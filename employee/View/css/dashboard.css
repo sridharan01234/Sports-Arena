@@ -1,0 +1,89 @@
+body {
+    background-image: url(../uploads/emp2.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+nav {
+    display: flex; 
+    float: right;
+    gap: 10px;
+}
+nav a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: large;
+    background-color: black;
+    padding: 15px;
+    border-radius: 7px;
+}
+nav a:hover {
+    background-color: rgb(52, 49, 49);
+}
+table {
+    margin-top: 80px;
+    width: 100%;
+    border-collapse: collapse;
+    font-weight: bold;
+}
+th {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+    background-color: #f2f2f2;
+    font-size: large;
+    font-weight: bold;
+}
+td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+    color: white;
+    font-size: large;
+}
+h2 {
+    margin-left: 35%;
+    margin-top: 20px;
+    margin-bottom: 40px;
+    font-weight: bold;
+}
+a {
+    color: #1c10bd;
+    text-decoration: none;
+}
+.view {
+    background-color: green;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 8px;
+    text-align: center;
+    font-weight: bold;
+}
+.view:hover {
+    background-color: rgb(131, 194, 131);
+}
+.edit {
+    background-color: blue;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 8px;
+    text-align: center;
+    font-weight: bold;
+}
+.edit:hover {
+    background-color: rgb(92, 92, 204);
+}
+.delete {
+    background-color: red;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 8px;
+    text-align: center;
+    font-weight: bold;
+}
+.delete:hover {
+    background-color: rgb(240, 117, 117);
+}

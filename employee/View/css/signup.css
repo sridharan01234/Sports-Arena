@@ -1,0 +1,79 @@
+body {
+    background-image: url(../uploads/emp2.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: bold;
+    color: #555; 
+}
+.container {
+    width: 400px;
+    height: 500px;
+    margin: 50px auto;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-top:100px auto;
+    text-align: center;
+    background-color: #fff;
+}
+.column1 {
+    display: inline-block;
+    width: 160px;
+    text-align: right;
+    margin-right: 10px;
+    margin-top: 30px;
+}
+.column2 {
+    width: 200px;
+    padding: 5px;
+    border-radius: 5px;
+}
+.error {
+    color: red;
+    font-size: 10px;
+    display: block;
+    margin-right: 30px;
+}
+button[type="submit"] {
+    width: 30%;
+    padding: 12px;
+    background-color: #3b6ea4;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;  
+    margin-top: 40px;
+}
+button[type="submit"]:hover {
+    background-color: #859db6;
+}
+p {
+    margin-top: 30px; 
+    color:  #555; 
+    font-weight: bold;
+}
+p a {
+    color: #007bff;
+    text-decoration: none;
+}
+p a:hover {
+    text-decoration: underline;
+}
+input:focus {
+    border: none;
+    background-color:bisque; 
+    color: #333;
+}
+.error-message {
+    color: red;
+    font-size: 16px; 
+    font-weight: bold; 
+    margin-bottom: 5px; 
+    margin-left:40%;
+}
+
+
