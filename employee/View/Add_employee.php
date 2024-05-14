@@ -1,5 +1,5 @@
 <?php
-require_once '/var/www/html/employee/Controller/Controller.php';
+require_once '/var/www/html/employee/Controller/Employee.php';
 if(isset($_SESSION['error'])) {
     echo '<p class="error-message">' . $_SESSION['error'] . '</p>';
     unset($_SESSION['error']); 

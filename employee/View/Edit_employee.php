@@ -1,23 +1,18 @@
 <?php
-require_once '/var/www/html/employee/Controller/Controller.php';
+require_once '/var/www/html/employee/Controller/Employee.php';
 
-$employeeDetails = [];
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $employeeController = new EmployeeController();
-    $updateEmployee = $employeeController->updateEmployee();
-}
-$userModel = new User(); 
-if(isset($_GET['id'])) {
+if (isset($_GET['id'])){
     $employeeId = $_GET['id'];
-    $employeeDetails = $userModel->getEmployeeDetails($employeeId);
+    $employeeController = new EmployeeController();
+    $employeeDetails = $employeeController->viewEmployee($employeeId);
     if ($employeeDetails) {
-       // echo "employee details found";
+        // echo "employee details found";
     } else {
-        echo "Employee details not found.";
+         echo "Employee details not found.";
     }
 } else {
-    echo "Employee ID is missing.";
-    exit;
+     echo "Employee ID is missing.";
+     exit;
 }
 ?>
 
@@ -31,7 +26,7 @@ if(isset($_GET['id'])) {
         <a href="Dashboard.php">Dashboard</a>
     </nav>
     <h2>Edit Employee Details</h2>
-    <form action="../Controller/Controller.php" method="post">
+    <form action="../Controller/Employee.php" method="post">
 
         <input type="hidden" name="action" value="update">
         <input type="hidden" name="id" value="<?php echo $employeeDetails['id']; ?>">

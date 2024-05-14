@@ -19,6 +19,7 @@ if(isset($_SESSION['error'])) {
        
             <div class="container">
             <form id="formlogin" action="../Controller/Authenticate.php" method="post">
+            <input type="hidden" name="action" value="login">
             <label class = "column1" for="email">Email :</label>
             <input class = "column2" type="email" id="loginemail" name="email">
             <span id="loginemailError" class="error"></span>

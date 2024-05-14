@@ -1,5 +1,5 @@
 <?php
-require_once '/var/www/html/employee/Controller/Controller.php';
+require_once '/var/www/html/employee/Controller/Employee.php';
 
 if (isset($_GET['id'])){
     $employeeId = $_GET['id'];

@@ -1,11 +1,16 @@
 <?php
-require_once '/var/www/html/employee/Controller/Authenticate.php';
-if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
-    header("Location: ../View/Signin_user.php");
-    exit();
-}
-$userModel = new User();
-$employeeDetails = $userModel->getEmpDetails();
+session_start();
+print_r(
+    $_SESSION
+);
+// require_once '/var/www/html/employee/Controller/Authenticate.php';
+// if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
+//     header("Location: ../View/Signin_user.php");
+//     exit();
+// }
+require_once '/var/www/html/employee/Controller/Employee.php';
+$employeeController = new EmployeeController();
+$employeeDetails = $employeeController->dashboard();
 ?>
 <html>
 <head>
@@ -17,7 +22,7 @@ $employeeDetails = $userModel->getEmpDetails();
 <body>
     <nav>
         <a href="Add_employee.php">Add Employee</a>
-        <a href="../Controller/logout.php">Logout</a>
+        <a href="../Controller/Logout.php">Logout</a>
     </nav>
     <h2>Welcome to Employee Dashboard</h2>
     <table>
@@ -59,7 +64,7 @@ $employeeDetails = $userModel->getEmpDetails();
                 </form>
                 </td>
                 <td>
-                <form action="../Controller/Controller.php" method="get">
+                <form action="../Controller/Employee.php" method="get">
                 <input type="hidden" name="action" value="delete">
                         <input type="hidden" name="empid" value="<?php echo $employee['employee_id']; ?>">
                         <input class='delete' type="submit" value="delete">

@@ -84,7 +84,16 @@ class AuthController
 }
 
 $controller = new AuthController();
-$controller->login();
-$controller->register();
-
-
+if ($_SERVER['REQUEST_METHOD'] === 'POST') 
+{
+    switch ($_POST['action']) {
+        case 'login':
+            $controller->login();
+            break;
+        case 'register':
+            $controller->register();
+            break;
+        default:
+            $message = "Invalid action!";
+    }
+}

@@ -20,6 +20,7 @@ if(isset($_SESSION['error'])) {
         </nav>
             <div class="container">
             <form id="signup" action="../Controller/Authenticate.php" method="POST">
+            <input type="hidden" name="action" value="register">
             <label class="column1" for="username">Username :</label>
             <input class="column2" type="text" id="username" name="username">
             <span id="usernameError" class="error"></span>

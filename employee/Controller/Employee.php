@@ -88,7 +88,8 @@ class EmployeeController
                 if ($result) {
                     $employeeDetails = $userModel->getEmpDetails();
                     $_SESSION['employeeDetails'] = $employeeDetails;
-                    include_once '../View/Dashboard.php';
+                    header("Location: ../View/Dashboard.php");
+                    return $employeeDetails;
                     exit;
                 } else {
                     $message = "Failed to update employee details.";
@@ -108,6 +109,13 @@ class EmployeeController
         $userModel = new User();
         $employeeDetails = $userModel->getEmployeeDetails($employeeId);
         return $employeeDetails; 
+    }
+
+    public function dashboard()
+    {
+        $userModel = new User();
+        $employeeDetails = $userModel->getEmpDetails();
+        return $employeeDetails;
     }
 
     private function isEmployeeExist($officeEmail)
@@ -190,7 +198,5 @@ if(isset($_POST['action'])) {
         default:
             echo "Invalid action.";
     }
-} else {
-  //  echo "Action not specified.";
-}
+} 
 ?>
