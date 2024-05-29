@@ -14,12 +14,10 @@ if (!$routeParams) {
 }
 
 if (!isset($_SESSION['user_id']) && !in_array($requestUri, ['/login', '/register', '/verifyUser'])) {
-    header('Location: /login');
-    exit;
-}
-
-if (in_array($requestUri, ['/login', '/']) && isset($_SESSION['user_id'])) {
-    header('Location: /listContacts');
+    echo json_encode([
+        'status' => false,
+        'error' => 'Unauthorized access'
+    ]);
     exit;
 }
 
