@@ -20,6 +20,7 @@ class Router
         $this->add("/logout", ['Controller' => 'AuthController', 'action' => 'logout']);
         $this->add("/password/reset", ['Controller' => 'AuthController', 'action' => 'resetPassword']);
         $this->add("/otp/verify", ['Controller' => 'AuthController', 'action' => 'verifyOTP']);
+        $this->add("/jwt/verify", ['Controller' => 'AuthController', 'action' => 'verifyToken']);
     }
 
     /**
