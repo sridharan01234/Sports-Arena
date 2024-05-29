@@ -39,11 +39,11 @@ class AuthModel extends Database
      *
      * @param array $data
      *
-     * @return void
+     * @return bool
      */
-    public function create(array $data)
+    public function create(array $data): bool
     {
-        $this->db->insert('users', $data);
+        return $this->db->insert('users', $data);
     }
 
     /**
