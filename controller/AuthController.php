@@ -157,7 +157,7 @@ class AuthController
                 );
                 exit();
             }
-            if ($this->model->check($email)) {
+            if ($this->model->checkEmail($email)) {
                 echo json_encode(
                     [
                         'status' => 'error',
