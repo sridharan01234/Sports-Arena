@@ -181,9 +181,14 @@ class AuthController
             }
             $hashed_password = password_hash($password, PASSWORD_DEFAULT);
             $data = [
-                'username'=> $username,
+                'firstName'=> $data['firstName'],
+                'lastName'=> $data['lastName'],
+                'username'=> $data['firstName'].$data['lastName'],
                 'email'=> $email,
                 'password'=> $hashed_password,
+                'age' => $data['age'],
+                'gender' => $data['gender'],
+                'phone' => $data['phone'],
             ];
             if ($this->model->create($data)) {
                 $subject = 'Registration Successful';
@@ -337,8 +342,8 @@ class AuthController
         $mail->Username = "sridharan01234@gmail.com"; // Sender email
         $mail->Password = "quqyymmbzmqqntrh"; // Sender password
         $mail->SetFrom("sridharan01234@gmail.com", "Sridharan"); // Sender details
-        $mail->Subject = "Password Reset"; // Email subject
-        $mail->Body = "This your OTP for password reset: " . $message; // Email body
+        $mail->Subject = $subject; // Email subject
+        $mail->Body = $message; // Email body
         $mail->AddAddress($email, "HR"); // Recipient email
 
         // Sending email
