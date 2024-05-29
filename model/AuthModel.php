@@ -2,7 +2,7 @@
 
 /**
  * AuthModel
- * 
+ *
  * @author Sridharan
  * Email : sridharan01234@gmail.com
  * LastModified : 29-05-2024
