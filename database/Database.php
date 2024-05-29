@@ -198,7 +198,6 @@ class Database
         $this->query($query);
         //$this->logger->log($query, E_USER_WARNING);
         try {
-
             $this->execute();
         } catch (Exception $e) {
             error_log($e->getMessage());
