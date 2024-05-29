@@ -33,7 +33,7 @@ class AuthController
     {
         $errors = [];
 
-        $requiredFields = ['firstName' => 'Name', 'email' => 'Email', 'password' => 'Password', 'confirmPassword' => 'Confirm Password'];
+        $requiredFields = ['firstName' => 'Name', 'lastName' => 'Last Name', 'email' => 'Email', 'password' => 'Password', 'confirmPassword' => 'Confirm Password'];
 
         foreach ($requiredFields as $field => $fieldName) {
             if (empty($data[$field])) {
@@ -201,7 +201,6 @@ class AuthController
             // Parse the JSON data
             $data = json_decode($raw_data, true);
 
-            $username = $data['firstName'];
             $email = $data['email'];
             $password = $data['password'];
             $errors = $this->validateRegisterFormEntries($data);
