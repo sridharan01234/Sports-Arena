@@ -1,14 +1,13 @@
 <?php
 
 /**
- * 
+ *
  */
 
 require './database/Database.php';
 
 class AuthModel extends Database
 {
-
     private $db;
     public function __construct()
     {
@@ -16,61 +15,42 @@ class AuthModel extends Database
     }
 
     /**
-     * Verify if the email is already registered
-     * 
+     * Check if user exists
+     *
      * @param string $email
      * @return bool
-     * 
+     *
      */
-    public function verify(string $email)
+    public function check(string $email): bool
     {
-        if ($this->db->get('users', ['email' => $email], [])) {
+        $user = $this->db->get('users', ['email' => $email], []);
+        if ($user) {
             return true;
         }
         return false;
     }
 
     /**
-     * Login the user
-     * 
+     * Create a new user
+     *
+     * @param array $data
+     * @return void
+     *
+     */
+    public function create(array $data)
+    {
+        $this->db->insert('users', $data);
+    }
+
+    /**
+     * Get user by email
+     *
      * @param string $email
-     * @param string $password
-     * @return bool
-     * 
+     * @return object|bool
+     *
      */
-    public function login(string $email, string $password)
+    public function getUserByEmail(string $email): object|bool
     {
-        $user = $this->db->get('users', ['email' => $email], []);
-        if (!$user) {
-            return false;
-        }
-        if (!password_verify($password, $user->password)) {
-            return false;
-        }
-        return true;
-    }
-
-    /**
-     * Logout the user
-     * 
-     * @return void
-     * 
-     */
-    public function logout(): void
-    {
-
-    }
-
-    /**
-     * Register the user
-     * 
-     * @param string $username
-     * @param string $password
-     * @return void
-     * 
-     */
-    public function register($username, $password)
-    {
-
+        return $this->db->get('users', ['email' => $email], []);
     }
 }
