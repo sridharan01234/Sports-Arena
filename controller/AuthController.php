@@ -12,6 +12,7 @@ use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 
 require './model/AuthModel.php';
+require './helper/SessionHelper.php';
 require './vendor/autoload.php';
 
 class AuthController
@@ -323,6 +324,7 @@ class AuthController
                 $email = $data['email'];
                 if ($this->model->checkEmail($email)) {
                     $otp = rand(100000, 999999);
+                    $_SESSION['otp'] = $otp;
                     $subject = 'Reset Password';
                     $message = 'Your OTP is: ' . $otp;
                     $mailStatus = $this->sendEmail($email, $subject, $message);
@@ -362,6 +364,50 @@ class AuthController
                     ]
                 );
                 exit();
+            }
+        }
+    }
+
+    /**
+     * Verifies OTP
+     *
+     * @return void
+     */
+    public function verifyOTP(): void
+    {
+        if(isset($_SERVER['otp']))
+        {
+            if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+                // Access the raw POST data
+                $raw_data = file_get_contents('php://input');
+                // Parse the JSON data
+                $data = json_decode($raw_data, true);
+    
+                if ($_SESSION['otp'] != $data['otp']) {
+                    echo json_encode(
+                        [
+                            'status'=> 'error',
+                            'message'=> 'Incorrect OTP'
+                        ]
+                    );
+                    exit();
+                } else {
+                    echo json_encode(
+                        [
+                            'status'=> 'success',
+                            'message'=> 'Correct OTP'
+                        ]
+                    );
+                    exit();
+                }
+            }
+            else {
+                echo json_encode(
+                    [
+                        'status'=> 'error',
+                        'message'=> 'Invalid Request'
+                    ]);
+                    exit();
             }
         }
     }
