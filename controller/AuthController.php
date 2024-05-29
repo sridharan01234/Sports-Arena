@@ -16,73 +16,31 @@ use Firebase\JWT\Key;
 require './model/AuthModel.php';
 require './helper/SessionHelper.php';
 require './vendor/autoload.php';
+require './helper/JWTHelper.php';
 
 class AuthController
 {
     private $model;
-    private const JWT_SECRET_KEY = 's3cr3tK3y123!@#"';
+    private $jwt;
 
     public function __construct()
     {
         $this->model = new AuthModel();
+        $this->jwt = new JWTHelper();
     }
 
     /**
-     * Generate JWT
-     *
-     * @param object $user
-     *
-     * @return string
-     */
-    private function generateJWT(object $user): string
-    {
-        $issuedAt = time();
-        $expirationTime = $issuedAt + 3600;
-        $payload = [
-            'iat' => $issuedAt,
-            'exp' => $expirationTime,
-            'data' => [
-                'userId' => $user->user_id,
-                'username' => $user->username,
-                'email' => $user->email
-            ]
-        ];
-
-        $jwt = JWT::encode($payload, self::JWT_SECRET_KEY, 'HS256');
-        return $jwt;
-    }
-
-    /**
-     * Get Bearer Token
-     *
-     * @return string|null
-     */
-    private function getBearerToken(): ?string
-    {
-        $headers = apache_request_headers();
-        if (isset($headers['Authorization'])) {
-            $matches = [];
-            if (preg_match('/Bearer\s(\S+)/', $headers['Authorization'], $matches)) {
-                return $matches[1];
-            }
-        }
-        return null;
-    }
-
-    /**
-     * Verify JWT
+     * Decodes raw data
      *
      * @return array|null
      */
-    private function verifyJWT(string $jwt): ?array
+    public function decodeRequest(): ?array
     {
-        try {
-            $decoded = JWT::decode($jwt, new Key(self::JWT_SECRET_KEY, 'HS256'));
-            return (array) $decoded;
-        } catch (Exception $e) {
-            echo 'Caught exception: ', $e->getMessage(), "\n";
-            return null;
-        }
+        // Access the raw POST data
+        $raw_data = file_get_contents('php://input');
+
+        // Parse the JSON data
+        return json_decode($raw_data, true);
     }
 
     /**
@@ -197,11 +155,8 @@ class AuthController
     {
         // Handle login request
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            // Access the raw POST data
-            $raw_data = file_get_contents('php://input');
-
-            // Parse the JSON data
-            $data = json_decode($raw_data, true);
+            $data = $this->decodeRequest();
+            // Check if data is null
             if (is_null($data)) {
                 echo json_encode(
                     [
@@ -233,7 +188,7 @@ class AuthController
                     echo json_encode(([
                         'status' => 'success',
                         'message' => 'Login successful',
-                        'jwt' => $this->generateJWT($user)
+                        'jwt' => $this->jwt->generateJWT($user)
                     ]));
                     exit();
                 } else {
@@ -266,11 +221,8 @@ class AuthController
     {
         // Handle registration request
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            // Access the raw POST data
-            $raw_data = file_get_contents('php://input');
-
-            // Parse the JSON data
-            $data = json_decode($raw_data, true);
+            $data = $this->decodeRequest();
+            // Check if data is null
             if (is_null($data)) {
                 echo json_encode(
                     [
@@ -280,11 +232,10 @@ class AuthController
                 );
                 exit();
             }
-
-            // Validate registration form entries
         }
         $email = $data['email'];
         $password = $data['password'];
+        // Validate registration form entries
         $errors = $this->validateRegisterFormEntries($data);
         if (!empty($errors)) {
             echo json_encode(
@@ -364,10 +315,7 @@ class AuthController
     public function verifyEmail(): void
     {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            // Access the raw POST data
-            $raw_data = file_get_contents('php://input');
-            // Parse the JSON data
-            $data = json_decode($raw_data, true);
+            $data = $this->decodeRequest();
             if ($this->model->getUserByEmail($data['email'])) {
                 echo json_encode(
                     [
@@ -396,10 +344,7 @@ class AuthController
     public function resetPassword(): void
     {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            // Access the raw POST data
-            $raw_data = file_get_contents('php://input');
-            // Parse the JSON data
-            $data = json_decode($raw_data, true);
+            $data = $this->decodeRequest();
             if (isset($data['email'])) {
                 $email = $data['email'];
                 if ($this->model->checkEmail($email)) {
@@ -457,11 +402,7 @@ class AuthController
     {
         if (isset($_SERVER['otp'])) {
             if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-                // Access the raw POST data
-                $raw_data = file_get_contents('php://input');
-                // Parse the JSON data
-                $data = json_decode($raw_data, true);
-
+                $data = $this->decodeRequest();
                 if ($_SESSION['otp'] != $data['otp']) {
                     echo json_encode(
                         [
@@ -489,5 +430,15 @@ class AuthController
                 exit();
             }
         }
+    }
+
+    /**
+     * Verify JWT token
+     *
+     * @return void
+     */
+    public function verifyToken(): void
+    {
+        $this->jwt->verifyJWT();
     }
 }
