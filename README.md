@@ -40,18 +40,27 @@ The API is designed to be used with a web server. You can access the API endpoin
 - **/reset-password:** Request password reset (POST)
 
 ### Example Request (Register):
+```
 json { "username": "johndoe", "email": "johndoe@example.com", "password": "password123", "confirm_password": "password123" }
+```
 
-
-Insert code
 ### Example Request (Login):
+```
 json { "email": "johndoe@example.com", "password": "password123" }
-
+```
 
 Insert code
 ### Example Request (Logout):
+```
 json { "email": "johndoe@example.com" }
+```
 
-
-Insert code
 ### Example Response (Success):
+```
+{ "message": "User registered successfully" }
+```
+
+### Example Response (Error):
+```
+{ "error": "Invalid email or password" }
+```
