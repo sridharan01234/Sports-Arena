@@ -18,6 +18,7 @@ class Router
         $this->add("/login", ['Controller' => 'AuthController', 'action' => 'login']);
         $this->add("/user/verify", ['Controller' => 'AuthController', 'action' => 'verifyEmail']);
         $this->add("/logout", ['Controller' => 'AuthController', 'action' => 'logout']);
+        $this->add("/password/reset", ['Controller' => 'AuthController', 'action' => 'resetPassword']);
     }
 
     /**
