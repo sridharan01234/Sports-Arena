@@ -1,7 +1,11 @@
 <?php
 
 /**
- *
+ * AuthModel
+ * 
+ * @author Sridharan
+ * Email : sridharan01234@gmail.com
+ * LastModified : 29-05-2024
  */
 
 require './database/Database.php';
@@ -18,8 +22,8 @@ class AuthModel extends Database
      * Check if user exists
      *
      * @param string $email
-     * @return bool
      *
+     * @return bool
      */
     public function check(string $email): bool
     {
@@ -34,8 +38,8 @@ class AuthModel extends Database
      * Create a new user
      *
      * @param array $data
-     * @return void
      *
+     * @return void
      */
     public function create(array $data)
     {
@@ -46,8 +50,8 @@ class AuthModel extends Database
      * Get user by email
      *
      * @param string $email
-     * @return object|bool
      *
+     * @return object|bool
      */
     public function getUserByEmail(string $email): object|bool
     {
