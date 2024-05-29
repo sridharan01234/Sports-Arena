@@ -10,6 +10,8 @@
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
+use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
 
 require './model/AuthModel.php';
 require './helper/SessionHelper.php';
@@ -18,10 +20,69 @@ require './vendor/autoload.php';
 class AuthController
 {
     private $model;
+    private const JWT_SECRET_KEY = 's3cr3tK3y123!@#"';
 
     public function __construct()
     {
         $this->model = new AuthModel();
+    }
+
+    /**
+     * Generate JWT
+     *
+     * @param object $user
+     *
+     * @return string
+     */
+    private function generateJWT(object $user): string
+    {
+        $issuedAt = time();
+        $expirationTime = $issuedAt + 3600;
+        $payload = [
+            'iat' => $issuedAt,
+            'exp' => $expirationTime,
+            'data' => [
+                'userId' => $user->user_id,
+                'username' => $user->username,
+                'email' => $user->email
+            ]
+        ];
+
+        $jwt = JWT::encode($payload, self::JWT_SECRET_KEY, 'HS256');
+        return $jwt;
+    }
+
+    /**
+     * Get Bearer Token
+     *
+     * @return string|null
+     */
+    private function getBearerToken(): ?string
+    {
+        $headers = apache_request_headers();
+        if (isset($headers['Authorization'])) {
+            $matches = [];
+            if (preg_match('/Bearer\s(\S+)/', $headers['Authorization'], $matches)) {
+                return $matches[1];
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Verify JWT
+     *
+     * @return array|null
+     */
+    private function verifyJWT(string $jwt): ?array
+    {
+        try {
+            $decoded = JWT::decode($jwt, new Key(self::JWT_SECRET_KEY, 'HS256'));
+            return (array) $decoded;
+        } catch (Exception $e) {
+            echo 'Caught exception: ', $e->getMessage(), "\n";
+            return null;
+        }
     }
 
     /**
@@ -93,16 +154,16 @@ class AuthController
         if (!$mail->Send()) {
             echo json_encode(
                 [
-                    "status"=> "error",
-                    "message"=> "Mail failed to send"
+                    "status" => "error",
+                    "message" => "Mail failed to send"
                 ]
             );
             exit();
         } else {
             echo json_encode(
                 [
-                    "status"=> "success",
-                    "message"=> "Otp sent success"
+                    "status" => "success",
+                    "message" => "Otp sent success"
                 ]
             );
             exit();
@@ -141,7 +202,16 @@ class AuthController
 
             // Parse the JSON data
             $data = json_decode($raw_data, true);
-
+            if (is_null($data)) {
+                echo json_encode(
+                    [
+                        'status' => 'error',
+                        'message' => 'Invalid request',
+                        'data' => $data
+                    ]
+                );
+                exit();
+            }
             // Validate login form entries
             $errors = $this->validateLoginFormEntries($data);
 
@@ -159,11 +229,11 @@ class AuthController
             if ($this->model->checkEmail($email)) {
                 $user = $this->model->getUserByEmail($email);
                 if (password_verify($password, $user->password)) {
-                    $_SESSION['user_id'] = $user->id;
+                    $_SESSION['user_id'] = $user->user_id;
                     echo json_encode(([
                         'status' => 'success',
                         'message' => 'Login successful',
-                        'user' => $user
+                        'jwt' => $this->generateJWT($user)
                     ]));
                     exit();
                 } else {
@@ -201,58 +271,68 @@ class AuthController
 
             // Parse the JSON data
             $data = json_decode($raw_data, true);
+            if (is_null($data)) {
+                echo json_encode(
+                    [
+                        'status' => 'error',
+                        'message' => 'Invalid request'
+                    ]
+                );
+                exit();
+            }
 
-            $email = $data['email'];
-            $password = $data['password'];
-            $errors = $this->validateRegisterFormEntries($data);
-            if (!empty($errors)) {
-                echo json_encode(
-                    [
-                        'status' => 'error',
-                        'message' => $errors
-                    ]
-                );
-                exit();
-            }
-            if ($this->model->checkEmail($email)) {
-                echo json_encode(
-                    [
-                        'status' => 'error',
-                        'message' => 'Email already exists'
-                    ]
-                );
-                exit();
-            }
-            $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-            $data = [
-                'firstName'=> $data['firstName'],
-                'lastName'=> $data['lastName'],
-                'username'=> $data['firstName'].$data['lastName'],
-                'email'=> $email,
-                'password'=> $hashed_password,
-                'age' => $data['age'],
-                'gender' => $data['gender'],
-                'phone' => $data['phone'],
-            ];
-            if ($this->model->create($data)) {
-                $subject = 'Registration Successful';
-                $message = 'Thank you for registering!';
-                $this->sendEmail($data['email'], $subject, $message);
-                echo json_encode(
-                    [
-                        'status' => 'success',
-                        'message' => 'Registration successful'
-                    ]
-                );
-            } else {
-                echo json_encode(
-                    [
-                        'status' => 'error',
-                        'message' => 'Registration failed'
-                    ]
-                );
-                exit();
-            }
+            // Validate registration form entries
+        }
+        $email = $data['email'];
+        $password = $data['password'];
+        $errors = $this->validateRegisterFormEntries($data);
+        if (!empty($errors)) {
+            echo json_encode(
+                [
+                    'status' => 'error',
+                    'message' => $errors
+                ]
+            );
+            exit();
+        }
+        if ($this->model->checkEmail($email)) {
+            echo json_encode(
+                [
+                    'status' => 'error',
+                    'message' => 'Email already exists'
+                ]
+            );
+            exit();
+        }
+        $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+        $data = [
+            'firstName' => $data['firstName'],
+            'lastName' => $data['lastName'],
+            'username' => $data['firstName'] . $data['lastName'],
+            'email' => $email,
+            'password' => $hashed_password,
+            'age' => $data['age'],
+            'gender' => $data['gender'],
+            'phone' => $data['phone'],
+        ];
+        if ($this->model->create($data)) {
+            $subject = 'Registration Successful';
+            $message = 'Thank you for registering!';
+            $this->sendEmail($data['email'], $subject, $message);
+            echo json_encode(
+                [
+                    'status' => 'success',
+                    'message' => 'Registration successful'
+                ]
+            );
+        } else {
+            echo json_encode(
+                [
+                    'status' => 'error',
+                    'message' => 'Registration failed'
+                ]
+            );
+            exit();
         }
     }
 
@@ -350,7 +430,7 @@ class AuthController
                 } else {
                     echo json_encode(
                         [
-                            'status'=> 'error',
+                            'status' => 'error',
                             'message' => 'Email not found',
                         ]
                     );
@@ -375,39 +455,38 @@ class AuthController
      */
     public function verifyOTP(): void
     {
-        if(isset($_SERVER['otp']))
-        {
+        if (isset($_SERVER['otp'])) {
             if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 // Access the raw POST data
                 $raw_data = file_get_contents('php://input');
                 // Parse the JSON data
                 $data = json_decode($raw_data, true);
-    
+
                 if ($_SESSION['otp'] != $data['otp']) {
                     echo json_encode(
                         [
-                            'status'=> 'error',
-                            'message'=> 'Incorrect OTP'
+                            'status' => 'error',
+                            'message' => 'Incorrect OTP'
                         ]
                     );
                     exit();
                 } else {
                     echo json_encode(
                         [
-                            'status'=> 'success',
-                            'message'=> 'Correct OTP'
+                            'status' => 'success',
+                            'message' => 'Correct OTP'
                         ]
                     );
                     exit();
                 }
-            }
-            else {
+            } else {
                 echo json_encode(
                     [
-                        'status'=> 'error',
-                        'message'=> 'Invalid Request'
-                    ]);
-                    exit();
+                        'status' => 'error',
+                        'message' => 'Invalid Request'
+                    ]
+                );
+                exit();
             }
         }
     }
