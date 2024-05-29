@@ -33,7 +33,7 @@ class AuthController
     {
         $errors = [];
 
-        $requiredFields = ['username' => 'Name', 'email' => 'Email', 'password' => 'Password', 'confirm_password' => 'Confirm Password'];
+        $requiredFields = ['firstName' => 'Name', 'email' => 'Email', 'password' => 'Password', 'confirmPassword' => 'Confirm Password'];
 
         foreach ($requiredFields as $field => $fieldName) {
             if (empty($data[$field])) {
@@ -91,8 +91,15 @@ class AuthController
     {
         // Handle login request
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            // Access the raw POST data
+            $raw_data = file_get_contents('php://input');
+
+            // Parse the JSON data
+            $data = json_decode($raw_data, true);
+
             // Validate login form entries
-            $errors = $this->validateLoginFormEntries($_POST);
+            $errors = $this->validateLoginFormEntries($data);
+
             if (!empty($errors)) {
                 echo json_encode(
                     [
@@ -102,8 +109,8 @@ class AuthController
                 );
                 exit();
             }
-            $email = $_POST['email'];
-            $password = $_POST['password'];
+            $email = $data['email'];
+            $password = $data['password'];
             if ($this->model->checkEmail($email)) {
                 $user = $this->model->getUserByEmail($email);
                 if (password_verify($password, $user->password)) {
@@ -144,10 +151,16 @@ class AuthController
     {
         // Handle registration request
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            $username = $_POST['username'];
-            $email = $_POST['email'];
-            $password = $_POST['password'];
-            $errors = $this->validateRegisterFormEntries($_POST);
+            // Access the raw POST data
+            $raw_data = file_get_contents('php://input');
+
+            // Parse the JSON data
+            $data = json_decode($raw_data, true);
+
+            $username = $data['firstName'];
+            $email = $data['email'];
+            $password = $data['password'];
+            $errors = $this->validateRegisterFormEntries($data);
             if (!empty($errors)) {
                 echo json_encode(
                     [
@@ -168,11 +181,14 @@ class AuthController
             }
             $hashed_password = password_hash($password, PASSWORD_DEFAULT);
             $data = [
-                'username' => $username,
-                'email' => $email,
-                'password' => $hashed_password
+                'username'=> $username,
+                'email'=> $email,
+                'password'=> $hashed_password,
             ];
             if ($this->model->create($data)) {
+                $subject = 'Registration Successful';
+                $message = 'Thank you for registering!';
+                $this->sendEmail($data['email'], $subject, $message);
                 echo json_encode(
                     [
                         'status' => 'success',
@@ -219,7 +235,11 @@ class AuthController
     public function verifyEmail(): void
     {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            if ($this->model->getUserByEmail($_POST['email'])) {
+            // Access the raw POST data
+            $raw_data = file_get_contents('php://input');
+            // Parse the JSON data
+            $data = json_decode($raw_data, true);
+            if ($this->model->getUserByEmail($data['email'])) {
                 echo json_encode(
                     [
                         'status' => 'success',
@@ -239,19 +259,30 @@ class AuthController
         }
     }
 
+    /**
+     * Reset password
+     *
+     * @return void
+     */
     public function resetPassword(): void
     {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            if (isset($_POST['email'])) {
-                $email = $_POST['email'];
+            // Access the raw POST data
+            $raw_data = file_get_contents('php://input');
+            // Parse the JSON data
+            $data = json_decode($raw_data, true);
+            if (isset($data['email'])) {
+                $email = $data['email'];
                 if ($this->model->checkEmail($email)) {
                     $otp = rand(100000, 999999);
                     $subject = 'Reset Password';
                     $message = 'Your OTP is: ' . $otp;
-                    if ($this->sendEmail($email, $subject, $message) === "Message has been sent") {
+                    $mailStatus = $this->sendEmail($email, $subject, $message);
+                    if ($mailStatus === "Message has been sent") {
                         echo json_encode(
                             [
                                 'status' => 'success',
+                                'otp' => $otp,
                                 'message' => 'Password reset email sent'
                             ]
                         );
@@ -260,7 +291,8 @@ class AuthController
                         echo json_encode(
                             [
                                 'status' => 'error',
-                                'message' => 'Failed to send password reset email'
+                                'message' => 'Failed to send password reset email',
+                                'error' => $mailStatus
                             ]
                         );
                         exit();
@@ -269,7 +301,7 @@ class AuthController
                     echo json_encode(
                         [
                             'status'=> 'error',
-                            'message' => 'Invalid email'
+                            'message' => 'Email not found',
                         ]
                     );
                     exit();
@@ -278,7 +310,7 @@ class AuthController
                 echo json_encode(
                     [
                         'status' => 'error',
-                        'message' => 'Invalid email'
+                        'message' => 'Please enter email'
                     ]
                 );
                 exit();
@@ -293,43 +325,39 @@ class AuthController
      */
     public function sendEmail(string $email, string $subject, string $message): bool|string
     {
-        // Send email
-        //Create an instance; passing `true` enables exceptions
-        $mail = new PHPMailer(true);
+        // Sending OTP via email
+        $mail = new PHPMailer(true); // Creating PHPMailer instance
+        $mail->IsSMTP();
+        $mail->SMTPDebug = 0;
+        $mail->SMTPAuth = true;
+        $mail->SMTPSecure = 'tls';
+        $mail->Host = "smtp.gmail.com";
+        $mail->Port = 587;
+        $mail->IsHTML(true);
+        $mail->Username = "sridharan01234@gmail.com"; // Sender email
+        $mail->Password = "quqyymmbzmqqntrh"; // Sender password
+        $mail->SetFrom("sridharan01234@gmail.com", "Sridharan"); // Sender details
+        $mail->Subject = "Password Reset"; // Email subject
+        $mail->Body = "This your OTP for password reset: " . $message; // Email body
+        $mail->AddAddress($email, "HR"); // Recipient email
 
-        try {
-    //Server settings
-            $mail->SMTPDebug = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
-            $mail->isSMTP();                                            //Send using SMTP
-            $mail->Host       = 'smtp.example.com';                     //Set the SMTP server to send through
-            $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
-            $mail->Username   = 'sridharan01234@gmail.com';                     //SMTP username
-            $mail->Password   = 'quqyymmbzmqqntrh';                               //SMTP password
-            $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;            //Enable implicit TLS encryption
-            $mail->Port       = 465;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
-
-            //Recipients
-            $mail->setFrom('from@example.com', 'Mailer');
-            $mail->addAddress('joe@example.net', 'Joe User');     //Add a recipient
-            $mail->addAddress('ellen@example.com');               //Name is optional
-            $mail->addReplyTo('info@example.com', 'Information');
-            $mail->addCC('cc@example.com');
-            $mail->addBCC('bcc@example.com');
-
-    //Attachments
-            $mail->addAttachment('/var/tmp/file.tar.gz');         //Add attachments
-            $mail->addAttachment('/tmp/image.jpg', 'new.jpg');    //Optional name
-
-    //Content
-            $mail->isHTML(true);                                  //Set email format to HTML
-            $mail->Subject = $subject;
-            $mail->Body    = $message;
-            $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
-
-            $mail->send();
-            return "Message has been sent";
-        } catch (Exception $e) {
-            return "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+        // Sending email
+        if (!$mail->Send()) {
+            echo json_encode(
+                [
+                    "status"=> "error",
+                    "message"=> "Mail failed to send"
+                ]
+            );
+            exit();
+        } else {
+            echo json_encode(
+                [
+                    "status"=> "success",
+                    "message"=> "Otp sent success"
+                ]
+            );
+            exit();
         }
     }
 }
