@@ -14,9 +14,10 @@ class Router
 
     public function __construct()
     {
-        $this->add("/", ['Controller' => 'AuthController', 'action' => 'login']);
         $this->add("/register", ['Controller' => 'AuthController', 'action' => 'register']);
         $this->add("/login", ['Controller' => 'AuthController', 'action' => 'login']);
+
+        $this->add("/logout", ['Controller' => 'AuthController', 'action' => 'logout']);
     }
 
     /**
