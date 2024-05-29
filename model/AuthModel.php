@@ -25,7 +25,7 @@ class AuthModel extends Database
      *
      * @return bool
      */
-    public function check(string $email): bool
+    public function checkEmail(string $email): bool
     {
         $user = $this->db->get('users', ['email' => $email], []);
         if ($user) {
