@@ -53,7 +53,7 @@ class AuthController
     {
         $errors = [];
 
-        $requiredFields = ['firstName' => 'Name', 'lastName' => 'Last Name', 'email' => 'Email', 'password' => 'Password', 'confirmPassword' => 'Confirm Password'];
+        $requiredFields = ['firstName' => 'Name', 'lastName' => 'Last Name', 'email' => 'Email', 'password' => 'Password', 'confirmPassword' => 'Confirm Password', 'username' => 'Username', 'gender' => 'Gender', 'age' => 'Age', 'phone' => 'Phone'];
 
         foreach ($requiredFields as $field => $fieldName) {
             if (empty($data[$field])) {
@@ -110,21 +110,9 @@ class AuthController
 
         // Sending email
         if (!$mail->Send()) {
-            echo json_encode(
-                [
-                    "status" => "error",
-                    "message" => "Mail failed to send"
-                ]
-            );
-            exit();
+            return $mail->ErrorInfo;
         } else {
-            echo json_encode(
-                [
-                    "status" => "success",
-                    "message" => "Otp sent success"
-                ]
-            );
-            exit();
+            return "Mail sent successfully";
         }
     }
 
@@ -257,25 +245,46 @@ class AuthController
         }
         $hashed_password = password_hash($password, PASSWORD_DEFAULT);
         $data = [
-            'firstName' => $data['firstName'],
-            'lastName' => $data['lastName'],
-            'username' => $data['firstName'] . $data['lastName'],
-            'email' => $email,
+            'first_name' => $data['firstName'],
+            'last_name' => $data['lastName'],
+            'email' => $data['email'],
             'password' => $hashed_password,
-            'age' => $data['age'],
+            'username' => $data['username'],
             'gender' => $data['gender'],
-            'phone' => $data['phone'],
+            'age' => $data['age'],
+            'phonenumber' => $data['phone'],
         ];
+        $subject = 'Registration Successful';
+        $message = "
+        <html>
+        <head>
+            <title>Registration Successful</title>
+        </head>
+        <body>
+            <p>Dear
+                $data[first_name]
+                $data[last_name],</p>
+            <p>Thank you for registering with us. Your account has been successfully created.</p>
+            <p>Your username is: $data[username]</p>
+            <p>Your password is: $password</p>
+            <p>Please use this password to login to your account.</p>
+            <p>Thank you for using our service.</p>
+            <br>
+
+            <p>Best regards,</p>
+            <p>Sports Arena Team</p>
+        </body>
+        </html>
+            ";
+        $this->sendEmail($data['email'], $subject, $message);
         if ($this->model->create($data)) {
-            $subject = 'Registration Successful';
-            $message = 'Thank you for registering!';
-            $this->sendEmail($data['email'], $subject, $message);
             echo json_encode(
                 [
                     'status' => 'success',
                     'message' => 'Registration successful'
                 ]
             );
+            exit();
         } else {
             echo json_encode(
                 [
@@ -351,9 +360,20 @@ class AuthController
                     $otp = rand(100000, 999999);
                     $_SESSION['otp'] = $otp;
                     $subject = 'Reset Password';
-                    $message = 'Your OTP is: ' . $otp;
+                    $message =
+                        "<html>
+                    <body>
+                        <p>Please use the following OTP to reset your password:</p>
+                        <p>Your OTP is: <strong>$otp</strong></p>
+                        <p>This OTP is valid for 5 minutes.</p>
+                        <p>If you did not request a password reset, please ignore this email.</p>
+                        <p>Thank you for using our service.</p>
+                        <p>Best regards,</p>
+                        <p>Sports Arena Team</p>                        
+                    </body>
+                    </html>";
                     $mailStatus = $this->sendEmail($email, $subject, $message);
-                    if ($mailStatus === "Message has been sent") {
+                    if ($mailStatus === "Mail sent successfully") {
                         echo json_encode(
                             [
                                 'status' => 'success',
