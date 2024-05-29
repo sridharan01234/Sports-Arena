@@ -22,7 +22,7 @@ class AuthController
      *
      * @return void
      */
-    public function login()
+    public function login(): void
     {
         // Handle login request
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -46,7 +46,7 @@ class AuthController
                     echo json_encode(([
                         'status' => 'success',
                         'message' => 'Login successful',
-                        'user' => json_encode($user)
+                        'user' => $user
                     ]));
                     exit();
                 } else {
@@ -100,7 +100,6 @@ class AuthController
             $username = $_POST['username'];
             $email = $_POST['email'];
             $password = $_POST['password'];
-            $confirm_password = $_POST['confirm_password'];
             $errors = $this->validateRegisterFormEntries($_POST);
             if (!empty($errors)) {
                 echo json_encode(
@@ -151,52 +150,36 @@ class AuthController
      * @param array $data
      * @return array
      */
-    public function validateRegisterFormEntries(array $data)
+    public function validateRegisterFormEntries(array $data): array
     {
         $errors = [];
-        if (empty($data['username'])) {
-            $errors[] = 'Name is required';
-        }
-        if (empty($data['email'])) {
-            $errors[] = 'Email is required';
-        }
-        if (empty($data['password'])) {
-            $errors[] = 'Password is required';
-        }
-        if (empty($data['confirm_password'])) {
-            $errors[] = 'Confirm Password is required';
-        }
-        if ($data['password'] !== $data['confirm_password']) {
-            $errors[] = 'Passwords do not match';
-        }
-        if (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
-            $errors[] = 'Invalid email format';
-        }
-        if (strlen($data['password']) < 8) {
-            $errors[] = 'Password must be at least 8 characters long';
-        }
-        if (strlen($data['username']) < 3) {
-            $errors[] = 'Name must be at least 3 characters long';
-        }
-        if (strlen($data['username']) > 20) {
-            $errors[] = 'Name must be less than 20 characters long';
+
+        $requiredFields = ['username' => 'Name', 'email' => 'Email', 'password' => 'Password', 'confirm_password' => 'Confirm Password'];
+
+        foreach ($requiredFields as $field => $fieldName) {
+            if (empty($data[$field])) {
+                $errors[] = $fieldName . ' is required';
+            }
         }
 
-        if (strlen($data['password']) > 20) {
-            $errors[] = 'Password must be less than 20 characters long';
+        if (!empty($data['password']) && !empty($data['confirm_password']) && $data['password'] !== $data['confirm_password']) {
+            $errors[] = 'Passwords do not match';
         }
-        if (strlen($data['confirm_password']) > 20) {
-            $errors[] = 'Confirm Password must be less than 20 characters long';
+
+        if (!empty($data['email']) && !filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
+            $errors[] = 'Invalid email format';
         }
-        if (
-            !preg_match(
-                '/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?!.* )(?=.*[^a-zA-Z0-9]).{8,16}$/m',
-                $data['password']
-            )
-        ) {
-            $errors[] = "Password should be at least 8 characters in 
-            length and should include at least one upper case letter, one number,
-             and one special character.";
+
+        $lengthConstraints = ['username' => [3, 20], 'password' => [8, 20], 'confirm_password' => [0, 20]];
+
+        foreach ($lengthConstraints as $field => $length) {
+            if (!empty($data[$field]) && (strlen($data[$field]) < $length[0] || strlen($data[$field]) > $length[1])) {
+                $errors[] = ucfirst($field) . ' must be between ' . $length[0] . ' and ' . $length[1] . ' characters';
+            }
+        }
+
+        if (!empty($data['password']) && !preg_match('/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?!.* )(?=.*[^a-zA-Z0-9]).{8,16}$/', $data['password'])) {
+            $errors[] = "Password must contain at least one upper case letter, one number, and one special character.";
         }
 
         return $errors;
@@ -207,7 +190,7 @@ class AuthController
      *
      * @return void
      */
-    public function logout()
+    public function logout(): void
     {
         echo "Hiii";
         exit;
