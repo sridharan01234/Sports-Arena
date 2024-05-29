@@ -1,12 +1,18 @@
 <?php
 
+
 /**
  * AuthController class
  *
  * @author Sridharan
  */
 
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception;
+
 require './model/AuthModel.php';
+require './vendor/autoload.php';
 
 class AuthController
 {
@@ -98,7 +104,7 @@ class AuthController
             }
             $email = $_POST['email'];
             $password = $_POST['password'];
-            if ($this->model->check($email)) {
+            if ($this->model->checkEmail($email)) {
                 $user = $this->model->getUserByEmail($email);
                 if (password_verify($password, $user->password)) {
                     $_SESSION['user_id'] = $user->id;
@@ -230,6 +236,100 @@ class AuthController
                 );
                 exit();
             }
+        }
+    }
+
+    public function resetPassword(): void
+    {
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            if (isset($_POST['email'])) {
+                $email = $_POST['email'];
+                if ($this->model->checkEmail($email)) {
+                    $otp = rand(100000, 999999);
+                    $subject = 'Reset Password';
+                    $message = 'Your OTP is: ' . $otp;
+                    if ($this->sendEmail($email, $subject, $message) === "Message has been sent") {
+                        echo json_encode(
+                            [
+                                'status' => 'success',
+                                'message' => 'Password reset email sent'
+                            ]
+                        );
+                        exit();
+                    } else {
+                        echo json_encode(
+                            [
+                                'status' => 'error',
+                                'message' => 'Failed to send password reset email'
+                            ]
+                        );
+                        exit();
+                    }
+                } else {
+                    echo json_encode(
+                        [
+                            'status'=> 'error',
+                            'message' => 'Invalid email'
+                        ]
+                    );
+                    exit();
+                }
+            } else {
+                echo json_encode(
+                    [
+                        'status' => 'error',
+                        'message' => 'Invalid email'
+                    ]
+                );
+                exit();
+            }
+        }
+    }
+
+    /**
+     * Send a email
+     *
+     * @return bool|string
+     */
+    public function sendEmail(string $email, string $subject, string $message): bool|string
+    {
+        // Send email
+        //Create an instance; passing `true` enables exceptions
+        $mail = new PHPMailer(true);
+
+        try {
+    //Server settings
+            $mail->SMTPDebug = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
+            $mail->isSMTP();                                            //Send using SMTP
+            $mail->Host       = 'smtp.example.com';                     //Set the SMTP server to send through
+            $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
+            $mail->Username   = 'sridharan01234@gmail.com';                     //SMTP username
+            $mail->Password   = 'quqyymmbzmqqntrh';                               //SMTP password
+            $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;            //Enable implicit TLS encryption
+            $mail->Port       = 465;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
+
+            //Recipients
+            $mail->setFrom('from@example.com', 'Mailer');
+            $mail->addAddress('joe@example.net', 'Joe User');     //Add a recipient
+            $mail->addAddress('ellen@example.com');               //Name is optional
+            $mail->addReplyTo('info@example.com', 'Information');
+            $mail->addCC('cc@example.com');
+            $mail->addBCC('bcc@example.com');
+
+    //Attachments
+            $mail->addAttachment('/var/tmp/file.tar.gz');         //Add attachments
+            $mail->addAttachment('/tmp/image.jpg', 'new.jpg');    //Optional name
+
+    //Content
+            $mail->isHTML(true);                                  //Set email format to HTML
+            $mail->Subject = $subject;
+            $mail->Body    = $message;
+            $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
+
+            $mail->send();
+            return "Message has been sent";
+        } catch (Exception $e) {
+            return "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
         }
     }
 }
