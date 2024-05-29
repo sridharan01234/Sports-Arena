@@ -64,6 +64,50 @@ class AuthController
         return $errors;
     }
 
+
+    /**
+     * Send a email
+     *
+     * @return bool|string
+     */
+    private function sendEmail(string $email, string $subject, string $message): bool|string
+    {
+        // Sending OTP via email
+        $mail = new PHPMailer(true); // Creating PHPMailer instance
+        $mail->IsSMTP();
+        $mail->SMTPDebug = 0;
+        $mail->SMTPAuth = true;
+        $mail->SMTPSecure = 'tls';
+        $mail->Host = "smtp.gmail.com";
+        $mail->Port = 587;
+        $mail->IsHTML(true);
+        $mail->Username = "sridharan01234@gmail.com"; // Sender email
+        $mail->Password = "quqyymmbzmqqntrh"; // Sender password
+        $mail->SetFrom("sridharan01234@gmail.com", "Sridharan"); // Sender details
+        $mail->Subject = $subject; // Email subject
+        $mail->Body = $message; // Email body
+        $mail->AddAddress($email, "HR"); // Recipient email
+
+        // Sending email
+        if (!$mail->Send()) {
+            echo json_encode(
+                [
+                    "status"=> "error",
+                    "message"=> "Mail failed to send"
+                ]
+            );
+            exit();
+        } else {
+            echo json_encode(
+                [
+                    "status"=> "success",
+                    "message"=> "Otp sent success"
+                ]
+            );
+            exit();
+        }
+    }
+
     /**
      * Validate login form entries
      *
@@ -320,49 +364,6 @@ class AuthController
                 );
                 exit();
             }
-        }
-    }
-
-    /**
-     * Send a email
-     *
-     * @return bool|string
-     */
-    public function sendEmail(string $email, string $subject, string $message): bool|string
-    {
-        // Sending OTP via email
-        $mail = new PHPMailer(true); // Creating PHPMailer instance
-        $mail->IsSMTP();
-        $mail->SMTPDebug = 0;
-        $mail->SMTPAuth = true;
-        $mail->SMTPSecure = 'tls';
-        $mail->Host = "smtp.gmail.com";
-        $mail->Port = 587;
-        $mail->IsHTML(true);
-        $mail->Username = "sridharan01234@gmail.com"; // Sender email
-        $mail->Password = "quqyymmbzmqqntrh"; // Sender password
-        $mail->SetFrom("sridharan01234@gmail.com", "Sridharan"); // Sender details
-        $mail->Subject = $subject; // Email subject
-        $mail->Body = $message; // Email body
-        $mail->AddAddress($email, "HR"); // Recipient email
-
-        // Sending email
-        if (!$mail->Send()) {
-            echo json_encode(
-                [
-                    "status"=> "error",
-                    "message"=> "Mail failed to send"
-                ]
-            );
-            exit();
-        } else {
-            echo json_encode(
-                [
-                    "status"=> "success",
-                    "message"=> "Otp sent success"
-                ]
-            );
-            exit();
         }
     }
 }
