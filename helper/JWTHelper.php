@@ -31,8 +31,6 @@ class JWTHelper
             'exp' => $expirationTime,
             'data' => [
                 'userId' => $user->user_id,
-                'username' => $user->username,
-                'email' => $user->email
             ]
         ];
 
