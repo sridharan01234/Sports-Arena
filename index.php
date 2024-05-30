@@ -13,7 +13,7 @@ if (!$routeParams) {
     exit;
 }
 
-if (!isset($_SESSION['user_id']) && !in_array($requestUri, ['/login', '/register', '/user/verify', '/password/reset'])) {
+if (!isset($_SESSION['user_id']) && !in_array($requestUri, ['/login', '/register', '/user/verify', '/password/reset', '/otp/verify', '/password/change'])) {
     echo json_encode([
         'status' => false,
         'error' => 'Unauthorized access'
