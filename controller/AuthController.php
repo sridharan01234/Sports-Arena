@@ -421,35 +421,35 @@ class AuthController
      */
     public function verifyOTP(): void
     {
-            if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-                $data = $this->decodeRequest();
-                if ($_SESSION['otp'] != $data['otp']) {
-                    echo json_encode(
-                        [
-                            'status' => 'error',
-                            'message' => 'Incorrect OTP',
-                            'otp' => $_SESSION['otp']
-                        ]
-                    );
-                    exit();
-                } else {
-                    echo json_encode(
-                        [
-                            'status' => 'success',
-                            'message' => 'Correct OTP'
-                        ]
-                    );
-                    exit();
-                }
-            } else {
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $data = $this->decodeRequest();
+            if ($_SESSION['otp'] != $data['otp']) {
                 echo json_encode(
                     [
                         'status' => 'error',
-                        'message' => 'Invalid Request'
+                        'message' => 'Incorrect OTP',
+                        'otp' => $_SESSION['otp']
+                    ]
+                );
+                exit();
+            } else {
+                echo json_encode(
+                    [
+                        'status' => 'success',
+                        'message' => 'Correct OTP'
                     ]
                 );
                 exit();
             }
+        } else {
+            echo json_encode(
+                [
+                    'status' => 'error',
+                    'message' => 'Invalid Request'
+                ]
+            );
+            exit();
+        }
     }
 
     /**
@@ -469,36 +469,36 @@ class AuthController
      */
     public function changePassword(): void
     {
-            if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-                $data = $this->decodeRequest();
-                if (isset($data['password'])) {
-                    $password = password_hash($data['password'], PASSWORD_DEFAULT);
-                    if ($this->model->changePassword($data['email'], $password)) {
-                        echo json_encode(
-                            [
-                                'status' => 'success',
-                                'message' => 'Password changed successfully'
-                            ]
-                        );
-                        exit();
-                    } else {
-                        echo json_encode(
-                            [
-                                'status' => 'error',
-                                'message' => 'Failed to change password'
-                            ]
-                        );
-                        exit();
-                    }
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $data = $this->decodeRequest();
+            if (isset($data['password'])) {
+                $password = password_hash($data['password'], PASSWORD_DEFAULT);
+                if ($this->model->changePassword($data['email'], $password)) {
+                    echo json_encode(
+                        [
+                            'status' => 'success',
+                            'message' => 'Password changed successfully'
+                        ]
+                    );
+                    exit();
+                } else {
+                    echo json_encode(
+                        [
+                            'status' => 'error',
+                            'message' => 'Failed to change password'
+                        ]
+                    );
+                    exit();
                 }
-            } else {
-                echo json_encode(
-                    [
-                        'status'=> 'error',
-                        'message' => 'Invalid Request'
-                    ]
-                );
-                exit();
             }
+        } else {
+            echo json_encode(
+                [
+                    'status'=> 'error',
+                    'message' => 'Invalid Request'
+                ]
+            );
+            exit();
         }
+    }
 }
