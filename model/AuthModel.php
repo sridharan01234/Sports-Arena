@@ -57,4 +57,14 @@ class AuthModel extends Database
     {
         return $this->db->get('users', ['email' => $email], []);
     }
+
+    public function changePassword(string $email, string $password): bool
+    {
+        return $this->db->update('users', ['password' => $password], ['email' => $email]);
+    }
+
+    public function getUserById(int $id): object|bool
+    {
+        return $this->db->get('users', ['id' => $id], []);
+    }
 }
