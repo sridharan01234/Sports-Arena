@@ -469,12 +469,11 @@ class AuthController
      */
     public function changePassword(): void
     {
-        if (isset($_SESSION['email'])) {
             if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $data = $this->decodeRequest();
                 if (isset($data['password'])) {
                     $password = password_hash($data['password'], PASSWORD_DEFAULT);
-                    if ($this->model->changePassword($_SESSION['email'], $password)) {
+                    if ($this->model->changePassword($data['email'], $password)) {
                         echo json_encode(
                             [
                                 'status' => 'success',
@@ -502,5 +501,4 @@ class AuthController
                 exit();
             }
         }
-    }
 }
