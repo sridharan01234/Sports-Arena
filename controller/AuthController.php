@@ -10,8 +10,6 @@
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
-use Firebase\JWT\JWT;
-use Firebase\JWT\Key;
 
 require './model/AuthModel.php';
 require './helper/SessionHelper.php';
@@ -34,7 +32,7 @@ class AuthController
      *
      * @return array|null
      */
-    public function decodeRequest(): ?array
+    public function decodeRequest(): array | bool | null
     {
         // Access the raw POST data
         $raw_data = file_get_contents('php://input');
@@ -368,6 +366,7 @@ class AuthController
                         <p>This OTP is valid for 5 minutes.</p>
                         <p>If you did not request a password reset, please ignore this email.</p>
                         <p>Thank you for using our service.</p>
+                        <br>
                         <p>Best regards,</p>
                         <p>Sports Arena Team</p>                        
                     </body>
@@ -377,10 +376,12 @@ class AuthController
                         echo json_encode(
                             [
                                 'status' => 'success',
-                                'otp' => $otp,
-                                'message' => 'Password reset email sent'
+                                'message' => 'Password reset email sent',
+                                'email' => $email,
+                                'otp' => $otp
                             ]
                         );
+                        $_SESSION['email'] = $email;
                         exit();
                     } else {
                         echo json_encode(
@@ -420,14 +421,14 @@ class AuthController
      */
     public function verifyOTP(): void
     {
-        if (isset($_SERVER['otp'])) {
             if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $data = $this->decodeRequest();
                 if ($_SESSION['otp'] != $data['otp']) {
                     echo json_encode(
                         [
                             'status' => 'error',
-                            'message' => 'Incorrect OTP'
+                            'message' => 'Incorrect OTP',
+                            'otp' => $_SESSION['otp']
                         ]
                     );
                     exit();
@@ -449,7 +450,6 @@ class AuthController
                 );
                 exit();
             }
-        }
     }
 
     /**
@@ -460,5 +460,47 @@ class AuthController
     public function verifyToken(): void
     {
         $this->jwt->verifyJWT();
+    }
+
+    /**
+     * Change password
+     *
+     * @return void
+     */
+    public function changePassword(): void
+    {
+        if (isset($_SESSION['email'])) {
+            if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+                $data = $this->decodeRequest();
+                if (isset($data['password'])) {
+                    $password = password_hash($data['password'], PASSWORD_DEFAULT);
+                    if ($this->model->changePassword($_SESSION['email'], $password)) {
+                        echo json_encode(
+                            [
+                                'status' => 'success',
+                                'message' => 'Password changed successfully'
+                            ]
+                        );
+                        exit();
+                    } else {
+                        echo json_encode(
+                            [
+                                'status' => 'error',
+                                'message' => 'Failed to change password'
+                            ]
+                        );
+                        exit();
+                    }
+                }
+            } else {
+                echo json_encode(
+                    [
+                        'status'=> 'error',
+                        'message' => 'Invalid Request'
+                    ]
+                );
+                exit();
+            }
+        }
     }
 }
