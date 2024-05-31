@@ -7,6 +7,7 @@
  */
 
 require './vendor/autoload.php';
+require 'SessionHelper.php';
 
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
@@ -31,6 +32,7 @@ class JWTHelper
             'exp' => $expirationTime,
             'data' => [
                 'userId' => $user->user_id,
+                'sessionId' => session_id()
             ]
         ];
 
