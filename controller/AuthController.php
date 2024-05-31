@@ -407,8 +407,7 @@ class AuthController
                             [
                                 'status' => 'success',
                                 'message' => 'Password reset email sent',
-                                'email' => $email,
-                                'otp' => $otp
+                                'email' => $email
                             ]
                         );
                         exit();
