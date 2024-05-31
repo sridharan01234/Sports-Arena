@@ -9,7 +9,12 @@ $route = new Router();
 
 $routeParams = $route->findRoute($requestUri);
 if (!$routeParams) {
-    require_once './view/pageNotFound.php';
+    echo json_encode(
+        [
+            'status'=> 'error',
+            'message'=> 'Invalid Request'
+        ]
+    );
     exit;
 }
 
