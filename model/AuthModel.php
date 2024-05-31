@@ -77,7 +77,7 @@ class AuthModel extends Database
      * @param int $id
      *
      * @return object|bool
-    
+
      */
     public function getUserById(int $id): object|bool
     {
@@ -85,7 +85,7 @@ class AuthModel extends Database
     }
 
     /**
-     * Checks 
+     * Checks
      */
     public function checkOtp(string $email, string $otp): bool
     {
