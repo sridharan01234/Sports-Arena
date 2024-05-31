@@ -9,6 +9,7 @@
  */
 
 require './config/config.php'; // Include the database configuration file
+require './service/QueryLogger.php';
 
 class Database
 {
@@ -34,6 +35,7 @@ class Database
         } catch (PDOException $e) {
             error_log($e->getMessage()); //Logs error
         }
+        $this->logger = new QueryLogger();
     }
 
     /**
@@ -274,7 +276,7 @@ class Database
             $query = $query . $this->arrayToInsert($data);
         }
         $this->query($query);
-        //$this->logger->log($query, E_USER_WARNING);
+        $this->logger->logQuery($query);
         try {
             $this->execute();
         } catch (Exception $e) {
