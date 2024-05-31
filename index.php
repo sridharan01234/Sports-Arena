@@ -1,7 +1,6 @@
 <?php
 
 require_once "router/Router.php";
-require_once "helper/SessionHelper.php";
 
 $requestUri = strtok($_SERVER['REQUEST_URI'], '?');
 
@@ -9,11 +8,16 @@ $route = new Router();
 
 $routeParams = $route->findRoute($requestUri);
 if (!$routeParams) {
-    require_once './view/pageNotFound.php';
+    echo json_encode(
+        [
+            'status'=> 'error',
+            'message'=> 'Invalid Request'
+        ]
+    );
     exit;
 }
 
-if (!isset($_SESSION['user_id']) && !in_array($requestUri, ['/login', '/register', '/user/verify', '/password/reset'])) {
+if (!isset($_SESSION['user_id']) && !in_array($requestUri, ['/login', '/register', '/user/verify', '/password/reset', '/otp/verify', '/password/change'])) {
     echo json_encode([
         'status' => false,
         'error' => 'Unauthorized access'

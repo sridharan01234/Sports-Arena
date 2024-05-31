@@ -57,4 +57,63 @@ class AuthModel extends Database
     {
         return $this->db->get('users', ['email' => $email], []);
     }
+
+    /**
+     * Change password
+     *
+     * @param string $email
+     * @param string $password
+     *
+     * @return bool
+     */
+    public function changePassword(string $email, string $password): bool
+    {
+        return $this->db->update('users', ['password' => $password], ['email' => $email]);
+    }
+
+    /**
+     * Get user by id
+     *
+     * @param int $id
+     *
+     * @return object|bool
+
+     */
+    public function getUserById(int $id): object|bool
+    {
+        return $this->db->get('users', ['id' => $id], []);
+    }
+
+    /**
+     * Checks
+     */
+    public function checkOtp(string $email, string $otp): bool
+    {
+        if ($this->db->get('otp_codes', [
+            'user_email' => $email,
+            'otp_code' => $otp
+        ], [])) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Update user's otp
+     *
+     * @param string $email
+     * @param string $otp
+     *
+     * @return bool
+     */
+    public function updateOtp(string $email, string $otp): bool
+    {
+        return $this->db->insert('otp_codes', [
+            'user_email' => $email,
+            'otp_code' => $otp,
+            'created_at' => date('Y-m-d H:i:s'),
+            'expires_at' => date('Y-m-d H:i:s', strtotime('+15 minutes'))
+        ]);
+    }
 }

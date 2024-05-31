@@ -21,6 +21,7 @@ class Router
         $this->add("/password/reset", ['Controller' => 'AuthController', 'action' => 'resetPassword']);
         $this->add("/otp/verify", ['Controller' => 'AuthController', 'action' => 'verifyOTP']);
         $this->add("/jwt/verify", ['Controller' => 'AuthController', 'action' => 'verifyToken']);
+        $this->add("/password/change", ['Controller' => 'AuthController', 'action' => 'changePassword']);
     }
 
     /**
