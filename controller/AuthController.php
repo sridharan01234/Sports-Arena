@@ -356,7 +356,7 @@ class AuthController
                 $email = $data['email'];
                 if ($this->model->checkEmail($email)) {
                     $otp = rand(100000, 999999);
-                    $_SESSION['otp'] = $otp;
+                    $this->model->updateOtp($email, $otp);
                     $subject = 'Reset Password';
                     $message =
                         "<html>
@@ -381,7 +381,6 @@ class AuthController
                                 'otp' => $otp
                             ]
                         );
-                        $_SESSION['email'] = $email;
                         exit();
                     } else {
                         echo json_encode(
@@ -423,12 +422,11 @@ class AuthController
     {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $data = $this->decodeRequest();
-            if ($_SESSION['otp'] != $data['otp']) {
+            if (!$this->model->checkOtp($data['email'], $data['otp'])) {
                 echo json_encode(
                     [
                         'status' => 'error',
-                        'message' => 'Incorrect OTP',
-                        'otp' => $_SESSION['otp']
+                        'message' => 'Incorrect OTP'
                     ]
                 );
                 exit();
