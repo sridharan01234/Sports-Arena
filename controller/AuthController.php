@@ -12,7 +12,6 @@ use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 
 require './model/AuthModel.php';
-require './helper/SessionHelper.php';
 require './vendor/autoload.php';
 require './helper/JWTHelper.php';
 
@@ -51,7 +50,7 @@ class AuthController
     {
         $errors = [];
 
-        $requiredFields = ['firstName' => 'Name', 'lastName' => 'Last Name', 'email' => 'Email', 'password' => 'Password', 'confirmPassword' => 'Confirm Password', 'username' => 'Username', 'gender' => 'Gender', 'age' => 'Age', 'phone' => 'Phone'];
+        $requiredFields = ['firstName' => 'First Name', 'lastName' => 'Last Name', 'email' => 'Email', 'password' => 'Password', 'confirmPassword' => 'Confirm Password', 'gender' => 'Gender', 'age' => 'Age', 'phoneNumber' => 'Phone'];
 
         foreach ($requiredFields as $field => $fieldName) {
             if (empty($data[$field])) {
@@ -101,7 +100,7 @@ class AuthController
         $mail->IsHTML(true);
         $mail->Username = "sridharan01234@gmail.com"; // Sender email
         $mail->Password = "quqyymmbzmqqntrh"; // Sender password
-        $mail->SetFrom("sridharan01234@gmail.com", "Sridharan"); // Sender details
+        $mail->SetFrom("sridharan01234@gmail.com", "Sports Arena"); // Sender details
         $mail->Subject = $subject; // Email subject
         $mail->Body = $message; // Email body
         $mail->AddAddress($email, "HR"); // Recipient email
@@ -170,6 +169,7 @@ class AuthController
             if ($this->model->checkEmail($email)) {
                 $user = $this->model->getUserByEmail($email);
                 if (password_verify($password, $user->password)) {
+                    session_start();
                     $_SESSION['user_id'] = $user->user_id;
                     echo json_encode(([
                         'status' => 'success',
@@ -195,6 +195,14 @@ class AuthController
                 );
                 exit();
             }
+        } else {
+            echo json_encode(
+                [
+                    'status'=> 'error',
+                    'message'=> "This ".$_SERVER['REQUEST_METHOD'] ." request method is not supported",
+                ]
+            );
+            exit();
         }
     }
 
@@ -218,42 +226,40 @@ class AuthController
                 );
                 exit();
             }
-        }
-        $email = $data['email'];
-        $password = $data['password'];
-        // Validate registration form entries
-        $errors = $this->validateRegisterFormEntries($data);
-        if (!empty($errors)) {
-            echo json_encode(
-                [
-                    'status' => 'error',
-                    'message' => $errors
-                ]
-            );
-            exit();
-        }
-        if ($this->model->checkEmail($email)) {
-            echo json_encode(
-                [
-                    'status' => 'error',
-                    'message' => 'Email already exists'
-                ]
-            );
-            exit();
-        }
-        $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-        $data = [
-            'first_name' => $data['firstName'],
-            'last_name' => $data['lastName'],
-            'email' => $data['email'],
-            'password' => $hashed_password,
-            'username' => $data['username'],
-            'gender' => $data['gender'],
-            'age' => $data['age'],
-            'phonenumber' => $data['phone'],
-        ];
-        $subject = 'Registration Successful';
-        $message = "
+            $email = $data['email'];
+            $password = $data['password'];
+            // Validate registration form entries
+            $errors = $this->validateRegisterFormEntries($data);
+            if (!empty($errors)) {
+                echo json_encode(
+                    [
+                        'status' => 'error',
+                        'message' => $errors
+                    ]
+                );
+                exit();
+            }
+            if ($this->model->checkEmail($email)) {
+                echo json_encode(
+                    [
+                        'status' => 'error',
+                        'message' => 'Email already exists'
+                    ]
+                );
+                exit();
+            }
+            $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+            $data = [
+                'first_name' => $data['firstName'],
+                'last_name' => $data['lastName'],
+                'email' => $data['email'],
+                'password' => $hashed_password,
+                'gender' => $data['gender'],
+                'age' => $data['age'],
+                'phonenumber' => $data['phoneNumber'],
+            ];
+            $subject = 'Registration Successful';
+            $message = "
         <html>
         <head>
             <title>Registration Successful</title>
@@ -263,7 +269,7 @@ class AuthController
                 $data[first_name]
                 $data[last_name],</p>
             <p>Thank you for registering with us. Your account has been successfully created.</p>
-            <p>Your username is: $data[username]</p>
+            <p>Your username is: $data[email]</p>
             <p>Your password is: $password</p>
             <p>Please use this password to login to your account.</p>
             <p>Thank you for using our service.</p>
@@ -274,20 +280,29 @@ class AuthController
         </body>
         </html>
             ";
-        $this->sendEmail($data['email'], $subject, $message);
-        if ($this->model->create($data)) {
-            echo json_encode(
-                [
-                    'status' => 'success',
-                    'message' => 'Registration successful'
-                ]
-            );
-            exit();
+            $this->sendEmail($data['email'], $subject, $message);
+            if ($this->model->create($data)) {
+                echo json_encode(
+                    [
+                        'status' => 'success',
+                        'message' => 'Registration successful'
+                    ]
+                );
+                exit();
+            } else {
+                echo json_encode(
+                    [
+                        'status' => 'error',
+                        'message' => 'Registration failed'
+                    ]
+                );
+                exit();
+            }
         } else {
             echo json_encode(
                 [
-                    'status' => 'error',
-                    'message' => 'Registration failed'
+                    'status'=> 'error',
+                    'message'=> "This ".$_SERVER['REQUEST_METHOD'] ." request method is not supported",
                 ]
             );
             exit();
@@ -311,9 +326,16 @@ class AuthController
                 ]
             );
             exit();
+        } else {
+            echo json_encode(
+                [
+                    'status'=> 'error',
+                    'message'=> "This ".$_SERVER['REQUEST_METHOD'] ." request method is not supported",
+                ]
+            );
+            exit();
         }
     }
-
     /**
      * Verify email address
      *
@@ -340,6 +362,14 @@ class AuthController
                 );
                 exit();
             }
+        } else {
+            echo json_encode(
+                [
+                    'status'=> 'error',
+                    'message'=> "This ".$_SERVER['REQUEST_METHOD'] ." request method is not supported",
+                ]
+            );
+            exit();
         }
     }
 
@@ -410,6 +440,14 @@ class AuthController
                 );
                 exit();
             }
+        } else {
+            echo json_encode(
+                [
+                    'status'=> 'error',
+                    'message'=> "This ".$_SERVER['REQUEST_METHOD'] ." request method is not supported",
+                ]
+            );
+            exit();
         }
     }
 
@@ -442,8 +480,8 @@ class AuthController
         } else {
             echo json_encode(
                 [
-                    'status' => 'error',
-                    'message' => 'Invalid Request'
+                    'status'=> 'error',
+                    'message'=> "This ".$_SERVER['REQUEST_METHOD'] ." request method is not supported",
                 ]
             );
             exit();
@@ -493,7 +531,7 @@ class AuthController
             echo json_encode(
                 [
                     'status'=> 'error',
-                    'message' => 'Invalid Request'
+                    'message'=> "This ".$_SERVER['REQUEST_METHOD'] ." request method is not supported",
                 ]
             );
             exit();
