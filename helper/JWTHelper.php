@@ -7,7 +7,6 @@
  */
 
 require './vendor/autoload.php';
-require 'SessionHelper.php';
 
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;

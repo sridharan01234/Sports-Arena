@@ -10,18 +10,24 @@ class QueryLogger
 
     public function logQuery(string $query)
     {
-        // Check if the file exists
-        if (!file_exists(self::LOG_FILE)) {
-            // Create the file if it doesn't exist
-            $fp = fopen(self::LOG_FILE, 'w');
-            fclose($fp);
-        }
-
         // Open the log file in append mode
         $fp = fopen(self::LOG_FILE, 'a');
 
-        // Log the query
-        fwrite($fp, date('Y-m-d H:i:s') . ' - ' . $query . PHP_EOL);
+        // Get additional details
+        $request_method = $_SERVER['REQUEST_METHOD'];
+        $request_uri = $_SERVER['REQUEST_URI'];
+        $client_ip = $_SERVER['REMOTE_ADDR'];
+
+        // Log the query with additional details
+        fwrite(
+            $fp,
+            date('Y-m-d H:i:s') . ' - ' .
+            "Method: $request_method" . PHP_EOL .
+            "URI: $request_uri" . PHP_EOL .
+            "Client IP: $client_ip" . PHP_EOL .
+            "Query: $query" . PHP_EOL .
+            PHP_EOL
+        );
 
         // Close the log file
         fclose($fp);

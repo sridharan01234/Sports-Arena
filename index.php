@@ -1,7 +1,6 @@
 <?php
 
 require_once "router/Router.php";
-require_once "helper/SessionHelper.php";
 
 $requestUri = strtok($_SERVER['REQUEST_URI'], '?');
 

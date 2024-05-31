@@ -47,6 +47,7 @@ class Database
      */
     public function query(string $sql): void
     {
+        $this->logger->logQuery($sql);
         $this->stmt = $this->dbh->prepare($sql);
     }
 
@@ -276,7 +277,6 @@ class Database
             $query = $query . $this->arrayToInsert($data);
         }
         $this->query($query);
-        $this->logger->logQuery($query);
         try {
             $this->execute();
         } catch (Exception $e) {
