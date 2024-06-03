@@ -3,16 +3,21 @@
 /**
  * AuthModel
  *
- * @author Sridharan
- * Email : sridharan01234@gmail.com
+ * @author Sridharan sridharan01234@gmail.com
  * LastModified : 29-05-2024
  */
 
 require './database/Database.php';
+require_once './interface/BaseInterface.php';
 
-class AuthModel extends Database
+
+class AuthModel extends Database implements BaseInterface
 {
+    /**
+     * @var Database
+     */
     private $db;
+
     public function __construct()
     {
         $this->db = new Database();
@@ -79,13 +84,18 @@ class AuthModel extends Database
      * @return object|bool
 
      */
-    public function getUserById(int $id): object|bool
+    public function getUser(int $id): object|bool
     {
         return $this->db->get('users', ['id' => $id], []);
     }
 
     /**
-     * Checks
+     * Checks otp
+     *
+     * @param string $email
+     * @param string $otp
+     *
+     * @return bool
      */
     public function checkOtp(string $email, string $otp): bool
     {
@@ -115,5 +125,15 @@ class AuthModel extends Database
             'created_at' => date('Y-m-d H:i:s'),
             'expires_at' => date('Y-m-d H:i:s', strtotime('+15 minutes'))
         ]);
+    }
+
+    public function updateUser(int $id, array $data)
+    {
+        // TODO: Implement updateUser() method.
+    }
+
+    public function deleteUser(int $id)
+    {
+        // TODO: Implement deleteUser() method.
     }
 }
