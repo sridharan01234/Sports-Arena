@@ -11,7 +11,7 @@ require './vendor/autoload.php';
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 
-class JWTHelper
+abstract class JWTHelper
 {
     private const JWT_SECRET_KEY = 's3cr3tK3y123!@#"';
 
@@ -22,7 +22,7 @@ class JWTHelper
      *
      * @return string
      */
-    public function generateJWT(object $user): string
+    public static function generateJWT(object $user): string
     {
         $issuedAt = time();
         $expirationTime = $issuedAt + 3600;
@@ -44,7 +44,7 @@ class JWTHelper
      *
      * @return string|null
      */
-    private function getBearerToken(): ?string
+    private static function getBearerToken(): ?string
     {
         $headers = apache_request_headers();
         if (isset($headers['Authorization'])) {
@@ -59,11 +59,11 @@ class JWTHelper
     /**
      * Verify JWT
      *
-     * @return array|null
+     * @return void
      */
-    public function verifyJWT(): ?array
+    public static function verifyJWT(): void
     {
-        $jwt = $this->getBearerToken();
+        $jwt = self::getBearerToken();
         if (!$jwt) {
             echo json_encode(
                 [
@@ -75,7 +75,7 @@ class JWTHelper
         } else {
             try {
                 $decoded = JWT::decode($jwt, new Key(self::JWT_SECRET_KEY, 'HS256'));
-                if ($this->isTokenExpired($decoded)) {
+                if (self::isTokenExpired($decoded)) {
                     echo json_encode(
                         [
                             "status" => "error",
@@ -84,14 +84,10 @@ class JWTHelper
                     );
                     exit();
                 }
-                echo json_encode(
-                    [
-                        "status" => "success",
-                        "message" => "JWT verification successful",
-                        "data" => $decoded
-                    ]
-                );
-                exit();
+                session_id($decoded->data->sessionId);
+                session_start();
+
+                return;
             } catch (DomainException $e) {
                 echo json_encode(
                     [
@@ -121,7 +117,7 @@ class JWTHelper
      *
      * @return bool
      */
-    private function isTokenExpired(object $token): bool
+    private static function isTokenExpired(object $token): bool
     {
         $expirationTime = $token->exp;
         return time() > $expirationTime;
