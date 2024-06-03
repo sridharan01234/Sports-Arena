@@ -1,6 +1,9 @@
 <?php
 
 require_once "router/Router.php";
+require_once "helper/SessionHelper.php";
+require 'helper/JWTHelper.php';
+
 
 $requestUri = strtok($_SERVER['REQUEST_URI'], '?');
 
@@ -17,12 +20,8 @@ if (!$routeParams) {
     exit;
 }
 
-if (!isset($_SESSION['user_id']) && !in_array($requestUri, ['/login', '/register', '/user/verify', '/password/reset', '/otp/verify', '/password/change'])) {
-    echo json_encode([
-        'status' => false,
-        'error' => 'Unauthorized access'
-    ]);
-    exit;
+if (!in_array($requestUri, ['/login', '/register', '/user/verify', '/password/reset', '/otp/verify', '/password/change'])) {
+    JWTHelper::verifyJWT();
 }
 
 $controllerName = $routeParams['Controller'];
