@@ -4,7 +4,7 @@
 /**
  * AuthController class
  *
- * @author Sridharan
+ * @author Sridharan sridharan01234@gmail.com
  */
 
 use PHPMailer\PHPMailer\PHPMailer;
@@ -14,8 +14,9 @@ use PHPMailer\PHPMailer\Exception;
 require './model/AuthModel.php';
 require './vendor/autoload.php';
 require './helper/JWTHelper.php';
+require 'BaseController.php';
 
-class AuthController
+class AuthController extends BaseController
 {
     private $model;
     private $jwt;
@@ -23,21 +24,6 @@ class AuthController
     public function __construct()
     {
         $this->model = new AuthModel();
-        $this->jwt = new JWTHelper();
-    }
-
-    /**
-     * Decodes raw data
-     *
-     * @return array|null
-     */
-    public function decodeRequest(): array | bool | null
-    {
-        // Access the raw POST data
-        $raw_data = file_get_contents('php://input');
-
-        // Parse the JSON data
-        return json_decode($raw_data, true);
     }
 
     /**
@@ -174,7 +160,7 @@ class AuthController
                     echo json_encode(([
                         'status' => 'success',
                         'message' => 'Login successful',
-                        'jwt' => $this->jwt->generateJWT($user)
+                        'jwt' => JWTHelper::generateJWT($user),
                     ]));
                     exit();
                 } else {
@@ -198,8 +184,8 @@ class AuthController
         } else {
             echo json_encode(
                 [
-                    'status'=> 'error',
-                    'message'=> "This ".$_SERVER['REQUEST_METHOD'] ." request method is not supported",
+                    'status' => 'error',
+                    'message' => "This " . $_SERVER['REQUEST_METHOD'] . " request method is not supported",
                 ]
             );
             exit();
@@ -301,8 +287,8 @@ class AuthController
         } else {
             echo json_encode(
                 [
-                    'status'=> 'error',
-                    'message'=> "This ".$_SERVER['REQUEST_METHOD'] ." request method is not supported",
+                    'status' => 'error',
+                    'message' => "This " . $_SERVER['REQUEST_METHOD'] . " request method is not supported",
                 ]
             );
             exit();
@@ -329,13 +315,14 @@ class AuthController
         } else {
             echo json_encode(
                 [
-                    'status'=> 'error',
-                    'message'=> "This ".$_SERVER['REQUEST_METHOD'] ." request method is not supported",
+                    'status' => 'error',
+                    'message' => "This " . $_SERVER['REQUEST_METHOD'] . " request method is not supported",
                 ]
             );
             exit();
         }
     }
+
     /**
      * Verify email address
      *
@@ -365,8 +352,8 @@ class AuthController
         } else {
             echo json_encode(
                 [
-                    'status'=> 'error',
-                    'message'=> "This ".$_SERVER['REQUEST_METHOD'] ." request method is not supported",
+                    'status' => 'error',
+                    'message' => "This " . $_SERVER['REQUEST_METHOD'] . " request method is not supported",
                 ]
             );
             exit();
@@ -442,8 +429,8 @@ class AuthController
         } else {
             echo json_encode(
                 [
-                    'status'=> 'error',
-                    'message'=> "This ".$_SERVER['REQUEST_METHOD'] ." request method is not supported",
+                    'status' => 'error',
+                    'message' => "This " . $_SERVER['REQUEST_METHOD'] . " request method is not supported",
                 ]
             );
             exit();
@@ -479,8 +466,8 @@ class AuthController
         } else {
             echo json_encode(
                 [
-                    'status'=> 'error',
-                    'message'=> "This ".$_SERVER['REQUEST_METHOD'] ." request method is not supported",
+                    'status' => 'error',
+                    'message' => "This " . $_SERVER['REQUEST_METHOD'] . " request method is not supported",
                 ]
             );
             exit();
@@ -494,7 +481,7 @@ class AuthController
      */
     public function verifyToken(): void
     {
-        $this->jwt->verifyJWT();
+        JWTHelper::verifyJWT();
     }
 
     /**
@@ -529,8 +516,8 @@ class AuthController
         } else {
             echo json_encode(
                 [
-                    'status'=> 'error',
-                    'message'=> "This ".$_SERVER['REQUEST_METHOD'] ." request method is not supported",
+                    'status' => 'error',
+                    'message' => "This " . $_SERVER['REQUEST_METHOD'] . " request method is not supported",
                 ]
             );
             exit();
