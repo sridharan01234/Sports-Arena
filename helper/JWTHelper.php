@@ -11,7 +11,7 @@ require './vendor/autoload.php';
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 
-abstract class JWTHelper
+class JWTHelper
 {
     private const JWT_SECRET_KEY = 's3cr3tK3y123!@#"';
 
@@ -22,7 +22,7 @@ abstract class JWTHelper
      *
      * @return string
      */
-    public static function generateJWT(object $user): string
+    public function generateJWT(object $user): string
     {
         $issuedAt = time();
         $expirationTime = $issuedAt + 3600;
@@ -44,7 +44,7 @@ abstract class JWTHelper
      *
      * @return string|null
      */
-    private static function getBearerToken(): ?string
+    private function getBearerToken(): ?string
     {
         $headers = apache_request_headers();
         if (isset($headers['Authorization'])) {
@@ -61,7 +61,7 @@ abstract class JWTHelper
      *
      * @return void
      */
-    public static function verifyJWT(): void
+    public function verifyJWT(): void
     {
         $jwt = self::getBearerToken();
         if (!$jwt) {
@@ -117,7 +117,7 @@ abstract class JWTHelper
      *
      * @return bool
      */
-    private static function isTokenExpired(object $token): bool
+    private function isTokenExpired(object $token): bool
     {
         $expirationTime = $token->exp;
         return time() > $expirationTime;
