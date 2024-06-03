@@ -23,9 +23,8 @@ class Router
         $this->add("/password/change", ['Controller' => 'AuthController', 'action' => 'changePassword']);
         $this->add("/user/profile", ['Controller' => 'UserController', 'action' => 'userProfile']);
         $this->add("/user/update", ['Controller' => 'UserController', 'action' => 'userUpdate']);
+        $this->add("/user/update/profile", ['Controller' => 'UserController', 'action' => 'updateProfile']);
         $this->add("/user/delete", ['Controller' => 'UserController', 'action' => 'userDelete']);
-        $this->add("/user/list", ['Controller' => 'AdminController', 'action' => 'list']);
-        $this->add("/user/create", ['Controller' => 'AdminController', 'action' => 'create']);
     }
 
     /**
