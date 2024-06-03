@@ -9,6 +9,7 @@
 
 require "BaseController.php";
 require './model/UserModel.php';
+require './helper/SessionHelper.php';
 
 class UserController extends BaseController
 {
@@ -68,7 +69,7 @@ class UserController extends BaseController
         $details = [];
 
         // Iterate through the desired keys
-        $keys = ['name', 'email', 'gender', 'dob', 'phone', 'address'];
+        $keys = ['name', 'age', 'gender', 'dob', 'phone', 'address'];
 
         foreach ($keys as $key) {
             if (isset($data[$key])) {
@@ -76,8 +77,8 @@ class UserController extends BaseController
             }
         }
 
-        // Add the 'updated_at' key regardless
-        $details['updated_at'] = date('Y-m-d H:i:s');
+        // Add the 'modified_at' key regardless
+        $details['modified_at'] = date('Y-m-d H:i:s');
         if ($this->userModel->updateUser($data['user_id'], $details)) {
             echo json_encode(['success' => true]);
             exit;
