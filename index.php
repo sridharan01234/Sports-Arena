@@ -1,9 +1,7 @@
 <?php
 
 require_once "router/Router.php";
-require_once "helper/SessionHelper.php";
-require 'helper/JWTHelper.php';
-
+require_once "helper/JWTHelper.php";
 
 $requestUri = strtok($_SERVER['REQUEST_URI'], '?');
 
@@ -21,7 +19,8 @@ if (!$routeParams) {
 }
 
 if (!in_array($requestUri, ['/login', '/register', '/user/verify', '/password/reset', '/otp/verify', '/password/change'])) {
-    JWTHelper::verifyJWT();
+    $jwt = new JWTHelper();
+    $jwt->verifyJWT();
 }
 
 $controllerName = $routeParams['Controller'];
