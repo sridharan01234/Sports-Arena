@@ -11,10 +11,10 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 
-require './model/AuthModel.php';
-require './vendor/autoload.php';
-require './helper/JWTHelper.php';
-require 'BaseController.php';
+require_once './model/AuthModel.php';
+require_once './vendor/autoload.php';
+require_once './helper/JWTHelper.php';
+require_once 'BaseController.php';
 
 class AuthController extends BaseController
 {
@@ -24,6 +24,7 @@ class AuthController extends BaseController
     public function __construct()
     {
         $this->model = new AuthModel();
+        $this->jwt = new JWTHelper();
     }
 
     /**
@@ -160,7 +161,7 @@ class AuthController extends BaseController
                     echo json_encode(([
                         'status' => 'success',
                         'message' => 'Login successful',
-                        'jwt' => JWTHelper::generateJWT($user),
+                        'jwt' => $this->jwt->generateJWT($user),
                     ]));
                     exit();
                 } else {
@@ -481,7 +482,7 @@ class AuthController extends BaseController
      */
     public function verifyToken(): void
     {
-        JWTHelper::verifyJWT();
+        $this->jwt->verifyJWT();
     }
 
     /**
