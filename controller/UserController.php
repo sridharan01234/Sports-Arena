@@ -108,4 +108,39 @@ class UserController extends BaseController
         echo json_encode(['success' => true]);
         exit;
     }
+
+    public function userProfilePictureUpload(): void
+    {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            echo json_encode([
+                'error' => 'Method Not Allowed'
+            ]);
+            exit;
+        }
+        $data = $this->decodeRequest();
+
+        if ($_FILES['profile_picture']['error'] === UPLOAD_ERR_OK) {
+            $uploadDir = './assets/profile_pictures/';
+            $uploadFile = $uploadDir . basename($_FILES['profile_picture']['name']);
+
+            if (move_uploaded_file($_FILES['profile_picture']['tmp_name'], $uploadFile)) {
+                echo json_encode([
+                    'success' => true,
+                    'message' => 'Profile picture uploaded successfully.'
+                ]);
+                $this->userModel->updateUser($data['user_id'], [
+                    'profile_picture' => $uploadFile
+                ]);
+                exit;
+            } else {
+                echo json_encode([
+                    'error' => 'There was an error uploading the file.'
+                ]);
+            }
+        } else {
+            echo json_encode([
+                'error' => 'Invalid file upload.'
+            ]);
+        }
+    }
 }
