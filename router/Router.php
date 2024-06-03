@@ -14,9 +14,14 @@ class Router
 
     public function __construct()
     {
-        $this->add("/", ['Controller' => 'AuthController', 'action' => 'login']);
         $this->add("/register", ['Controller' => 'AuthController', 'action' => 'register']);
         $this->add("/login", ['Controller' => 'AuthController', 'action' => 'login']);
+        $this->add("/user/verify", ['Controller' => 'AuthController', 'action' => 'verifyEmail']);
+        $this->add("/logout", ['Controller' => 'AuthController', 'action' => 'logout']);
+        $this->add("/password/reset", ['Controller' => 'AuthController', 'action' => 'resetPassword']);
+        $this->add("/otp/verify", ['Controller' => 'AuthController', 'action' => 'verifyOTP']);
+        $this->add("/jwt/verify", ['Controller' => 'AuthController', 'action' => 'verifyToken']);
+        $this->add("/password/change", ['Controller' => 'AuthController', 'action' => 'changePassword']);
     }
 
     /**
