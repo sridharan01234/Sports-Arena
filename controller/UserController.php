@@ -117,30 +117,39 @@ class UserController extends BaseController
             ]);
             exit;
         }
+
         $data = $this->decodeRequest();
 
+        // Updated code for handling profile picture upload with error handling, permission fix, and database update
         if ($_FILES['profile_picture']['error'] === UPLOAD_ERR_OK) {
-            $uploadDir = './assets/profile_pictures/';
-            $uploadFile = $uploadDir . basename($_FILES['profile_picture']['name']);
+            $uploadDir = '/home/asplap1937/github/be/assets/profile_pictures/';
+
+            $fileExtension = pathinfo($_FILES['profile_picture']['name'], PATHINFO_EXTENSION);
+            $uploadFile = $uploadDir . $_POST['email'] . '.' . $fileExtension;
 
             if (move_uploaded_file($_FILES['profile_picture']['tmp_name'], $uploadFile)) {
+                $this->userModel->updateUser( $_POST['user_id'], [
+                    'profile_picture' => $uploadFile = $uploadDir . $_POST['email'] . '.' . $fileExtension
+                ]);
                 echo json_encode([
                     'success' => true,
                     'message' => 'Profile picture uploaded successfully.'
                 ]);
-                $this->userModel->updateUser($data['user_id'], [
-                    'profile_picture' => $uploadFile
-                ]);
                 exit;
             } else {
                 echo json_encode([
-                    'error' => 'There was an error uploading the file.'
+                    'error' => 'Failed to upload profile picture.',
+                    'error_code' => $_FILES['profile_picture']['error'],
                 ]);
+                exit;
             }
         } else {
             echo json_encode([
-                'error' => 'Invalid file upload.'
+                'error' => 'Profile picture upload failed.',
+                'error_code' => $_FILES['profile_picture']['error'],
             ]);
+            exit;
         }
+     
     }
 }
