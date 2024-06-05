@@ -51,8 +51,13 @@ class UserController extends BaseController
      */
     public function userProfile(): void
     {
+        if($_SERVER['REQUEST_METHOD'] !== 'GET') {
+            http_response_code(405);
+            echo json_encode(['error' => 'Method Not Allowed']);
+            exit;
+        }
         $data = $this->decodeRequest();
-        $user = $this->userModel->getUser($data['user_id']);
+        $user = $this->userModel->getUser($_SESSION['user_id']);
 
         echo json_encode($user);
         exit;
