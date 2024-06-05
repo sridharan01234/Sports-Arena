@@ -169,7 +169,7 @@ class AuthController extends BaseController
                     echo json_encode(
                         [
                             'status' => 'error',
-                            'message' => 'Invalid password'
+                            'message' => 'Incorrect password'
                         ]
                     );
                     exit();
@@ -253,6 +253,7 @@ class AuthController extends BaseController
             <title>Registration Successful</title>
         </head>
         <body>
+        <img src='../assets/images/logo.png' alt='Image description'>
             <p>Dear
                 $data[first_name]
                 $data[last_name],</p>
