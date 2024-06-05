@@ -24,6 +24,7 @@ Insert code
 2. Install dependencies:
 bash cd authentication-api composer install
 
+## Configuration
 
 Insert code
 3. Configure the email settings:
@@ -38,6 +39,12 @@ The API is designed to be used with a web server. You can access the API endpoin
 - **/logout:** Logout a user (GET)
 - **/verify-email:** Verify email address (POST)
 - **/reset-password:** Request password reset (POST)
+- **/change-password:** Change user password (POST)
+- **/user/profile:** Get user profile (GET)
+- **/user/update:** Update user profile (PUT)
+- **/user/delete:** Delete user account (DELETE)
+- **/user/list:** List users (GET)
+- **/user/create:** Create a new user (POST)
 
 ### Example Request (Register):
 ```
@@ -63,4 +70,47 @@ json { "email": "johndoe@example.com" }
 ### Example Response (Error):
 ```
 { "error": "Invalid email or password" }
+```
+
+# Email Verification
+
+### Example Request 
+```
+json { "email": "johndoe@example.com" }
+```  
+
+### Example Response (Success):
+```
+{ "message": "Verification email sent" }
+```
+
+### Example Response (Error):
+```
+{ "error": "Invalid email" }
+```
+
+# Password Reset
+
+### Example Request
+```
+json { "email": "johndoe@example.com" }
+```
+
+### Example Response (Success):
+```
+{ "message": "Password reset email sent" }
+```
+
+### Example Respone (Error):
+```
+{
+    "error": "Invalid token"
+}
+```
+
+### Example Response (Success)
+```
+{
+    "success": "Token updated successfully"
+}"
 ```

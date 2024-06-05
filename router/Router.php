@@ -3,8 +3,7 @@
 /**
  * This file contains request handling functionalities
  *
- * Author : sridharan
- * Email : sridharan01234@gmail.com
+ * @author Sridharan sridharan01234@gmail.com
  * Last modified : 28/5/2024
  */
 
@@ -22,6 +21,10 @@ class Router
         $this->add("/otp/verify", ['Controller' => 'AuthController', 'action' => 'verifyOTP']);
         $this->add("/jwt/verify", ['Controller' => 'AuthController', 'action' => 'verifyToken']);
         $this->add("/password/change", ['Controller' => 'AuthController', 'action' => 'changePassword']);
+        $this->add("/user/profile", ['Controller' => 'UserController', 'action' => 'userProfile']);
+        $this->add("/user/update", ['Controller' => 'UserController', 'action' => 'userUpdate']);
+        $this->add("/user/update/profile", ['Controller' => 'UserController', 'action' => 'userProfilePictureUpload']);
+        $this->add("/user/delete", ['Controller' => 'UserController', 'action' => 'userDelete']);
     }
 
     /**

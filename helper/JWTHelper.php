@@ -59,11 +59,11 @@ class JWTHelper
     /**
      * Verify JWT
      *
-     * @return array|null
+     * @return void
      */
-    public function verifyJWT(): ?array
+    public function verifyJWT(): void
     {
-        $jwt = $this->getBearerToken();
+        $jwt = self::getBearerToken();
         if (!$jwt) {
             echo json_encode(
                 [
@@ -75,7 +75,7 @@ class JWTHelper
         } else {
             try {
                 $decoded = JWT::decode($jwt, new Key(self::JWT_SECRET_KEY, 'HS256'));
-                if ($this->isTokenExpired($decoded)) {
+                if (self::isTokenExpired($decoded)) {
                     echo json_encode(
                         [
                             "status" => "error",
@@ -84,14 +84,10 @@ class JWTHelper
                     );
                     exit();
                 }
-                echo json_encode(
-                    [
-                        "status" => "success",
-                        "message" => "JWT verification successful",
-                        "data" => $decoded
-                    ]
-                );
-                exit();
+                session_id($decoded->data->sessionId);
+                session_start();
+
+                return;
             } catch (DomainException $e) {
                 echo json_encode(
                     [
