@@ -14,9 +14,9 @@ class Router
 
     public function __construct()
     {
-        // $this->add("/", ['Controller' => 'TournamentController', 'action' => 'getTournament']);
-        // $this->add("/", ['Controller' => 'TournamentController', 'action' => 'addTournament']);
-        $this->add("/", ['Controller' => 'TournamentController', 'action' => 'registerTournament']);
+        $this->add("/get", ['Controller' => 'TournamentController', 'action' => 'getTournament']);
+        $this->add("/add", ['Controller' => 'TournamentController', 'action' => 'addTournament']);
+        $this->add("/register", ['Controller' => 'TournamentController', 'action' => 'registerTournament']);
 
     }
 
