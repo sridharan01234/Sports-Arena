@@ -162,6 +162,7 @@ class AuthController extends BaseController
                         'status' => 'success',
                         'message' => 'Login successful',
                         'jwt' => $this->jwt->generateJWT($user),
+                        'session_id' => session_id(),
                     ]));
                     exit();
                 } else {
