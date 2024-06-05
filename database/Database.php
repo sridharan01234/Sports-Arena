@@ -3,12 +3,13 @@
 /**
  * This file contains database actions
  *
- * Author : sridharan
+ * Author : Sridharan
  * Email : sridharan01234@gmail.com
- * Last modified : 16/5/2024
+ * Last modified : 28/5/2024
  */
 
 require './config/config.php'; // Include the database configuration file
+require './service/QueryLogger.php';
 
 class Database
 {
@@ -34,6 +35,7 @@ class Database
         } catch (PDOException $e) {
             error_log($e->getMessage()); //Logs error
         }
+        $this->logger = new QueryLogger();
     }
 
     /**
@@ -45,6 +47,7 @@ class Database
      */
     public function query(string $sql): void
     {
+        $this->logger->logQuery($sql);
         $this->stmt = $this->dbh->prepare($sql);
     }
 
@@ -198,7 +201,6 @@ class Database
         $this->query($query);
         //$this->logger->log($query, E_USER_WARNING);
         try {
-
             $this->execute();
         } catch (Exception $e) {
             error_log($e->getMessage());
@@ -275,7 +277,6 @@ class Database
             $query = $query . $this->arrayToInsert($data);
         }
         $this->query($query);
-        //$this->logger->log($query, E_USER_WARNING);
         try {
             $this->execute();
         } catch (Exception $e) {
