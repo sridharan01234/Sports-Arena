@@ -51,7 +51,7 @@ class UserController extends BaseController
      */
     public function userProfile(): void
     {
-        if($_SERVER['REQUEST_METHOD'] !== 'GET') {
+        if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
             http_response_code(405);
             echo json_encode(['error' => 'Method Not Allowed']);
             exit;
@@ -70,6 +70,12 @@ class UserController extends BaseController
      */
     public function userUpdate(): void
     {
+        if ($_SERVER['REQUEST_METHOD'] !== "PUT") {
+            http_response_code(0);
+            echo json_encode(['error' => 'Method Not Allowed']);
+            exit;
+        }
+
         $data = $this->decodeRequest();
         $details = [];
 
@@ -133,7 +139,7 @@ class UserController extends BaseController
             $uploadFile = $uploadDir . $_POST['email'] . '.' . $fileExtension;
 
             if (move_uploaded_file($_FILES['profile_picture']['tmp_name'], $uploadFile)) {
-                $this->userModel->updateUser( $_POST['user_id'], [
+                $this->userModel->updateUser($_POST['user_id'], [
                     'profile_picture' => $uploadFile = $uploadDir . $_POST['email'] . '.' . $fileExtension
                 ]);
                 echo json_encode([
@@ -155,6 +161,6 @@ class UserController extends BaseController
             ]);
             exit;
         }
-     
+
     }
 }
