@@ -12,4 +12,3 @@ Header set Access-Control-Allow-Credentials true
 Header set Access-Control-Max-Age 3600
 Header set Access-Control-Expose-Headers "Content-Type, Authorization"
 Header set Access-Control-Allow-Origin "*"
-
