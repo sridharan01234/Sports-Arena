@@ -90,7 +90,7 @@ class AuthController extends BaseController
         $mail->SetFrom("sridharan01234@gmail.com", "Sports Arena"); // Sender details
         $mail->Subject = $subject; // Email subject
         $mail->Body = $message; // Email body
-        $mail->AddAddress($email, "HR"); // Recipient email
+        $mail->AddAddress($email, "Sports Arena User"); // Recipient email
 
         // Sending email
         if (!$mail->Send()) {
@@ -155,6 +155,15 @@ class AuthController extends BaseController
             $password = $data['password'];
             if ($this->model->checkEmail($email)) {
                 $user = $this->model->getUserByEmail($email);
+                if ($user->email_verified == 0) {
+                    echo json_encode(
+                        [
+                            'status' => 'error',
+                            'message' => 'Email not verified'
+                        ]
+                    );
+                    exit();
+                }
                 if (password_verify($password, $user->password)) {
                     session_start();
                     $_SESSION['user_id'] = $user->user_id;
@@ -244,16 +253,13 @@ class AuthController extends BaseController
                 'password' => $hashed_password,
                 'gender' => $data['gender'],
                 'age' => $data['age'],
+                'token' => bin2hex(random_bytes(8)),
                 'phonenumber' => $data['phoneNumber'],
             ];
             $subject = 'Registration Successful';
             $message = "
         <html>
         <head>
-            <title>Registration Successful</title>
-        </head>
-        <body>
-        <img src='../assets/images/logo.png' alt='Image description'>
             <p>Dear
                 $data[first_name]
                 $data[last_name],</p>
@@ -263,6 +269,8 @@ class AuthController extends BaseController
             <p>Please use this password to login to your account.</p>
             <p>Thank you for using our service.</p>
             <br>
+
+            <p>Click This link to verify your email address: <a href='http://172.24.220.187/email/verify?token=$data[token]'>Click Here</a></p>
 
             <p>Best regards,</p>
             <p>Sports Arena Team</p>
@@ -521,6 +529,42 @@ class AuthController extends BaseController
                 [
                     'status' => 'error',
                     'message' => "This " . $_SERVER['REQUEST_METHOD'] . " request method is not supported",
+                ]
+            );
+            exit();
+        }
+    }
+
+    /**
+     * Email Confirmation
+     *
+     * @return void
+     */
+    public function EmailConfirmation(): void
+    {
+        if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
+            echo json_encode(
+                [
+                    'status' => 'error',
+                    'message' => 'This ' . $_SERVER['REQUEST_METHOD'] . ' request method is not supported'
+                ]
+            );
+            exit();
+        }
+        $email = $this->model->emailTokenVerification($_GET['token']);
+        if ($email) {
+            $this->model->updateEmailVerificationStatus($email);
+            echo
+            "<div style='border:1px solid black;padding:20px;width:400px;margin:auto;text-align:center;margin-top:300px'>
+            <h1 style='color:green'>Email Verified</h1>"
+            ."<p>Your email has been verified successfully.</p>"
+            ."<p>You can now login with your email and password.</p></div>";
+            exit();
+        } else {
+            echo json_encode(
+                [
+                    'status' => 'error',
+                    'message' => 'Invalid token'
                 ]
             );
             exit();
