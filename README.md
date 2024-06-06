@@ -17,16 +17,14 @@ This repository provides a PHP API for user authentication, offering features li
 - A mail server configured for sending emails (e.g., SMTP)
 
 ## Installation
-1. Clone the repository: bash git clone https://github.com/your-username/authentication-api.git
+1. Clone the repository
 
 
-Insert code
 2. Install dependencies:
 bash cd authentication-api composer install
 
 ## Configuration
 
-Insert code
 3. Configure the email settings:
    - Open `AuthController.php` and replace the placeholder values in the `sendEmail` function with your actual email server settings (host, username, password, etc.).
 
@@ -51,20 +49,19 @@ The API is designed to be used with a web server. You can access the API endpoin
 json { "username": "johndoe", "email": "johndoe@example.com", "password": "password123", "confirm_password": "password123" }
 ```
 
+### Example Response (Success):
+```
+{ "message": "User registered successfully" }
+```
+
 ### Example Request (Login):
 ```
 json { "email": "johndoe@example.com", "password": "password123" }
 ```
 
-Insert code
 ### Example Request (Logout):
 ```
 json { "email": "johndoe@example.com" }
-```
-
-### Example Response (Success):
-```
-{ "message": "User registered successfully" }
 ```
 
 ### Example Response (Error):
@@ -99,18 +96,4 @@ json { "email": "johndoe@example.com" }
 ### Example Response (Success):
 ```
 { "message": "Password reset email sent" }
-```
-
-### Example Respone (Error):
-```
-{
-    "error": "Invalid token"
-}
-```
-
-### Example Response (Success)
-```
-{
-    "success": "Token updated successfully"
-}"
 ```
