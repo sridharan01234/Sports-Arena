@@ -132,7 +132,11 @@ class AuthModel extends Database implements BaseInterface
      */
     public function emailTokenVerification(string $token): bool | string
     {
-        return $this->db->get('users', ['token' => $token], [])->email;
+        if ($this->db->get('users', ['token' => $token], [])) {
+            return $this->db->get('users', ['token' => $token], [])->email;
+        } else {
+            return false;
+        }
     }
 
     /**
