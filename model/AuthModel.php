@@ -127,6 +127,22 @@ class AuthModel extends Database implements BaseInterface
         ]);
     }
 
+    /**
+     *
+     */
+    public function emailTokenVerification(string $token): bool | string
+    {
+        return $this->db->get('users', ['token' => $token], [])->email;
+    }
+
+    /**
+     * Update email verification status
+     */
+    public function updateEmailVerificationStatus(string $email): bool
+    {
+        return $this->db->update('users', ['email_verified' => 1], ['email' => $email]);
+    }
+
     public function updateUser(int $id, array $data)
     {
         // TODO: Implement updateUser() method.
