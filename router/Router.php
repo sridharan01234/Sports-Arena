@@ -19,6 +19,7 @@ class Router
         $this->add("/register", ['Controller' => 'AuthController', 'action' => 'register']);
         $this->add("/login", ['Controller' => 'AuthController', 'action' => 'login']);
         $this->add("/user/verify", ['Controller' => 'AuthController', 'action' => 'verifyEmail']);
+        $this->add("/email/verify", ['Controller' => 'AuthController', 'action' => 'EmailConfirmation']);
         $this->add("/logout", ['Controller' => 'AuthController', 'action' => 'logout']);
         $this->add("/password/reset", ['Controller' => 'AuthController', 'action' => 'resetPassword']);
         $this->add("/otp/verify", ['Controller' => 'AuthController', 'action' => 'verifyOTP']);
@@ -26,7 +27,7 @@ class Router
         $this->add("/password/change", ['Controller' => 'AuthController', 'action' => 'changePassword']);
         $this->add("/user/profile", ['Controller' => 'UserController', 'action' => 'userProfile']);
         $this->add("/user/update", ['Controller' => 'UserController', 'action' => 'userUpdate']);
-        $this->add("/user/update/profile", ['Controller' => 'UserController', 'action' => 'userProfilePictureUpload']);
+        $this->add("/user/update/profile", ['Controller' => 'UserController', 'action' => 'updateProfile']);
         $this->add("/user/delete", ['Controller' => 'UserController', 'action' => 'userDelete']);
         $this->add("/product/add", ['Controller' => 'AdminController', 'action' => 'addProduct']);
         $this->add("/turf/add", ['Controller' => 'AdminController', 'action' => 'addTurf']);

@@ -47,7 +47,7 @@ class UserModel implements BaseInterface
      */
     public function updateUser(int $id, array $data): bool
     {
-        return $this->db->update('users', $data, ['user_id'=> $id], ['id'=> $id]);
+        return $this->db->update('users', $data, ['user_id'=> $id]);
     }
 
     /**

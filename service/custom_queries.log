@@ -598,3 +598,98 @@ URI: /product/add
 Client IP: 127.0.0.1
 Query: INSERT INTO products (admin_id,name,description,price,stock,category,main_image) VALUES('33','Product Name','Product Description','100','50','cricket','gfhjkjbn')
 
+2024-06-07 10:42:45 - Method: POST
+URI: /login
+Client IP: 127.0.0.1
+Query: SELECT * FROM users WHERE email='sridharan01234@gmail.com'
+
+2024-06-07 10:42:45 - Method: POST
+URI: /login
+Client IP: 127.0.0.1
+Query: SELECT * FROM users WHERE email='sridharan01234@gmail.com'
+
+2024-06-07 10:43:23 - Method: POST
+URI: /product/add
+Client IP: 127.0.0.1
+Query: SELECT * FROM users WHERE user_id='41' AND is_admin='1'
+
+2024-06-07 10:43:37 - Method: POST
+URI: /turf/add
+Client IP: 127.0.0.1
+Query: SELECT * FROM users WHERE user_id='41' AND is_admin='1'
+
+2024-06-07 10:43:41 - Method: POST
+URI: /turf/add
+Client IP: 127.0.0.1
+Query: SELECT * FROM users WHERE user_id='41' AND is_admin='1'
+
+2024-06-07 10:44:21 - Method: POST
+URI: /login
+Client IP: 127.0.0.1
+Query: SELECT * FROM users WHERE email='gomathiabi75@gmail.com'
+
+2024-06-07 10:44:21 - Method: POST
+URI: /login
+Client IP: 127.0.0.1
+Query: SELECT * FROM users WHERE email='gomathiabi75@gmail.com'
+
+2024-06-07 10:45:03 - Method: POST
+URI: /product/add
+Client IP: 127.0.0.1
+Query: SELECT * FROM users WHERE user_id='33' AND is_admin='1'
+
+2024-06-07 10:46:30 - Method: POST
+URI: /product/add
+Client IP: 127.0.0.1
+Query: SELECT * FROM users WHERE user_id='33' AND is_admin='1'
+
+2024-06-07 10:46:59 - Method: POST
+URI: /product/add
+Client IP: 127.0.0.1
+Query: SELECT * FROM users WHERE user_id='33' AND is_admin='1'
+
+2024-06-07 10:46:59 - Method: POST
+URI: /product/add
+Client IP: 127.0.0.1
+Query: INSERT INTO products (admin_id,name,description,price,stock,category,main_image) VALUES('60','Product Name','Product Description','100','50','Category Name','fghj')
+
+2024-06-07 10:47:17 - Method: POST
+URI: /product/add
+Client IP: 127.0.0.1
+Query: SELECT * FROM users WHERE user_id='33' AND is_admin='1'
+
+2024-06-07 10:47:17 - Method: POST
+URI: /product/add
+Client IP: 127.0.0.1
+Query: INSERT INTO products (admin_id,name,description,price,stock,category,main_image) VALUES('60','Product Name','Product Description','100','50','cricket','fghj')
+
+2024-06-07 10:47:26 - Method: POST
+URI: /product/add
+Client IP: 127.0.0.1
+Query: SELECT * FROM users WHERE user_id='33' AND is_admin='1'
+
+2024-06-07 10:47:36 - Method: POST
+URI: /product/add
+Client IP: 127.0.0.1
+Query: SELECT * FROM users WHERE user_id='33' AND is_admin='1'
+
+2024-06-07 10:47:36 - Method: POST
+URI: /product/add
+Client IP: 127.0.0.1
+Query: INSERT INTO products (admin_id,name,description,price,stock,category,main_image) VALUES('12','Product Name','Product Description','100','50','cricket','fghj')
+
+2024-06-07 10:51:08 - Method: POST
+URI: /product/add
+Client IP: 127.0.0.1
+Query: SELECT * FROM users WHERE user_id='33' AND is_admin='1'
+
+2024-06-07 10:51:21 - Method: POST
+URI: /product/add
+Client IP: 127.0.0.1
+Query: SELECT * FROM users WHERE user_id='33' AND is_admin='1'
+
+2024-06-07 10:51:21 - Method: POST
+URI: /product/add
+Client IP: 127.0.0.1
+Query: INSERT INTO products (admin_id,name,description,price,stock,category,main_image) VALUES('33','Product Name','Product Description','100','50','cricket','fghj')
+

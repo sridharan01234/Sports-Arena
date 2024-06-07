@@ -37,6 +37,12 @@ class UserController extends BaseController
      */
     public function userDelete(): void
     {
+        if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
+            http_response_code(405);
+            echo json_encode(['error' => 'Method Not Allowed']);
+            exit;
+        }
+
         $data = $this->decodeRequest();
         $this->userModel->deleteUser($data['user_id']);
 
@@ -51,8 +57,18 @@ class UserController extends BaseController
      */
     public function userProfile(): void
     {
+        if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
+            http_response_code(405);
+            echo json_encode(
+                [
+                    'status' => 'error',
+                    'message' => "This " . $_SERVER['REQUEST_METHOD'] . " request method is not supported",
+                ]
+            );
+            exit();
+        }
         $data = $this->decodeRequest();
-        $user = $this->userModel->getUser($data['user_id']);
+        $user = $this->userModel->getUser($_SESSION['user_id']);
 
         echo json_encode($user);
         exit;
@@ -65,6 +81,17 @@ class UserController extends BaseController
      */
     public function userUpdate(): void
     {
+        if ($_SERVER['REQUEST_METHOD'] !== "PUT") {
+            http_response_code(0);
+            echo json_encode(
+                [
+                    'status' => 'error',
+                    'message' => "This " . $_SERVER['REQUEST_METHOD'] . " request method is not supported",
+                ]
+            );
+            exit();
+        }
+
         $data = $this->decodeRequest();
         $details = [];
 
@@ -97,8 +124,13 @@ class UserController extends BaseController
     {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             http_response_code(405);
-            echo json_encode(['error' => 'Method Not Allowed']);
-            exit;
+            echo json_encode(
+                [
+                    'status' => 'error',
+                    'message' => "This " . $_SERVER['REQUEST_METHOD'] . " request method is not supported",
+                ]
+            );
+            exit();
         }
 
         $data = $this->decodeRequest();
@@ -112,10 +144,13 @@ class UserController extends BaseController
     public function userProfilePictureUpload(): void
     {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            echo json_encode([
-                'error' => 'Method Not Allowed'
-            ]);
-            exit;
+            echo json_encode(
+                [
+                    'status' => 'error',
+                    'message' => "This " . $_SERVER['REQUEST_METHOD'] . " request method is not supported",
+                ]
+            );
+            exit();
         }
 
         $data = $this->decodeRequest();
@@ -125,10 +160,10 @@ class UserController extends BaseController
             $uploadDir = '/home/asplap1937/github/be/assets/profile_pictures/';
 
             $fileExtension = pathinfo($_FILES['profile_picture']['name'], PATHINFO_EXTENSION);
-            $uploadFile = $uploadDir . $_POST['email'] . '.' . $fileExtension;
+            $uploadFile = $uploadDir . $_SESSION['user_id'] . '.' . $fileExtension;
 
             if (move_uploaded_file($_FILES['profile_picture']['tmp_name'], $uploadFile)) {
-                $this->userModel->updateUser( $_POST['user_id'], [
+                $this->userModel->updateUser($_POST['user_id'], [
                     'profile_picture' => $uploadFile = $uploadDir . $_POST['email'] . '.' . $fileExtension
                 ]);
                 echo json_encode([
@@ -150,6 +185,5 @@ class UserController extends BaseController
             ]);
             exit;
         }
-     
     }
 }

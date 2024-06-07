@@ -2,6 +2,7 @@
 require_once './model/ProductModel.php';
 require_once './model/TurfModel.php';
 require_once './helper/JWTHelper.php';
+require './helper/SessionHelper.php';
 require_once 'BaseController.php';
 
 class AdminController extends BaseController {
@@ -24,7 +25,7 @@ class AdminController extends BaseController {
                 if ($user_id === null || !$this->getAdmin($user_id)) {
                     throw new Exception('Only admins are allowed to add products');
                 }
-                $required_fields = ['admin_id', 'name', 'description', 'price', 'stock', 'category', 'main_image'];
+                $required_fields = ['name', 'description', 'price', 'stock', 'category', 'main_image'];
                 foreach ($required_fields as $field) {
                     if (empty($data[$field])) {
                         throw new Exception("Field '$field' is required");
@@ -32,7 +33,7 @@ class AdminController extends BaseController {
                 }
 
                 $details = [
-                    'admin_id' => $data['admin_id'],
+                    'admin_id' => $_SESSION['user_id'],
                     'name' => $data['name'],
                     'description' => $data['description'],
                     'price' => $data['price'],
