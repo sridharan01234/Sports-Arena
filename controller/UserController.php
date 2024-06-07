@@ -160,7 +160,7 @@ class UserController extends BaseController
             $uploadDir = '/home/asplap1937/github/be/assets/profile_pictures/';
 
             $fileExtension = pathinfo($_FILES['profile_picture']['name'], PATHINFO_EXTENSION);
-            $uploadFile = $uploadDir . $_POST['email'] . '.' . $fileExtension;
+            $uploadFile = $uploadDir . $_SESSION['user_id'] . '.' . $fileExtension;
 
             if (move_uploaded_file($_FILES['profile_picture']['tmp_name'], $uploadFile)) {
                 $this->userModel->updateUser($_POST['user_id'], [
