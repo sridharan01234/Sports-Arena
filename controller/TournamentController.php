@@ -16,7 +16,7 @@ class TournamentController {
                 $details = [
                     'user_id' => $_POST['user_id'],
                     'title' => $_POST['title'],
-                    'location' => $_POST['location'],
+                    // 'location' => $_POST['location'],
                     'description' => $_POST['description'],
                     'start_date' => $_POST['start_date'],
                     'end_date' => $_POST['end_date']

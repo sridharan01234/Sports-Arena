@@ -11,14 +11,14 @@ class Tournament_Model extends Database {
 
     public function createTournament(array $details)
     {
-        $this->db->insert('tournament', $details);
+        $this->db->insert('tournaments', $details);
     }
 
     public function getTournament($tournament_id = null) {
         if ($tournament_id !== null) {
-            return $this->db->getAll('tournament', ['tournament_id' => $tournament_id], []);
+            return $this->db->getAll('tournaments', ['tournament_id' => $tournament_id], []);
         } else {
-            return $this->db->getAll('tournament', [], []);
+            return $this->db->getAll('tournaments', [], []);
         }
     }
 

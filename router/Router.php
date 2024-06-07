@@ -28,6 +28,8 @@ class Router
         $this->add("/user/update", ['Controller' => 'UserController', 'action' => 'userUpdate']);
         $this->add("/user/update/profile", ['Controller' => 'UserController', 'action' => 'userProfilePictureUpload']);
         $this->add("/user/delete", ['Controller' => 'UserController', 'action' => 'userDelete']);
+        $this->add("/product/add", ['Controller' => 'AdminController', 'action' => 'addProduct']);
+        $this->add("/turf/add", ['Controller' => 'AdminController', 'action' => 'addTurf']);
     }
 
     /**
