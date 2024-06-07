@@ -62,11 +62,15 @@ class ProductController extends BaseController
     {
         $data = $this->model->get_all_products();
 
+        foreach ($data as $key => $value) {
+            $data[$key] = $this->correctNaming($value);
+        }
+
         echo json_encode(
             [
                 'status' => 200,
                 'message' => 'success',
-                'data' => $this->correctNaming($data)
+                'data' => $data
             ]
         );
         exit;
