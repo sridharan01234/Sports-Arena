@@ -10,7 +10,6 @@
 require_once './interface/BaseInterface.php';
 require_once './database/Database.php';
 
-
 class UserModel implements BaseInterface
 {
     /**
