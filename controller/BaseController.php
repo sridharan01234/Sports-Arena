@@ -7,6 +7,8 @@
  * Last Modified : 03-06-2024
  */
 
+require './helper/SessionHelper.php';
+
 abstract class BaseController
 {
     /**
