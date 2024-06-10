@@ -9,7 +9,6 @@
 
 require "BaseController.php";
 require './model/UserModel.php';
-require './helper/SessionHelper.php';
 
 class UserController extends BaseController
 {
