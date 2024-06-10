@@ -28,6 +28,7 @@ class Router
         $this->add("/user/delete", ['Controller' => 'UserController', 'action' => 'userDelete']);
         $this->add("/product/all", ['Controller' => 'ProductController', 'action' => 'getAll']);
         $this->add("/product", ['Controller' => 'ProductController', 'action' => 'getBYId']);
+        $this->add("/cart/add", ['Controller' => 'CartController', 'action' => 'updateCart']);
     }
 
     /**
