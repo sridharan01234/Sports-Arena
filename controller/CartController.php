@@ -81,4 +81,21 @@ class CartController extends BaseController
         }
         exit;
     }
+
+    /**
+     * Clear cart items
+     * 
+     * @return void
+     */
+    public function clearCart(): void
+    {
+        $user_id = $_SESSION['user_id'];
+        $this->cartModel->clearCart();
+        echo json_encode(
+            [
+                'status'=> 'success',
+                'data'=> 'Cart items cleared',
+            ]);
+            exit;
+    }
 }
