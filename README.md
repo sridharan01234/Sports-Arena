@@ -44,67 +44,67 @@ This project is licensed under the MIT License.
 
 ## Example Usage
 
-### User Registration:
+## User Registration:
 ```
 POST http://localhost/register -d '{"name": "John Doe", "email": "john.doe@example.com", "password": "password123"}'
 ```
 
-### User Login:
+## User Login:
 ```
 POST http://localhost/login -d '{"email": "john.doe@example.com", "password": "password123"}'
 ```
 
-### Email Verification:
+## Email Verification:
 ```
 GET http://localhost/verify/email
 ```
 
-### Profile Management:
+## Profile Management:
 ```
 GET http://localhost/profile/get
 POST http://localhost/profile/update -d '{"name": "John Doe", "email": "john.doe@example.com"}'
 DELETE http://localhost/profile/delete
 ```
 
-### Password Reset:
+## Password Reset:
 ```
 POST http://localhost/reset/password -d '{"email": "john.doe@example.com"}'
 ```
 
-### Product Listing:
+## Product Listing:
 ```
 GET http://localhost/product/all
 ```
-### Cart Management:
+## Cart Management:
 
-## Add to Cart:
+### Add to Cart:
 ```
 POST http://localhost/cart/add -d '{"product_id": 1, "quantity": 2}'
 ```
 
-## Remove from Cart:
+### Remove from Cart:
 ```
 DELETE http://localhost/cart/remove/1
 ```
 
-## Clear Cart:
+### Clear Cart:
 ```
 DELETE http://localhost/cart/clear
 ```
 
-### Country, State, and City Retrieval:
+## Country, State, and City Retrieval:
 
-## Get Countries:
+### Get Countries:
 ```
 GET http://localhost/countries/get
 ```
 
-## Get States:
+### Get States:
 ```
 GET http://localhost/states/get
 ```
 
-## Get Cities:
+### Get Cities:
 ```
 GET http://localhost/cities/get
 ```
