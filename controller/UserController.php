@@ -140,6 +140,11 @@ class UserController extends BaseController
         exit;
     }
 
+    /**
+     * User profile picture upload
+     *
+     * @return void
+     */
     public function userProfilePictureUpload(): void
     {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
@@ -188,7 +193,7 @@ class UserController extends BaseController
 
     /**
      * Get countries
-     * 
+     *
      * @return void
      */
     public function getCountries(): void
@@ -200,7 +205,7 @@ class UserController extends BaseController
 
     /**
      * Get states
-     * 
+     *
      * @return void
      */
     public function getStates(): void
@@ -212,7 +217,7 @@ class UserController extends BaseController
 
     /**
      * Get cities
-     * 
+     *
      * @return void
      */
     public function getCities(): void
