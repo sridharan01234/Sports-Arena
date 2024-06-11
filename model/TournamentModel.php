@@ -2,10 +2,12 @@
 
 require './database/Database.php';
 
-class Tournament_Model extends Database {
+class Tournament_Model extends Database
+{
     private $db;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->db = new Database();
     }
 
@@ -14,7 +16,8 @@ class Tournament_Model extends Database {
         $this->db->insert('tournament', $details);
     }
 
-    public function getTournament($tournament_id = null) {
+    public function getTournament($tournament_id = null)
+    {
         if ($tournament_id !== null) {
             return $this->db->getAll('tournament', ['tournament_id' => $tournament_id], []);
         } else {
@@ -26,8 +29,9 @@ class Tournament_Model extends Database {
     {
         $this->db->insert('tournament_registrations', $details);
     }
-      
-    public function isPlayerRegistered($registration_id = null,$details) {
+
+    public function isPlayerRegistered($registration_id = null, $details)
+    {
         if ($registration_id!== null) {
             return $this->db->get('tournament_registrations', ['registration_id' => $registration_id, $details], []);
         } else {
