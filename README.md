@@ -32,7 +32,6 @@ This repository contains the backend code for an e-commerce application. It prov
 ## Installation
 1. Clone the repository.
 2. Configure the database connection in `config.php`.
-3. Run the database migration scripts to create the necessary tables.
 
 ## Usage
 The API endpoints are documented in the code comments.
