@@ -47,17 +47,29 @@ This project is licensed under the MIT License.
 
 ### User Registration:
 ```
-POST http://localhost/api/register -d '{"name": "John Doe", "email": "john.doe@example.com", "password": "password123"}'
+POST http://localhost/register -d '{"name": "John Doe", "email": "john.doe@example.com", "password": "password123"}'
 ```
 
 ### User Login:
 ```
-POST http://localhost/api/login -d '{"email": "john.doe@example.com", "password": "password123"}'
+POST http://localhost/login -d '{"email": "john.doe@example.com", "password": "password123"}'
 ```
 
 ### Email Verification:
 ```
-GET http://localhost/api/verify/token
+GET http://localhost/verify/email
+```
+
+### Profile Management:
+```
+GET http://localhost/profile/get
+POST http://localhost/profile/update -d '{"name": "John Doe", "email": "john.doe@example.com"}'
+DELETE http://localhost/profile/delete
+```
+
+### Password Reset:
+```
+POST http://localhost/reset/password -d '{"email": "john.doe@example.com"}'
 ```
 
 ### Product Listing:
@@ -68,22 +80,23 @@ GET http://localhost/api/product/all
 
 ## Add to Cart:
 ```
-POST http://localhost/api/cart/add -d '{"product_id": 1, "quantity": 2}'
+POST http://localhost/cart/add -d '{"product_id": 1, "quantity": 2}'
 ```
 
 ## Get Countries:
 ```
-GET http://localhost/api/countries/get
+GET http://localhost/countries/get
 ```
 
 
 ## Get States:
 ```
-GET http://localhost/api/states/get
+GET http://localhost/states/get
 ```
 
 
 ## Get Cities:
 ```
-GET http://localhost/api/cities/get
+GET http://localhost/cities/get
 ```
+
