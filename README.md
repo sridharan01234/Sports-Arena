@@ -1,99 +1,89 @@
-# Authentication API
+# E-commerce Backend API
 
-This repository provides a PHP API for user authentication, offering features like registration, login, logout, email verification, and password reset.
+This repository contains the backend code for an e-commerce application. It provides APIs for user authentication, product management, cart operations, and more.
 
 ## Features
-- **Registration:** Enables users to create new accounts with username, email, and password.
-- **Login:** Authenticates users based on email and password.
-- **Logout:** Logs users out of their session.
-- **Email Verification:** Sends verification emails to newly registered users.
-- **Password Reset:** Allows users to reset their passwords via email.
-- **Secure Password Handling:** Uses password hashing to protect user passwords.
-- **Error Handling:** Provides informative error messages for invalid inputs or failed operations.
 
-## Requirements
-- PHP 7.4 or higher
-- Composer
-- A mail server configured for sending emails (e.g., SMTP)
+### User Management:
+- **Registration**: Allows users to create new accounts.
+- **Login**: Authenticates users using their credentials.
+- **Email Verification**: Sends verification emails and handles verification.
+- **Password Reset**: Enables users to reset their passwords.
+- **Profile Management**: Allows users to view, update, and delete their profiles.
+- **Profile Picture Upload**: Enables users to upload their profile pictures.
+
+### Product Management:
+- **Product Listing**: Retrieves a list of all products.
+- **Product Details**: Retrieves details of a specific product.
+
+### Cart Management:
+- **Add to Cart**: Adds products to the user's cart.
+- **Remove from Cart**: Removes products from the user's cart.
+- **Clear Cart**: Empties the user's cart.
+
+### Other Features:
+- **Country, State, and City Retrieval**: Provides APIs to retrieve lists of countries, states, and cities.
+
+## Technologies
+- **PHP**: The backend is written in PHP.
+- **MySQL**: The database is MySQL.
+- **JSON**: Data is exchanged in JSON format.
 
 ## Installation
-1. Clone the repository
-
-
-2. Install dependencies:
-bash cd authentication-api composer install
-
-## Configuration
-
-3. Configure the email settings:
-   - Open `AuthController.php` and replace the placeholder values in the `sendEmail` function with your actual email server settings (host, username, password, etc.).
+1. Clone the repository.
+2. Configure the database connection in `config.php`.
+3. Run the database migration scripts to create the necessary tables.
 
 ## Usage
-The API is designed to be used with a web server. You can access the API endpoints using HTTP requests.
+The API endpoints are documented in the code comments.
 
-### Endpoints:
-- **/register:** Register a new user (POST)
-- **/login:** Login a user (POST)
-- **/logout:** Logout a user (GET)
-- **/verify-email:** Verify email address (POST)
-- **/reset-password:** Request password reset (POST)
-- **/change-password:** Change user password (POST)
-- **/user/profile:** Get user profile (GET)
-- **/user/update:** Update user profile (PUT)
-- **/user/delete:** Delete user account (DELETE)
-- **/user/list:** List users (GET)
-- **/user/create:** Create a new user (POST)
+## Contributing
+Contributions are welcome! Please open an issue or submit a pull request.
 
-### Example Request (Register):
+## License
+This project is licensed under the MIT License.
+
+## Example Usage
+
+### User Registration:
 ```
-json { "username": "johndoe", "email": "johndoe@example.com", "password": "password123", "confirm_password": "password123" }
+POST http://localhost/api/register -d '{"name": "John Doe", "email": "john.doe@example.com", "password": "password123"}'
 ```
 
-### Example Response (Success):
+### User Login:
 ```
-{ "message": "User registered successfully" }
-```
-
-### Example Request (Login):
-```
-json { "email": "johndoe@example.com", "password": "password123" }
+POST http://localhost/api/login -d '{"email": "john.doe@example.com", "password": "password123"}'
 ```
 
-### Example Request (Logout):
+### Email Verification:
 ```
-json { "email": "johndoe@example.com" }
-```
-
-### Example Response (Error):
-```
-{ "error": "Invalid email or password" }
+GET http://localhost/api/verify/token
 ```
 
-# Email Verification
+### Product Listing:
+```
+GET http://localhost/api/product/all
+```
+### Cart Management:
 
-### Example Request 
+## Add to Cart:
 ```
-json { "email": "johndoe@example.com" }
-```  
-
-### Example Response (Success):
-```
-{ "message": "Verification email sent" }
-```
-
-### Example Response (Error):
-```
-{ "error": "Invalid email" }
+POST http://localhost/api/cart/add -d '{"product_id": 1, "quantity": 2}'
 ```
 
-# Password Reset
-
-### Example Request
+## Get Countries:
 ```
-json { "email": "johndoe@example.com" }
+GET http://localhost/api/countries/get
 ```
 
-### Example Response (Success):
+
+## Get States:
 ```
-{ "message": "Password reset email sent" }
+GET http://localhost/api/states/get
+```
+
+
+## Get Cities:
+```
+GET http://localhost/api/cities/get
 ```
