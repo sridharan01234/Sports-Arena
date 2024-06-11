@@ -99,12 +99,10 @@ DELETE http://localhost/cart/clear
 GET http://localhost/countries/get
 ```
 
-
 ## Get States:
 ```
 GET http://localhost/states/get
 ```
-
 
 ## Get Cities:
 ```
