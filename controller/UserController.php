@@ -185,4 +185,40 @@ class UserController extends BaseController
             exit;
         }
     }
+
+    /**
+     * Get countries
+     * 
+     * @return void
+     */
+    public function getCountries(): void
+    {
+        $countries = $this->userModel->getCountries();
+        echo json_encode($countries);
+        exit;
+    }
+
+    /**
+     * Get states
+     * 
+     * @return void
+     */
+    public function getStates(): void
+    {
+        $states = $this->userModel->getStates($_GET['country_id']);
+        echo json_encode($states);
+        exit;
+    }
+
+    /**
+     * Get cities
+     * 
+     * @return void
+     */
+    public function getCities(): void
+    {
+        $cities = $this->userModel->getCities($_GET['state_id']);
+        echo json_encode($cities);
+        exit;
+    }
 }

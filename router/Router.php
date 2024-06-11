@@ -29,6 +29,11 @@ class Router
         $this->add("/product/all", ['Controller' => 'ProductController', 'action' => 'getAll']);
         $this->add("/product", ['Controller' => 'ProductController', 'action' => 'getBYId']);
         $this->add("/cart/add", ['Controller' => 'CartController', 'action' => 'updateCart']);
+        $this->add("/cart/remove", ['Controller' => 'CartController', 'action' => 'removeCart']);
+        $this->add("/cart/clear", ['Controller' => 'CartController', 'action' => 'clearCart']);
+        $this->add('/countries/get', ['Controller' => 'UserController', 'action' => 'getCountries']);
+        $this->add('/states/get', ['Controller' => 'UserController', 'action' => 'getStates']);
+        $this->add('/cities/get', ['Controller' => 'UserController', 'action' => 'getCities']);
     }
 
     /**
