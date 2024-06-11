@@ -12,6 +12,11 @@ class ProductController extends BaseController
 {
     private $model;
 
+    public function __construct()
+    {
+        $this->model = new ProductModel();
+    }
+
     /**
      * Correct naming
      *
@@ -19,7 +24,7 @@ class ProductController extends BaseController
      *
      * @return object
      */
-    private function correctNaming(object $data)
+    private function correctNaming(object $data): object
     {
         $data->productId = $data->product_id;
         unset($data->product_id);
@@ -48,17 +53,12 @@ class ProductController extends BaseController
         return $data;
     }
 
-    public function __construct()
-    {
-        $this->model = new ProductModel();
-    }
-
     /**
      * Get all products
      *
      * @return void
      */
-    public function getAll()
+    public function getAll(): void
     {
         $data = $this->model->get_all_products();
 
@@ -81,7 +81,7 @@ class ProductController extends BaseController
      *
      * @return void
      */
-    public function getById()
+    public function getById(): void
     {
         $data = $this->model->get_product($_GET['id']);
 
