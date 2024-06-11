@@ -70,7 +70,7 @@ class CartModel extends Database
      *
      * @return void
      */
-    private function createCart()
+    private function createCart(): void
     {
         if (
             !$this->db->get("cart", [
@@ -106,9 +106,11 @@ class CartModel extends Database
     }
 
     /**
-     *
+     * Remove product from cart
+     * 
+     * @return bool
      */
-    public function removeCart(string $productId)
+    public function removeCart(string $productId): bool
     {
         $cart_id = $this->findCart();
         if (
@@ -120,6 +122,27 @@ class CartModel extends Database
             return true;
         } else {
             return false;
+        }
+    }
+
+    /**
+     * Clears cart
+     * 
+     * @return bool
+     */
+    public function clearCart(): ?bool
+    {
+        $cart_id = $this->findCart();
+        if(
+            $this->db->delete("cart_items", [
+                "cart_id"=> $cart_id]
+        ))
+        {
+            $this->clearCart();
+        }
+        else 
+        {
+            return true;
         }
     }
 }
