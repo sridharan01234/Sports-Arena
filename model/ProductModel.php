@@ -20,7 +20,7 @@ class ProductModel extends Database
      *
      * @return array
      */
-    public function get_all_products()
+    public function get_all_products(): array
     {
         return $this->db->getAll('products', [], []);
     }
