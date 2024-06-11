@@ -1,14 +1,18 @@
 <?php
+
 require_once './model/TournamentModel.php';
 
-class TournamentController {
+class TournamentController
+{
     private $tournamentModel;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->tournamentModel = new Tournament_Model();
     }
 
-    public function addTournament() {
+    public function addTournament()
+    {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $response = [];
 
@@ -21,14 +25,13 @@ class TournamentController {
                     'start_date' => $_POST['start_date'],
                     'end_date' => $_POST['end_date']
                 ];
-            
+
                 $this->tournamentModel->createTournament($details);
                 $response = [
                     'status' => 'success',
                     'message' => 'Tournament created successfully.'
                 ];
-                http_response_code(200); 
-
+                http_response_code(200);
             } catch (Exception $e) {
                 $response = [
                     'status' => 'error',
@@ -40,10 +43,11 @@ class TournamentController {
             echo json_encode($response);
         }
     }
-    public function getTournament() {
+    public function getTournament()
+    {
         if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             $response = [];
-    
+
             try {
                 $tournament_id = isset($_GET['tournament_id']) ? intval($_GET['tournament_id']) : null;
                 if ($tournament_id !== null) {
@@ -79,10 +83,11 @@ class TournamentController {
         }
     }
 
-    public function registerTournament() {
+    public function registerTournament()
+    {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $response = [];
-    
+
             try {
                 $details = [
                     'registration_id' => $_POST['registration_id'],
@@ -91,10 +96,10 @@ class TournamentController {
                     'team_name' => $_POST['team_name'],
                     'email' => $_POST['email']
                 ];
-    
+
                 // Check if the player already exists in the tournament
                 $playerExists = $this->tournamentModel->isPlayerRegistered($details['registration_id'], $details['email'], $details['player_name']);
-    
+
                 if ($playerExists) {
                     $response = [
                         'status' => 'error',
@@ -107,9 +112,8 @@ class TournamentController {
                         'status' => 'success',
                         'message' => 'Tournament booked successfully.'
                     ];
-                    http_response_code(200); 
+                    http_response_code(200);
                 }
-    
             } catch (Exception $e) {
                 $response = [
                     'status' => 'error',
@@ -117,7 +121,7 @@ class TournamentController {
                 ];
                 http_response_code(500); // Internal Server Error
             }
-    
+
             header('Content-Type: application/json');
             echo json_encode($response);
         }
