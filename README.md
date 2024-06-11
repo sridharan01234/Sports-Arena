@@ -74,7 +74,7 @@ POST http://localhost/reset/password -d '{"email": "john.doe@example.com"}'
 
 ### Product Listing:
 ```
-GET http://localhost/api/product/all
+GET http://localhost/product/all
 ```
 ### Cart Management:
 
