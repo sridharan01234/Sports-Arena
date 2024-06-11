@@ -29,6 +29,8 @@ class Router
         $this->add("/user/update", ['Controller' => 'UserController', 'action' => 'userUpdate']);
         $this->add("/user/update/profile", ['Controller' => 'UserController', 'action' => 'updateProfile']);
         $this->add("/user/delete", ['Controller' => 'UserController', 'action' => 'userDelete']);
+        $this->add("/product/all", ['Controller' => 'ProductController', 'action' => 'getAll']);
+        $this->add("/product", ['Controller' => 'ProductController', 'action' => 'getBYId']);
     }
 
     /**
