@@ -73,7 +73,7 @@ class UserModel implements BaseInterface
 
     /**
      * Get states\
-     * 
+     *
      * @param int $country_id
      *
      * @return array
