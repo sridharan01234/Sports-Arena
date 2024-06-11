@@ -82,6 +82,18 @@ GET http://localhost/product/all
 POST http://localhost/cart/add -d '{"product_id": 1, "quantity": 2}'
 ```
 
+## Remove from Cart:
+```
+DELETE http://localhost/cart/remove/1
+```
+
+## Clear Cart:
+```
+DELETE http://localhost/cart/clear
+```
+
+### Country, State, and City Retrieval:
+
 ## Get Countries:
 ```
 GET http://localhost/countries/get
