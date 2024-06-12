@@ -128,13 +128,12 @@ class Database extends QueryBuilder
             $query = $query . $this->arrayToCondition($condition);
         }
         $this->query($query);
-        //$this->logger->log($query, E_USER_WARNING);
         try {
             $this->execute();
         } catch (Exception $e) {
             error_log($e->getMessage());
         }
-
+        
         return $this->affected_rows();
     }
 
@@ -157,7 +156,6 @@ class Database extends QueryBuilder
             $query .= $this->arrayToCondition($condition);
         }
         $this->query($query);
-        //$this->logger->log($query, E_USER_WARNING);
         try {
             $this->execute();
         } catch (Exception $e) {
@@ -181,7 +179,6 @@ class Database extends QueryBuilder
         $query = "SELECT " . ($columns ? $this->arrayToColumns($columns) : '*') . " FROM $table ";
         $query .= $condition ? $this->arrayToCondition($condition) : '';
         $this->query($query);
-        //$this->logger->log($query, E_USER_WARNING);
         try {
             $this->execute();
         } catch (Exception $e) {
@@ -236,7 +233,6 @@ class Database extends QueryBuilder
             $query = $query . $this->arrayToCondition($condition);
         }
         $this->query($query);
-        error_log($query);
         try {
             $this->execute();
         } catch (Exception $e) {
