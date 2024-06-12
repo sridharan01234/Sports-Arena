@@ -2,7 +2,7 @@
 
 /**
  * CartController class
- * 
+ *
  * @author Sridharan
  */
 
@@ -20,10 +20,10 @@ class CartController extends BaseController
 
     /**
      * Update cart items
-     * 
+     *
      * @return void
      */
-    public function updateCart(): void           
+    public function updateCart(): void
     {
         $data = $this->decodeRequest();
         $this->cartModel->add($data);
@@ -38,7 +38,7 @@ class CartController extends BaseController
 
     /**
      * Get cart items
-     * 
+     *
      * @return void
      */
     public function getCart(): void
@@ -58,7 +58,7 @@ class CartController extends BaseController
 
     /**
      * Remove cart item
-     * 
+     *
      * @return void
      */
     public function removeCart(): void
@@ -84,7 +84,7 @@ class CartController extends BaseController
 
     /**
      * Clear cart items
-     * 
+     *
      * @return void
      */
     public function clearCart(): void
@@ -95,7 +95,8 @@ class CartController extends BaseController
             [
                 'status'=> 'success',
                 'data'=> 'Cart items cleared',
-            ]);
-            exit;
+            ]
+        );
+        exit;
     }
 }
