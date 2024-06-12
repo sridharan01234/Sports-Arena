@@ -29,7 +29,8 @@ class CartModel extends Database
         if (
             $this->db->get('cart_items', [
                 'cart_id' => $cart_id,
-                'product_id' => $data['productId']
+                'product_id' => $data['productId'],
+                'size' => $data['productSize']
             ], [])
         ) {
             if (isset($data['quantity'])) {
@@ -41,11 +42,13 @@ class CartModel extends Database
                 "quantity" => $quantity,
             ], [
                 "cart_id" => $cart_id,
+                'size' => $data['productSize'],
                 "product_id" => $data["productId"],
             ]);
         } else {
             $this->db->insert("cart_items", [
                 "cart_id" => $cart_id,
+                'size' => $data['productSize'],
                 "product_id" => $data["productId"],
             ]);
         }
@@ -102,8 +105,9 @@ class CartModel extends Database
         foreach ($cart_items as $cart_item) {
             $product = $this->db->get("products", [
                 "product_id" => $cart_item->product_id,
-            ], []);
+            ], ['name', 'price', 'main_image', 'product_id', 'description', 'stock', 'category']);
             $product->quantity = $cart_item->quantity;
+            $product->size = $cart_item->size;
             $products[] = $product;
         }
         return $products;
@@ -114,13 +118,14 @@ class CartModel extends Database
      *
      * @return bool
      */
-    public function removeCart(string $productId): bool
+    public function removeCart(string $productId, string $size): bool
     {
         $cart_id = $this->findCart();
         if (
             $this->db->delete("cart_items", [
                 "cart_id" => $cart_id,
                 "product_id" => $productId,
+                "size" => $size
             ])
         ) {
             return true;

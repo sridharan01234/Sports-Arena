@@ -44,13 +44,15 @@ class CartController extends BaseController
     public function getCart(): void
     {
         $data = $this->cartModel->getCart();
-        foreach ($data as $key => $product) {
-            $data[] = $this->correctNaming($product);
+        $products = [];
+        foreach( $data as $product)
+        {
+            $products[] = $this->correctNaming($product);
         }
         echo json_encode(
             [
                 'status' => 'success',
-                'data' => $data,
+                'data' => $products,
             ]
         );
         exit;
@@ -64,7 +66,7 @@ class CartController extends BaseController
     public function removeCart(): void
     {
         $data = $this->decodeRequest();
-        if ($this->cartModel->removeCart($data['productId'])) {
+        if ($this->cartModel->removeCart($data['productId'], $data['productSize'])) {
             echo json_encode(
                 [
                     'status' => 'success',
