@@ -44,7 +44,7 @@ abstract class BaseController
         $data->productMainImage = $data->main_image;
         unset($data->main_image);
 
-        $data->productPrice = $data->price;
+        $data->productPrice = (int)$data->price;
         unset($data->price);
 
         $data->productDescription = $data->description;
