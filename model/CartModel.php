@@ -26,15 +26,19 @@ class CartModel extends Database
     public function add(array $data)
     {
         $cart_id = $this->findCart();
-
         if (
             $this->db->get('cart_items', [
                 'cart_id' => $cart_id,
                 'product_id' => $data['productId']
             ], [])
         ) {
+            if (isset($data['quantity'])) {
+                $quantity = $data['quantity'];
+            } else {
+                $quantity = $this->db->get('cart_items', ['cart_id' => $cart_id, 'product_id' => $data['productId']], ['quantity'])->quantity + 1;
+            }
             $this->db->update("cart_items", [
-                "quantity" => $data["quantity"],
+                "quantity" => $quantity,
             ], [
                 "cart_id" => $cart_id,
                 "product_id" => $data["productId"],
@@ -107,7 +111,7 @@ class CartModel extends Database
 
     /**
      * Remove product from cart
-     * 
+     *
      * @return bool
      */
     public function removeCart(string $productId): bool
@@ -127,22 +131,19 @@ class CartModel extends Database
 
     /**
      * Clears cart
-     * 
-     * @return bool
+     *
+     * @return void
      */
-    public function clearCart(): ?bool
+    public function clearCart(): void
     {
         $cart_id = $this->findCart();
-        if(
-            $this->db->delete("cart_items", [
+        if (
+            $this->db->delete(
+                "cart_items",
+                [
                 "cart_id"=> $cart_id]
-        ))
-        {
+            )) {
             $this->clearCart();
-        }
-        else 
-        {
-            return true;
         }
     }
 }
