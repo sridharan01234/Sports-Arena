@@ -148,7 +148,7 @@ class Database extends QueryBuilder
     public function get(string $table, array $condition, array $columns): bool | object
     {
         if (!empty($columns)) {
-            $query = "SELECT " . $this->arrayToColumns($columns) . " FROM $table ";
+            $query = "SELECT " . $this->arrayToSelect($columns) . " FROM $table ";
         } else {
             $query = "SELECT * FROM $table ";
         }
