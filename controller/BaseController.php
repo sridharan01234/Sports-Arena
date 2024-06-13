@@ -61,4 +61,43 @@ abstract class BaseController
 
         return $data;
     }
+
+    /**
+     * Correct tournment naming
+     * 
+     * @param object $data
+     * 
+     * @return object
+     */
+    protected function correctTournmentNaming(object $data): object
+    {
+        $data->tournamentName = $data->title;
+        unset($data->title);
+
+        $data->tournamentLocation = $data->location;
+        unset($data->location);
+
+        $data->tournamentStartDate = $data->start_date;
+        unset($data->start_date);
+
+        $data->tournamentEndDate = $data->end_date;
+        unset($data->end_date);
+
+        $data->tournamentOrganizerName = $data->organizer_name;
+        unset($data->organizer_name);
+
+        $data->tournamentOrganizerEmail = $data->organizer_email;
+        unset($data->organizer_email);
+
+        $data->tournamentOrganizerPhoneNumber = $data->organizer_phone_number;
+        unset($data->organizer_phone_number);
+
+        $data->tournamentImage = $data->image;
+        unset($data->image);
+
+        $data->tournamentDescription = $data->description;
+        unset($data->description);
+
+        return $data;
+    }
 }

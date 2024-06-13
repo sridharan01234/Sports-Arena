@@ -13,7 +13,7 @@ class Router
 
     public function __construct()
     {
-        $this->add("/tournament/get", ['Controller' => 'TournamentController', 'action' => 'getTournament']);
+        $this->add("/tournament/get", ['Controller' => 'TournamentController', 'action' => 'getTournaments']);
         $this->add("/tournament/add", ['Controller' => 'TournamentController', 'action' => 'addTournament']);
         $this->add("/tournament/register", ['Controller' => 'TournamentController', 'action' => 'registerTournament']);
         $this->add("/register", ['Controller' => 'AuthController', 'action' => 'register']);

@@ -241,4 +241,32 @@ class Database extends QueryBuilder
 
         return $this->affected_rows();
     }
+
+    /**
+     * Bind values to parameters in a prepared statement.
+     *
+     * @param string $param The parameter placeholder to bind the value to
+     * @param mixed $value The value to bind
+     * @param int $type Optional data type for the parameter (e.g., PDO::PARAM_INT)
+     * @return void
+     */
+    public function bind(string $param, $value, $type = null): void
+    {
+        if (is_null($type)) {
+            switch (true) {
+                case is_int($value):
+                    $type = PDO::PARAM_INT;
+                    break;
+                case is_bool($value):
+                    $type = PDO::PARAM_BOOL;
+                    break;
+                case is_null($value):
+                    $type = PDO::PARAM_NULL;
+                    break;
+                default:
+                    $type = PDO::PARAM_STR;
+            }
+        }
+        $this->stmt->bindValue($param, $value, $type);
+    }
 }
