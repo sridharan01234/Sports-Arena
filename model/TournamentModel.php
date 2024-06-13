@@ -34,16 +34,16 @@ class Tournament_Model {
         }
     }
 
-   /**
-     * Check if a tournament with the given title and location exists.
-     *
-     * @param string $title The title of the tournament
-     * @param string $location The location of the tournament
-     * @return array|null The tournament details as an array or null if not found
-     */
-    public function isTournamentExists(string $title, string $location){
-        return $this->db->get('tournaments', ['title' => $title, 'tournament_location' => $location], []);
-    }
+//    /**
+//      * Check if a tournament with the given title and location exists.
+//      *
+//      * @param string $title The title of the tournament
+//      * @param string $location The location of the tournament
+//      * @return array|null The tournament details as an array or null if not found
+//      */
+//     public function isTournamentExists(string $title, string $location){
+//         return $this->db->get('tournaments', ['title' => $title, 'tournament_location' => $location], []);
+//     }
 
     /**
      * Add a player to a tournament.
@@ -82,19 +82,31 @@ class Tournament_Model {
         return $this->db->resultSet();
     }
 
-     /**
-     * Check if the user has a tournament with the same title and location for overlapping dates.
+      /**
+     * Check if a tournament with the given title and location exists.
+     *
+     * @param string $title The title of the tournament
+     * @param string $location The location of the tournament
+     * @return array|null The tournament details as an array or null if not found
+     */
+    public function isTournamentExists(string $title, string $location) {
+        return $this->db->get('tournaments', ['title' => $title, 'tournament_location' => $location], []);
+    }
+
+    /**
+     * Check if the user has a tournament with the same title and location for exact dates.
      *
      * @param array $params Parameters including user_id, title, location, start_date, and end_date
      * @return bool Whether a conflicting tournament exists
      */
-    public function userHasTournamentWithConflictingDate(array $params): bool {
+    public function userHasTournamentWithExactDates(array $params): bool {
         $query = "SELECT COUNT(*) AS count 
                   FROM tournaments 
                   WHERE user_id = :user_id 
                   AND title = :title 
                   AND tournament_location = :location 
-                  AND NOT (end_date < :start_date OR start_date > :end_date)";
+                  AND start_date = :start_date 
+                  AND end_date = :end_date";
         
         $this->db->query($query);
         $this->db->bind(':user_id', $params['user_id']);

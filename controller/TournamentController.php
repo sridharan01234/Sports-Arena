@@ -28,6 +28,11 @@ class TournamentController extends BaseController {
                     }
                 }
     
+                $existingTournament = $this->tournamentModel->isTournamentExists($data['title'], $data['tournament_location']);
+                if ($existingTournament) {
+                    throw new Exception("A tournament with the same name and location already exists.");
+                }
+
                 // Extract only date part from start_date and end_date
                 $start_date = date('Y-m-d', strtotime($data['start_date']));
                 $end_date = date('Y-m-d', strtotime($data['end_date']));
@@ -46,7 +51,7 @@ class TournamentController extends BaseController {
                 ];
     
                 // Check if tournament with the same title and location already exists
-                $conflictingTournamentExists = $this->tournamentModel->userHasTournamentWithConflictingDate($details);
+                $conflictingTournamentExists = $this->tournamentModel->userHasTournamentWithExactDates($details);
                 if ($conflictingTournamentExists) {
                     throw new Exception("You already have a tournament with the same title and location for overlapping dates.");
                 }
