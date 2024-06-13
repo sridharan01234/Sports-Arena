@@ -2,8 +2,8 @@
 
 require './database/Database.php';
 
-class Tournament_Model {
-
+class Tournament_Model
+{
     private $db;
 
     public function __construct()
@@ -17,8 +17,10 @@ class Tournament_Model {
      * @param array $details The details of the tournament to be created
      * @return bool Whether the operation was successful
      */
-    public function createTournament(array $details): bool {
-        return $this->db->insert('tournaments', $details);
+    public function createTournament(array $details): bool
+    {
+        $this->db->insert('tournaments', $details);
+        return $this->db->get('tournaments', ['title' => $details['title'], 'tournament_location' => $details['tournament_location']], [])->tournament_id;
     }
 
     /**
@@ -27,7 +29,8 @@ class Tournament_Model {
      * @param int|null $tournament_id The ID of the tournament to fetch (optional)
      * @return array|null The tournament details as an array or null if not found
      */
-    public function getTournament(array $params = []): ?array {
+    public function getTournament(array $params = []): ?array
+    {
         if (isset($params['tournament_id'])) {
             return $this->db->getAll('tournaments', ['tournament_id' => $params['tournament_id']], []);
         } else {
@@ -42,7 +45,8 @@ class Tournament_Model {
      * @param string $location The location of the tournament
      * @return array|null The tournament details as an array or null if not found
      */
-    public function isTournamentExists(string $title, string $location){
+    public function isTournamentExists(string $title, string $location)
+    {
         return $this->db->get('tournaments', ['title' => $title, 'tournament_location' => $location], []);
     }
 
@@ -52,7 +56,8 @@ class Tournament_Model {
      * @param array $details The details of the player registration
      * @return bool Whether the operation was successful
      */
-    public function addPlayer(array $details): bool {
+    public function addPlayer(array $details): bool
+    {
         return $this->db->insert('tournament_registrations', $details);
     }
 
@@ -62,7 +67,8 @@ class Tournament_Model {
      * @param array $params The parameters containing registration_id and details
      * @return array|null The player registration details as an array or null if not found
      */
-    public function isPlayerRegistered(array $params = []) {
+    public function isPlayerRegistered(array $params = [])
+    {
         if (isset($params['registration_id'])) {
             return $this->db->get('tournament_registrations', ['registration_id' => $params['registration_id']] + $params['details'], []);
         } else {
@@ -75,7 +81,8 @@ class Tournament_Model {
      *
      * @return array The list of upcoming tournaments
      */
-    public function getUpcomingTournaments(): array {
+    public function getUpcomingTournaments(): array
+    {
         $currentDate = date('Y-m-d H:i:s'); // Current date and time
         $query = "SELECT * FROM tournaments WHERE end_date > :currentDate";
         $this->db->query($query);
@@ -89,23 +96,36 @@ class Tournament_Model {
      * @param array $params Parameters including user_id, title, location, start_date, and end_date
      * @return bool Whether a conflicting tournament exists
      */
-    public function userHasTournamentWithConflictingDate(array $params): bool {
+    public function userHasTournamentWithConflictingDate(array $params): bool
+    {
         $query = "SELECT COUNT(*) AS count 
                   FROM tournaments 
                   WHERE user_id = :user_id 
                   AND title = :title 
                   AND tournament_location = :location 
                   AND NOT (end_date < :start_date OR start_date > :end_date)";
-        
+
         $this->db->query($query);
         $this->db->bind(':user_id', $params['user_id']);
         $this->db->bind(':title', $params['title']);
         $this->db->bind(':location', $params['location']);
         $this->db->bind(':start_date', $params['start_date']);
         $this->db->bind(':end_date', $params['end_date']);
-        
+
         $result = $this->db->single();
 
         return $result->count > 0;
+    }
+
+    /**
+     * Update the tournament image path.
+     *
+     * @param int $tournament_id The ID of the tournament
+     * @param string $image_path The path to the tournament image
+     * @return bool Whether the operation was successful
+     */
+    public function updateTournamentImage($tournament_id, $image_path): bool
+    {
+        return $this->db->update('tournaments', ['image_path' => $image_path], ['tournament_id' => $tournament_id]);
     }
 }
