@@ -1,4 +1,5 @@
 <?php
+
 require_once './model/TournamentModel.php';
 require_once 'BaseController.php';
 require_once './helper/JWTHelper.php';
@@ -6,15 +7,16 @@ require_once './helper/JWTHelper.php';
 class TournamentController extends BaseController {
     private $tournamentModel;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->tournamentModel = new Tournament_Model();
     }
 
-    public function addTournament() {
+    public function addTournament()
+    {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $data = $this->decodeRequest();
             $response = [];
-    
             try {
                 // Check if user_id is set in session
                 if (!isset($_SESSION['user_id'])) {
@@ -114,10 +116,11 @@ class TournamentController extends BaseController {
         echo json_encode($response);
     }
 
-    public function registerTournament() {
+    public function registerTournament()
+    {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $response = [];
-    
+
             try {
                 $details = [
                     'registration_id' => $_POST['registration_id'],
@@ -127,10 +130,10 @@ class TournamentController extends BaseController {
                     'email' => $_POST['email'],
                     'phone_number' => $_POST['phone_number']
                 ];
-    
+
                 // Check if the player already exists in the tournament
                 $playerExists = $this->tournamentModel->isPlayerRegistered($details['registration_id'], $details['email'], $details['player_name']);
-    
+
                 if ($playerExists) {
                     $response = [
                         'status' => 'error',
@@ -143,9 +146,8 @@ class TournamentController extends BaseController {
                         'status' => 'success',
                         'message' => 'Player registered successfully for the tournament.'
                     ];
-                    http_response_code(200); 
+                    http_response_code(200);
                 }
-    
             } catch (Exception $e) {
                 $response = [
                     'status' => 'error',
@@ -153,7 +155,7 @@ class TournamentController extends BaseController {
                 ];
                 http_response_code(500); 
             }
-    
+
             header('Content-Type: application/json');
             echo json_encode($response);
         }

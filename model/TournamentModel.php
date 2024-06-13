@@ -6,7 +6,8 @@ class Tournament_Model {
 
     private $db;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->db = new Database();
     }
 
@@ -108,5 +109,3 @@ class Tournament_Model {
         return $result->count > 0;
     }
 }
-
-?>

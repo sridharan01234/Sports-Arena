@@ -81,4 +81,16 @@ abstract class QueryBuilder
 
         return $str;
     }
+
+    /**
+     * Convert array to select columns
+     *
+     * @param array $columns
+     *
+     * @return string
+     */
+    public function arrayToSelect(array $columns): string
+    {
+        return implode(",", $columns);
+    }
 }
