@@ -133,7 +133,7 @@ class Database extends QueryBuilder
         } catch (Exception $e) {
             error_log($e->getMessage());
         }
-        
+
         return $this->affected_rows();
     }
 

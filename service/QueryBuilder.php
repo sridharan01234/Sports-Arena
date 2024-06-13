@@ -84,9 +84,9 @@ abstract class QueryBuilder
 
     /**
      * Convert array to select columns
-     * 
+     *
      * @param array $columns
-     * 
+     *
      * @return string
      */
     public function arrayToSelect(array $columns): string
