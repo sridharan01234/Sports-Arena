@@ -8,6 +8,7 @@
  */
 
 define("host", "172.24.220.187");
-define("user", "gomathi");
+define("user", "sridharan");
 define("pass", "Aspire@123");
 define("dbname", "sports_arena");
+define("port", 3360);

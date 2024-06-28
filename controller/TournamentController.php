@@ -129,59 +129,59 @@ class TournamentController extends BaseController {
         }
     }
 
-    /**
-     * Endpoint to register a player for a tournament.
-     * POST method expected.
-     * Required fields: registration_id, tournament_id, player_name, team_name, email.
-     * 
-     * @return void
-     */
-    public function registerTournament() {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $response = [];
+   /**
+ * Endpoint to register a player for a tournament.
+ * POST method expected.
+ * Required fields: tournament_id, player_name, team_name, email, phone_number.
+ * 
+ * @return void
+ */
+public function registerTournament() {
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $data = $this->decodeRequest();
+        $response = [];
 
-            try {
-                // Prepare registration details
-                $details = [
-                    'registration_id' => $_POST['registration_id'],
-                    'tournament_id' => $_POST['tournament_id'],
-                    'player_name' => $_POST['player_name'],
-                    'team_name' => $_POST['team_name'],
-                    'email' => $_POST['email']
-                ];
-
-                // Check if player is already registered
-                $playerExists = $this->tournamentModel->isPlayerRegistered($details['registration_id'], $details['email'], $details['player_name']);
-
-                if ($playerExists) {
-                    // Player is already registered
-                    $response = [
-                        'status' => 'error',
-                        'message' => 'Player is already registered for this tournament.'
-                    ];
-                    http_response_code(409);
-                } else {
-                    // Register player for the tournament
-                    $this->tournamentModel->addPlayer($details);
-                    $response = [
-                        'status' => 'success',
-                        'message' => 'Player registered successfully for the tournament.'
-                    ];
-                    http_response_code(200); 
+        try {
+            $required_fields = ['tournament_id', 'player_name', 'team_name', 'email', 'phone_number'];
+            foreach ($required_fields as $field) {
+                if (!isset($data[$field]) || empty($data[$field])) {
+                    throw new Exception("Field '$field' is required");
                 }
-
-            } catch (Exception $e) {
-                // Error occurred during registration
-                $response = [
-                    'status' => 'error',
-                    'message' => $e->getMessage()
-                ];
-                http_response_code(500); 
             }
 
-            header('Content-Type: application/json');
-            echo json_encode($response);
+            // Check if player is already registered for this tournament
+            $playerExists = $this->tournamentModel->isPlayerRegistered($data['tournament_id'], $data);
+
+            if ($playerExists) {
+                // Player is already registered
+                $response = [
+                    'status' => 'error',
+                    'message' => 'Player is already registered for this tournament.'
+                ];
+                http_response_code(409);
+            } else {
+                // Register player for the tournament
+                $this->tournamentModel->addPlayer($data);
+                $response = [
+                    'status' => 'success',
+                    'message' => 'Player registered successfully for the tournament.'
+                ];
+                http_response_code(200); 
+            }
+
+        } catch (Exception $e) {
+            // Error occurred during registration
+            $response = [
+                'status' => 'error',
+                'message' => $e->getMessage()
+            ];
+            http_response_code(500); 
         }
+
+        header('Content-Type: application/json');
+        echo json_encode($response);
     }
+}
+
 }
 ?>

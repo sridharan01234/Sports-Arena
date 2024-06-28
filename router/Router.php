@@ -31,8 +31,9 @@ class Router
         $this->add("/user/delete", ['Controller' => 'UserController', 'action' => 'userDelete']);
         $this->add("/product/all", ['Controller' => 'ProductController', 'action' => 'getAll']);
         $this->add("/product", ['Controller' => 'ProductController', 'action' => 'getBYId']);
+        $this->add("/addAddress", ['Controller' => 'OrderController', 'action' => 'addUserAddress']);
+        $this->add("/placeorder", ['Controller' => 'OrderController', 'action' => 'placeOrder']);
     }
-
     /**
      * Add application paths
      *
