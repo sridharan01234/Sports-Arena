@@ -92,8 +92,8 @@ class OrderController extends BaseController {
                 $orderDetails = [
                     'user_id' => $_SESSION['user_id'],
                     'address_id' => $data['address_id'],
-                    'total_amount' => $total_amount,
-                    'order_date' => date('Y-m-d H:i:s'), 
+                    'total' => $total_amount,
+                    'orderDate' => date('Y-m-d H:i:s'), 
                     'status' => 'pending' 
                 ];
 
@@ -105,7 +105,7 @@ class OrderController extends BaseController {
 
                 // Add payment details
                 $paymentDetails = [
-                    'order_id' => $order_id,
+                    'orderId' => $order_id,
                     'payment_method' => $data['payment_method'],
                     'payment_status' => 'Completed'
                 ];
@@ -120,8 +120,8 @@ class OrderController extends BaseController {
                 $response = [
                     'status' => 'success',
                     'message' => 'Order placed successfully.',
-                    'order_id' => $order_id,
-                    'order_history' => $orderHistory
+                    'orderId' => $order_id,
+                    'orderHistory' => $orderHistory
                 ];
                 http_response_code(200);
 
@@ -166,7 +166,7 @@ class OrderController extends BaseController {
 
                 $response = [
                     'status' => 'success',
-                    'order_history' => $orderHistory
+                    'orderHistory' => $orderHistory
                 ];
                 http_response_code(200);
 
@@ -212,8 +212,8 @@ class OrderController extends BaseController {
 
                 $addressDetails = [
                     'user_id' => $_SESSION['user_id'],
-                    'name' => $data['name'],
-                    'phone_number' => $data['phone_number'],
+                    'userName' => $data['name'],
+                    'phoneNumber' => $data['phone_number'],
                     'pincode' => $data['pincode'],
                     'locality' => $data['locality'],
                     'address' => $data['address'],
