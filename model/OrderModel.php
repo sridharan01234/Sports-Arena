@@ -52,7 +52,7 @@ class OrderModel {
     public function getOrdersByUserId(int $user_id): array {
         $query = "
             SELECT 
-                o.id AS orderID,
+                o.id AS orderId,
                 o.order_date AS orderDate,
                 o.total_amount AS total,
                 o.status,
