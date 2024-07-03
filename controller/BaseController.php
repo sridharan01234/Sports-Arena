@@ -64,9 +64,9 @@ abstract class BaseController
 
     /**
      * Correct tournment naming
-     * 
+     *
      * @param object $data
-     * 
+     *
      * @return object
      */
     protected function correctTournmentNaming(object $data): object

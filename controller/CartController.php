@@ -22,19 +22,20 @@ class CartController extends BaseController
      * ValidateCart method
      *
      * @param array $data
-     * 
+     *
      * @return array
      */
     public function validateCart(array $data): array
     {
         $error = [];
-        if(!isset($data['productId']) || empty($data['productId'])) {
+        if (!isset($data['productId']) || empty($data['productId'])) {
             $error[] = 'Product ID is required';
         }
-        if(!isset($data['productSize']) || empty($data['productSize'])) {
+        if (!isset($data['productSize']) || empty($data['productSize'])) {
             $error[] = 'Product size is required';
         }
-        return $error;;
+        return $error;
+        ;
     }
 
     /**
@@ -46,7 +47,7 @@ class CartController extends BaseController
     {
         $data = $this->decodeRequest();
         $error = $this->validateCart($data);
-        if(!empty($error)) {
+        if (!empty($error)) {
             echo json_encode(
                 [
                     'status' => 'error',
