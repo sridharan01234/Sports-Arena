@@ -18,42 +18,6 @@ class ProductController extends BaseController
     }
 
     /**
-     * Correct naming
-     *
-     * @param object $data
-     *
-     * @return object
-     */
-    private function correctNaming(object $data): object
-    {
-        $data->productId = $data->product_id;
-        unset($data->product_id);
-
-        $data->productName = $data->name;
-        unset($data->name);
-
-        $data->productMainImage = $data->main_image;
-        unset($data->main_image);
-
-        $data->productPrice = $data->price;
-        unset($data->price);
-
-        $data->productDescription = $data->description;
-        unset($data->description);
-
-        $data->productSize = $data->size;
-        unset($data->size);
-
-        $data->productCategory = $data->category;
-        unset($data->category);
-
-        $data->productStock = $data->stock;
-        unset($data->stock);
-
-        return $data;
-    }
-
-    /**
      * Get all products
      *
      * @return void

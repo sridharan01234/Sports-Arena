@@ -18,7 +18,7 @@ if (!$routeParams) {
     exit;
 }
 
-if (!in_array($requestUri, ['/login', '/register', '/user/verify', '/password/reset', '/otp/verify', '/password/change', '/email/verify', '/product/all', '/product'])) {
+if (!isset($_SESSION['user_id']) && !in_array($requestUri, ['/login', '/register', '/user/verify', '/password/reset', '/otp/verify', '/password/change', '/email/verify', '/product/all', '/product'])) {
     $jwt = new JWTHelper();
     $jwt->verifyJWT();
 }

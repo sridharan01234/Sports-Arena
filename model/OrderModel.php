@@ -43,9 +43,36 @@ class OrderModel {
         return $product ? (float)$product->price : false;
     }
 
+   /**
+     * Get orders by user ID with detailed information.
+     * 
+     * @param int $user_id ID of the user.
+     * @return array Order history details.
+     */
     public function getOrdersByUserId(int $user_id): array {
-        $orders = $this->db->getAll('orders', ['user_id' => $user_id], []);
-        return $orders;
+        $query = "
+            SELECT 
+                o.id AS order_id,
+                o.order_date,
+                o.total_amount,
+                o.status,
+                a.phone_number,
+                a.name AS username,
+                CONCAT(a.address, ', ', a.locality, ', ', a.city, ', ', a.state, ' - ', a.pincode) AS address,
+                GROUP_CONCAT(p.name ORDER BY p.name ASC) AS products
+            FROM orders o
+            INNER JOIN user_addresses a ON o.address_id = a.id
+            INNER JOIN order_items oi ON o.id = oi.order_id
+            INNER JOIN products p ON oi.product_id = p.product_id
+            WHERE o.user_id = :user_id
+            GROUP BY o.id
+            ORDER BY o.order_date DESC
+        ";
+
+        $this->db->query($query);
+        $this->db->bind(':user_id', $user_id);
+        
+        return $this->db->resultSet();
     }
 }
 ?>

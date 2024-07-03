@@ -5,7 +5,8 @@ require './database/Database.php';
 class Tournament_Model {
     private $db;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->db = new Database();
     }
 
@@ -15,8 +16,10 @@ class Tournament_Model {
      * @param array $details Details of the tournament to be created.
      * @return bool Returns true on successful insertion, false otherwise.
      */
-    public function createTournament(array $details): bool {
-        return $this->db->insert('tournaments', $details);
+    public function createTournament(array $details): bool
+    {
+        $this->db->insert('tournaments', $details);
+        return $this->db->get('tournaments', ['title' => $details['title'], 'tournament_location' => $details['tournament_location']], [])->tournament_id;
     }
 
     /**
@@ -51,7 +54,8 @@ class Tournament_Model {
      * @param array $details Details of the player registration.
      * @return bool Returns true on successful insertion, false otherwise.
      */
-    public function addPlayer(array $details): bool {
+    public function addPlayer(array $details): bool
+    {
         return $this->db->insert('tournament_registrations', $details);
     }
 
@@ -102,6 +106,16 @@ class Tournament_Model {
         $result = $this->db->single();
         return $result->count > 0;
     }
-}
 
-?>
+    /**
+     * Update the tournament image path.
+     *
+     * @param int $tournament_id The ID of the tournament
+     * @param string $image_path The path to the tournament image
+     * @return bool Whether the operation was successful
+     */
+    public function updateTournamentImage($tournament_id, $image_path): bool
+    {
+        return $this->db->update('tournaments', ['image_path' => $image_path], ['tournament_id' => $tournament_id]);
+    }
+}

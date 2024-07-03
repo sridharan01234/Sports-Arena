@@ -10,7 +10,6 @@
 require_once './interface/BaseInterface.php';
 require_once './database/Database.php';
 
-
 class UserModel implements BaseInterface
 {
     /**
@@ -60,5 +59,39 @@ class UserModel implements BaseInterface
     public function deleteUser(int $id): bool
     {
         return $this->db->delete('users', ['user_id' => $id]);
+    }
+
+    /**
+     * Get countries
+     *
+     * @return array
+     */
+    public function getCountries(): array
+    {
+        return $this->db->getAll('countries', [], []);
+    }
+
+    /**
+     * Get states\
+     *
+     * @param int $country_id
+     *
+     * @return array
+     */
+    public function getStates(int $country_id): array
+    {
+        return $this->db->getAll('states', ['country_id' => $country_id], []);
+    }
+
+    /**
+     * Get cities
+     *
+     * @param int $state_id
+     *
+     * @return array
+     */
+    public function getCities(int $state_id): array
+    {
+        return $this->db->getAll('cities', ['state_id' => $state_id], []);
     }
 }

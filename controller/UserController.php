@@ -9,7 +9,6 @@
 
 require "BaseController.php";
 require './model/UserModel.php';
-require './helper/SessionHelper.php';
 
 class UserController extends BaseController
 {
@@ -141,6 +140,11 @@ class UserController extends BaseController
         exit;
     }
 
+    /**
+     * User profile picture upload
+     *
+     * @return void
+     */
     public function userProfilePictureUpload(): void
     {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
@@ -185,5 +189,41 @@ class UserController extends BaseController
             ]);
             exit;
         }
+    }
+
+    /**
+     * Get countries
+     *
+     * @return void
+     */
+    public function getCountries(): void
+    {
+        $countries = $this->userModel->getCountries();
+        echo json_encode($countries);
+        exit;
+    }
+
+    /**
+     * Get states
+     *
+     * @return void
+     */
+    public function getStates(): void
+    {
+        $states = $this->userModel->getStates($_GET['country_id']);
+        echo json_encode($states);
+        exit;
+    }
+
+    /**
+     * Get cities
+     *
+     * @return void
+     */
+    public function getCities(): void
+    {
+        $cities = $this->userModel->getCities($_GET['state_id']);
+        echo json_encode($cities);
+        exit;
     }
 }

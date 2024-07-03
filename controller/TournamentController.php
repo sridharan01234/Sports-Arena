@@ -1,12 +1,15 @@
 <?php
+
 require_once './model/TournamentModel.php';
 require_once 'BaseController.php';
 require_once './helper/JWTHelper.php';
 
-class TournamentController extends BaseController {
+class TournamentController extends BaseController
+{
     private $tournamentModel;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->tournamentModel = new Tournament_Model();
     }
 
@@ -19,6 +22,7 @@ class TournamentController extends BaseController {
      */
     public function addTournament() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            // Decode the request data
             $data = $this->decodeRequest();
             $response = [];
 
@@ -47,7 +51,6 @@ class TournamentController extends BaseController {
                     'start_date' => $start_date,
                     'end_date' => $end_date,
                     'tournament_location' => $data['tournament_location'],
-                    'tournament_image' => $data['tournament_image'],
                     'organizer_name' => $data['organizer_name'],
                     'phone_number' => $data['phone_number'],
                     'email' => $data['email'],
@@ -69,12 +72,14 @@ class TournamentController extends BaseController {
             } catch (Exception $e) {
                 $response = [
                     'status' => 'error',
-                    'message' => $e->getMessage()
+                    'message' => $e->getMessage(),
                 ];
                 http_response_code(500);
             }
             header('Content-Type: application/json');
             echo json_encode($response);
+        } else {
+            http_response_code(405);
         }
     }
 
@@ -120,13 +125,15 @@ class TournamentController extends BaseController {
             } catch (Exception $e) {
                 $response = [
                     'status' => 'error',
-                    'message' => $e->getMessage()
+                    'message' => $e->getMessage(),
                 ];
                 http_response_code(500);
             }
             header('Content-Type: application/json');
             echo json_encode($response);
-        }
+        } else {
+            throw new Exception("Invalid request method.");
+        }   
     }
 
    /**
@@ -184,4 +191,3 @@ public function registerTournament() {
 }
 
 }
-?>

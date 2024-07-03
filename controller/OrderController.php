@@ -149,6 +149,41 @@ class OrderController extends BaseController {
         return $orderHistory;
     }
 
+     /**
+     * Endpoint to get order history for a user.
+     * GET method expected.
+     * Required parameter: user_id (in query string).
+     * 
+     * @return void
+     */
+    public function orderHistory() {
+        if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+            $response = [];
+
+            try {
+                // Fetch order history
+                $orderHistory = $this->getOrderHistory($_SESSION['user_id']);
+
+                $response = [
+                    'status' => 'success',
+                    'order_history' => $orderHistory
+                ];
+                http_response_code(200);
+
+            } catch (Exception $e) {
+                $response = [
+                    'status' => 'error',
+                    'message' => $e->getMessage()
+                ];
+                http_response_code(500);
+            }
+
+            header('Content-Type: application/json');
+            echo json_encode($response);
+        }
+    }
+
+
     /**
      * Endpoint to add a new user address.
      * POST method expected.
