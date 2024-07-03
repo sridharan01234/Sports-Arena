@@ -14,39 +14,36 @@ class TournamentController extends BaseController
     }
 
     /**
-     * Add tournament 
-     * 
-     * This method is responsible for adding a new tournament to the database.
+     * Endpoint to add a new tournament.
+     * POST method expected.
+     * Required fields: title, description, start_date, end_date, tournament_location, tournament_image, organizer_name, phone_number, email.
      * 
      * @return void
      */
-    public function addTournament(): void
-    {
+    public function addTournament() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Decode the request data
             $data = $this->decodeRequest();
             $response = [];
+
             try {
-                // Extract only date part from start_date and end_date
-                $start_date = date('Y-m-d', strtotime($data['start_date']));
-                $end_date = date('Y-m-d', strtotime($data['end_date']));
+                if (!isset($_SESSION['user_id'])) {
+                    throw new Exception("User session not found.");
+                }
 
-                $requiredKeys = ['title', 'description', 'start_date', 'end_date', 'tournament_location', 'organizer_name', 'phone_number', 'email'];
-                $missingKeys = [];
-
-                foreach ($requiredKeys as $key) {
-                    if (!array_key_exists($key, $data) || empty($data[$key])) {
-                        $missingKeys[] = $key;
+                // Validate required fields
+                $required_fields = ['title', 'description', 'start_date', 'end_date', 'tournament_location', 'tournament_image', 'organizer_name', 'phone_number', 'email'];
+                foreach ($required_fields as $field) {
+                    if (empty($data[$field])) {
+                        throw new Exception("Field '$field' is required");
                     }
                 }
 
-                if (!empty($missingKeys)) {
-                    echo json_encode([
-                        'error' => 'Missing required keys: ' . implode(', ', $missingKeys),
-                    ]);
-                    exit;
-                }
+                // Convert dates to proper format
+                $start_date = date('Y-m-d', strtotime($data['start_date']));
+                $end_date = date('Y-m-d', strtotime($data['end_date']));
 
+                // Prepare tournament details
                 $details = [
                     'user_id' => $_SESSION['user_id'],
                     'title' => $data['title'],
@@ -59,44 +56,19 @@ class TournamentController extends BaseController
                     'email' => $data['email'],
                 ];
 
-                // Check if tournament with the same title and location already exists
-                $conflictingTournamentExists = $this->tournamentModel->userHasTournamentWithConflictingDate($details);
-                if ($conflictingTournamentExists) {
-                    throw new Exception("You already have a tournament with the same title and location for overlapping dates.");
+                // Check for date conflict
+                if ($this->tournamentModel->isDateConflict($details['title'], $details['tournament_location'], $details['start_date'], $details['end_date'])) {
+                    throw new Exception("A tournament with the same name and location exists during these dates.");
                 }
 
-                $tournament_id = $this->tournamentModel->createTournament($details);
+                // Create tournament
+                $this->tournamentModel->createTournament($details);
+                $response = [
+                    'status' => 'success',
+                    'message' => 'Tournament created successfully.'
+                ];
+                http_response_code(200);
 
-                // Updated code for handling profile picture upload with error handling, permission fix, and database update
-                if ($_FILES['tournament_image']['error'] === UPLOAD_ERR_OK) {
-                    $uploadDir = '/home/asplap1937/github/be/assets/tournament_image/';
-
-                    $fileExtension = pathinfo($_FILES['tournament_image']['name'], PATHINFO_EXTENSION);
-                    $uploadFile = $uploadDir . $tournament_id . '.' . $fileExtension;
-
-                    if (move_uploaded_file($_FILES['profile_picture']['tmp_name'], $uploadFile)) {
-                        if ($this->tournamentModel->updateTournamentImage(
-                            $tournament_id,
-                            $uploadFile
-                        )) {
-                            echo json_encode([
-                                'status' => 'success',
-                                'message' => 'Tournament image updated successfully.',
-                            ]);
-                            exit;
-                        } else {
-                            echo json_encode([
-                                throw new Exception("Failed to update tournament image."),
-                            ]);
-                            exit;
-                        }
-                    } else {
-                        echo json_encode([
-                            throw new Exception("Failed to upload profile picture."),
-                        ]);
-                        exit;
-                    }
-                }
             } catch (Exception $e) {
                 $response = [
                     'status' => 'error',
@@ -112,88 +84,43 @@ class TournamentController extends BaseController
     }
 
     /**
-     * Get upcoming tournaments.
-     * This method fetches tournaments where the end date is in the future (after current time).
-     * Adjust the logic according to your database structure and date comparison needs.
+     * Endpoint to get tournament details.
+     * GET method expected.
+     * If tournament_id is provided, returns details of that tournament if it exists and is upcoming.
+     * If no tournament_id is provided, returns details of all upcoming tournaments.
      * 
      * @return void
      */
-    public function getTournaments(): void
-    {
-        $response = [];
-        try {
-            // Get all tournaments
-            $tournaments = $this->tournamentModel->getTournament();
-
-            // Filter out tournaments where the end date is in the future
-            $upcomingTournaments = [];
-            $currentTime = time();
-
-            foreach ($tournaments as $tournament) {
-                // Convert end date to timestamp (adjust according to your database structure)
-                $endDate = strtotime($tournament->end_date);
-
-                // Compare with current time
-                if ($endDate > $currentTime) {
-                    $upcomingTournaments[] = $tournament;
-                }
-            }
-            // Prepare response
-            $response = [
-                'status' => 'success',
-                'data' => $upcomingTournaments,
-            ];
-        } catch (Exception $e) {
-            // Handle exceptions
-            $response = [
-                'status' => 'error',
-                'message' => $e->getMessage(),
-            ];
-            http_response_code(500);
-        }
-
-        // Output JSON response
-        header('Content-Type: application/json');
-        echo json_encode($response);
-    }
-
-    /**
-     * Register for a tournament.
-     * This method registers a player for a tournament.
-     * 
-     * @return void
-     */
-    public function registerTournament(): void
-    {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    public function getTournament() {
+        if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             $response = [];
 
             try {
-                $details = [
-                    'registration_id' => $_POST['registration_id'],
-                    'tournament_id' => $_POST['tournament_id'],
-                    'player_name' => $_POST['player_name'],
-                    'team_name' => $_POST['team_name'],
-                    'email' => $_POST['email'],
-                    'phone_number' => $_POST['phone_number'],
-                ];
-
-                // Check if the player already exists in the tournament
-                $playerExists = $this->tournamentModel->isPlayerRegistered($details['registration_id'], $details['email'], $details['player_name']);
-
-                if ($playerExists) {
-                    $response = [
-                        'status' => 'error',
-                        'message' => 'Player is already registered for this tournament.',
-                    ];
-                    http_response_code(409);
+                $tournament_id = isset($_GET['tournament_id']) ? intval($_GET['tournament_id']) : null;
+                $currentDate = date('Y-m-d H:i:s');
+                
+                if ($tournament_id !== null) {
+                    // Get details of a specific tournament
+                    $tournament = $this->tournamentModel->getTournament($tournament_id);
+                    if ($tournament && strtotime($tournament[0]['end_date']) > strtotime($currentDate)) {
+                        $response = [
+                            'status' => 'success',
+                            'data' => $tournament
+                        ];
+                    } else {
+                        $response = [
+                            'status' => 'error',
+                            'message' => 'Tournament not found or it has already ended.'
+                        ];
+                        http_response_code(404);
+                    }
                 } else {
-                    $this->tournamentModel->addPlayer($details);
+                    // Get details of all upcoming tournaments
+                    $tournaments = $this->tournamentModel->getUpcomingTournaments();
                     $response = [
                         'status' => 'success',
-                        'message' => 'Player registered successfully for the tournament.',
+                        'data' => $tournaments
                     ];
-                    http_response_code(200);
                 }
             } catch (Exception $e) {
                 $response = [
@@ -202,11 +129,65 @@ class TournamentController extends BaseController
                 ];
                 http_response_code(500);
             }
-
             header('Content-Type: application/json');
             echo json_encode($response);
         } else {
             throw new Exception("Invalid request method.");
         }   
     }
+
+   /**
+ * Endpoint to register a player for a tournament.
+ * POST method expected.
+ * Required fields: tournament_id, player_name, team_name, email, phone_number.
+ * 
+ * @return void
+ */
+public function registerTournament() {
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $data = $this->decodeRequest();
+        $response = [];
+
+        try {
+            $required_fields = ['tournament_id', 'player_name', 'team_name', 'email', 'phone_number'];
+            foreach ($required_fields as $field) {
+                if (!isset($data[$field]) || empty($data[$field])) {
+                    throw new Exception("Field '$field' is required");
+                }
+            }
+
+            // Check if player is already registered for this tournament
+            $playerExists = $this->tournamentModel->isPlayerRegistered($data['tournament_id'], $data);
+
+            if ($playerExists) {
+                // Player is already registered
+                $response = [
+                    'status' => 'error',
+                    'message' => 'Player is already registered for this tournament.'
+                ];
+                http_response_code(409);
+            } else {
+                // Register player for the tournament
+                $this->tournamentModel->addPlayer($data);
+                $response = [
+                    'status' => 'success',
+                    'message' => 'Player registered successfully for the tournament.'
+                ];
+                http_response_code(200); 
+            }
+
+        } catch (Exception $e) {
+            // Error occurred during registration
+            $response = [
+                'status' => 'error',
+                'message' => $e->getMessage()
+            ];
+            http_response_code(500); 
+        }
+
+        header('Content-Type: application/json');
+        echo json_encode($response);
+    }
+}
+
 }

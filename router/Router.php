@@ -13,7 +13,7 @@ class Router
 
     public function __construct()
     {
-        $this->add("/tournament/get", ['Controller' => 'TournamentController', 'action' => 'getTournaments']);
+        $this->add("/tournament/get", ['Controller' => 'TournamentController', 'action' => 'getTournament']);
         $this->add("/tournament/add", ['Controller' => 'TournamentController', 'action' => 'addTournament']);
         $this->add("/tournament/register", ['Controller' => 'TournamentController', 'action' => 'registerTournament']);
         $this->add("/register", ['Controller' => 'AuthController', 'action' => 'register']);
@@ -34,12 +34,14 @@ class Router
         $this->add('/cities/get', ['Controller' => 'UserController', 'action' => 'getCities']);
         $this->add("/product/all", ['Controller' => 'ProductController', 'action' => 'getAll']);
         $this->add("/product", ['Controller' => 'ProductController', 'action' => 'getBYId']);
+        $this->add("/addAddress", ['Controller' => 'OrderController', 'action' => 'addUserAddress']);
+        $this->add("/placeOrder", ['Controller' => 'OrderController', 'action' => 'placeOrder']);
+        $this->add("/orderHistory", ['Controller' => 'OrderController', 'action' => 'orderHistory']);
         $this->add("/cart/add", ['Controller' => 'CartController', 'action' => 'updateCart']);
         $this->add("/cart/get", ['Controller' => 'CartController', 'action' => 'getCart']);
         $this->add("/cart/remove", ['Controller' => 'CartController', 'action' => 'removeCart']);
         $this->add("/cart/clear", ['Controller' => 'CartController', 'action' => 'clearCart']);
     }
-
     /**
      * Add application paths
      *

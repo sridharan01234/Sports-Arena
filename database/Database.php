@@ -24,7 +24,7 @@ class Database extends QueryBuilder
      */
     public function __construct()
     {
-        $dsn = sprintf("mysql:host=%s;dbname=%s", host, dbname); // Construct the Data Source Name (DSN)
+        $dsn = sprintf("mysql:host=%s;port=%s;dbname=%s", host, port,dbname); // Construct the Data Source Name (DSN)
         $options = [
             PDO::ATTR_PERSISTENT => true, // Enable persistent connections
             PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION, // Set error mode to exceptions
@@ -145,8 +145,7 @@ class Database extends QueryBuilder
      *
      * @return bool|object
      */
-    public function get(string $table, array $condition, array $columns): bool | object
-    {
+    public function get(string $table, array $condition, array $columns): ?object {
         if (!empty($columns)) {
             $query = "SELECT " . $this->arrayToSelect($columns) . " FROM $table ";
         } else {
@@ -160,11 +159,12 @@ class Database extends QueryBuilder
             $this->execute();
         } catch (Exception $e) {
             error_log($e->getMessage());
+            return null;
         }
-
-        return $this->single();
+        $result = $this->single();
+        return $result !== false ? $result : null;
     }
-
+    
     /**
      * Get all records from a table based on conditions
      *
@@ -268,5 +268,64 @@ class Database extends QueryBuilder
             }
         }
         $this->stmt->bindValue($param, $value, $type);
+    }
+
+     /**
+     * Insert a record into a table and return the last inserted ID.
+     * 
+     * @param string $table The name of the table.
+     * @param array $data An associative array of column => value pairs.
+     * @return int|false Returns the last inserted ID on success, false on failure.
+     */
+    public function insertWithLastId(string $table, array $data): int|false {
+        $columns = implode(',', array_keys($data));
+        $placeholders = ':' . implode(',:', array_keys($data));
+        $sql = "INSERT INTO $table ($columns) VALUES ($placeholders)";
+        
+        try {
+            $stmt = $this->dbh->prepare($sql);
+            foreach ($data as $key => $value) {
+                $stmt->bindValue(':' . $key, $value);
+            }
+            $stmt->execute();
+            return $this->dbh->lastInsertId();
+        } catch (PDOException $e) {
+            return false;
+        }
+    }
+
+    /**
+     * Insert a record into a table.
+     * 
+     * @param string $table The name of the table.
+     * @param array $data An associative array of column => value pairs.
+     * @return bool Returns true on success, false on failure.
+     */
+    public function insertt(string $table, array $data): bool {
+        $columns = implode(',', array_keys($data));
+        $placeholders = ':' . implode(',:', array_keys($data));
+        $sql = "INSERT INTO $table ($columns) VALUES ($placeholders)";
+        
+        try {
+            $stmt = $this->dbh->prepare($sql);
+            foreach ($data as $key => $value) {
+                $stmt->bindValue(':' . $key, $value);
+            }
+            return $stmt->execute();
+        } catch (PDOException $e) {
+            return false;
+        }
+    }
+
+    public function gett(string $table, array $conditions, array $columns): object|false {
+        $columns_str = $columns ? implode(", ", $columns) : '*';
+        $conditions_str = implode(" AND ", array_map(fn($k) => "$k = :$k", array_keys($conditions)));
+        $sql = "SELECT $columns_str FROM $table WHERE $conditions_str";
+        $this->query($sql);
+        foreach ($conditions as $key => $value) {
+            $this->stmt->bindValue(":$key", $value);
+        }
+        $this->execute();
+        return $this->stmt->fetch(PDO::FETCH_OBJ);
     }
 }
