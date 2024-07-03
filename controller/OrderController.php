@@ -121,7 +121,7 @@ class OrderController extends BaseController {
                     'status' => 'success',
                     'message' => 'Order placed successfully.',
                     'order_id' => $order_id,
-                    'order_history' => $orderHistory
+                    'orderHistory' => $orderHistory
                 ];
                 http_response_code(200);
 
@@ -166,7 +166,7 @@ class OrderController extends BaseController {
 
                 $response = [
                     'status' => 'success',
-                    'order_history' => $orderHistory
+                    'orderHistory' => $orderHistory
                 ];
                 http_response_code(200);
 
