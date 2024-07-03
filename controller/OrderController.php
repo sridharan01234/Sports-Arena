@@ -92,8 +92,8 @@ class OrderController extends BaseController {
                 $orderDetails = [
                     'user_id' => $_SESSION['user_id'],
                     'address_id' => $data['address_id'],
-                    'total' => $total_amount,
-                    'orderDate' => date('Y-m-d H:i:s'), 
+                    'total_amount' => $total_amount,
+                    'order_date' => date('Y-m-d H:i:s'), 
                     'status' => 'pending' 
                 ];
 
@@ -212,8 +212,8 @@ class OrderController extends BaseController {
 
                 $addressDetails = [
                     'user_id' => $_SESSION['user_id'],
-                    'userName' => $data['name'],
-                    'phoneNumber' => $data['phone_number'],
+                    'name' => $data['name'],
+                    'phone_number' => $data['phone_number'],
                     'pincode' => $data['pincode'],
                     'locality' => $data['locality'],
                     'address' => $data['address'],

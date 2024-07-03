@@ -52,12 +52,12 @@ class OrderModel {
     public function getOrdersByUserId(int $user_id): array {
         $query = "
             SELECT 
-                o.id AS order_id,
-                o.order_date,
-                o.total_amount,
+                o.id AS orderID,
+                o.order_date AS orderDate,
+                o.total_amount AS total,
                 o.status,
-                a.phone_number,
-                a.name AS username,
+                a.phone_number AS phoneNumber,
+                a.name AS userName,
                 CONCAT(a.address, ', ', a.locality, ', ', a.city, ', ', a.state, ' - ', a.pincode) AS address,
                 GROUP_CONCAT(p.name ORDER BY p.name ASC) AS products
             FROM orders o
