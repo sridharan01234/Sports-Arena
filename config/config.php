@@ -7,7 +7,7 @@
  * Last modified : 8/5/2024
  */
 
-define("host", "172.24.220.187");
+define("host", "localhost");
 define("user", "sridharan");
 define("pass", "Aspire@123");
 define("dbname", "sports_arena");

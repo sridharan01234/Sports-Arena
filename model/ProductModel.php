@@ -60,4 +60,16 @@ class ProductModel extends Database
     {
         return $this->db->getAll('product_size', ['product_id' => $id], ['size']);
     }
+
+    /**
+     * Add product
+     *
+     * @param array $data
+     *
+     * @return bool
+     */
+    public function addProduct(array $data)
+    {
+        return $this->db->insert('products', $data);
+    }
 }
