@@ -57,13 +57,15 @@ class OrderModel {
                 o.total_amount AS total,
                 o.status,
                 a.phone_number AS phoneNumber,
-                a.name AS userName,
+                u.first_name AS firstName,
+                u.last_name AS lastName,
                 CONCAT(a.address, ', ', a.locality, ', ', a.city, ', ', a.state, ' - ', a.pincode) AS address,
                 GROUP_CONCAT(p.name ORDER BY p.name ASC) AS products
             FROM orders o
             INNER JOIN user_addresses a ON o.address_id = a.id
             INNER JOIN order_items oi ON o.id = oi.order_id
             INNER JOIN products p ON oi.product_id = p.product_id
+            INNER JOIN users u on o.user_id = u.user_id
             WHERE o.user_id = :user_id
             GROUP BY o.id
             ORDER BY o.order_date DESC

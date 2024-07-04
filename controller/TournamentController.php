@@ -155,7 +155,12 @@ public function registerTournament() {
                     throw new Exception("Field '$field' is required");
                 }
             }
-
+            $details = [
+                'playerName' => $data['player_name'],
+                'teamName' => $data['team_name'],
+                'email' => $data['email'],
+                'phoneNumber' => $data['phone_number']
+            ];
             // Check if player is already registered for this tournament
             $playerExists = $this->tournamentModel->isPlayerRegistered($data['tournament_id'], $data);
 
@@ -168,7 +173,7 @@ public function registerTournament() {
                 http_response_code(409);
             } else {
                 // Register player for the tournament
-                $this->tournamentModel->addPlayer($data);
+                $this->tournamentModel->addPlayer($details);
                 $response = [
                     'status' => 'success',
                     'message' => 'Player registered successfully for the tournament.'
