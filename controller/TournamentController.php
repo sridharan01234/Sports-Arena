@@ -156,6 +156,7 @@ public function registerTournament() {
                 }
             }
             $details = [
+                'tournamentId' => $data['tournament_id'],
                 'playerName' => $data['player_name'],
                 'teamName' => $data['team_name'],
                 'email' => $data['email'],
