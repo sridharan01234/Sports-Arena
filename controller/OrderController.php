@@ -36,7 +36,7 @@ class OrderController extends BaseController {
                     throw new Exception('User session not found.');
                 }
 
-                $required_fields = ['user_id', 'address_id', 'items', 'payment_method'];
+                $required_fields = ['user_id','address_id', 'items', 'payment_method'];
                 foreach ($required_fields as $field) {
                     if (!isset($data[$field])) {
                         throw new Exception("Field '$field' is required");
@@ -49,7 +49,7 @@ class OrderController extends BaseController {
                 }
 
                 // Validate payment method
-                $allow_payment_methods = ['credit_card', 'google_pay', 'paytm', 'cash_on_delivery'];
+                $allow_payment_methods = ['upiPayment', 'cardPayment', 'cash_on_delivery'];
                 if (!in_array($data['payment_method'], $allow_payment_methods)) {
                     throw new Exception("Invalid payment method");
                 }
@@ -82,11 +82,36 @@ class OrderController extends BaseController {
                     ];
                 }
 
+                $paymentDetails = [];
+                if ($data['payment_method'] === 'upiPayment') {
+                    if (!isset($data['upi_id'])) {
+                        throw new Exception("UPI payment requires 'upi_id'");
+                    }
+                    $paymentDetails[] = [
+                        'upiId' => $data['upi_id']
+                    ];
+                } elseif ($data['payment_method'] === 'cardPayment') {
+                    if (!isset($data['card_number']) || !isset($data['card_holdername']) || !isset($data['expiry_date'])) {
+                        throw new Exception("Card payment requires 'card_number', 'card_holdername', and 'expiry_date'");
+                    }
+                    $paymentDetails[] = [
+                        'cardNumber' => $data['card_number'],
+                        'cardHoldername' => $data['card_holdername'],
+                        'expiryDate' => $data['expiry_date']
+                    ];
+                }
+    
                 // Process payment (hypothetical function)
-                $payment_successful = $this->processPayment($total_amount, $data['payment_method']);
+                $payment_successful = $this->processPayment($total_amount, $data['payment_method'], $paymentDetails);
                 if (!$payment_successful) {
                     throw new Exception("Payment failed");
                 }
+
+                // Process payment (hypothetical function)
+                // $payment_successful = $this->processPayment($total_amount, $data['payment_method']);
+                // if (!$payment_successful) {
+                //     throw new Exception("Payment failed");
+                // }
 
                 // Prepare order details
                 $orderDetails = [
@@ -220,7 +245,7 @@ class OrderController extends BaseController {
                     'city' => $data['city'],
                     'state' => $data['state'],
                     'landmark' => isset($data['landmark']) ? $data['landmark'] : null,
-                    'alternate_phone_number' => isset($data['alternate_phone_number']) ? $data['alternate_phone_number'] : null,
+                    'alternatePhoneNumber' => isset($data['alternate_phone_number']) ? $data['alternate_phone_number'] : null,
                 ];
 
                 // Add user address
@@ -256,17 +281,19 @@ class OrderController extends BaseController {
     * @param string $payment_method Payment method (e.g., 'credit_card', 'paypal').
     * @return bool Returns true if payment is successful, false otherwise.
     */
-    private function processPayment(float $amount, string $payment_method): bool {
-       // Simulated logic to process payment
-       // Replace with actual payment gateway integration
-
-       // Log the payment amount and method for now
-        error_log("Processing payment of $amount using $payment_method");
-
-       // Simulated success
-        $success = true;
+    private function processPayment(float $amount, string $payment_method, array $paymentDetails): bool {
+        try {
+            // Simulated logic to process payment
+            error_log("Processing payment of $amount using $payment_method and " . json_encode($paymentDetails));
     
-        return $success;
-    }
+            // Simulate payment success or failure
+            $success = true; // Replace with actual logic
+            return $success;
+        } catch (Exception $e) {
+            // Log payment processing error
+            error_log("Payment processing error: " . $e->getMessage());
+            return false;
+        }
+    }    
 }
 ?>
