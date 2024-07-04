@@ -149,18 +149,19 @@ public function registerTournament() {
         $response = [];
 
         try {
-            $required_fields = ['tournament_id', 'player_name', 'team_name', 'email', 'phone_number'];
-            foreach ($required_fields as $field) {
-                if (!isset($data[$field]) || empty($data[$field])) {
-                    throw new Exception("Field '$field' is required");
-                }
-            }
+            // $required_fields = ['tournament_id', 'player_name', 'team_name', 'email', 'phone_number'];
+            // foreach ($required_fields as $field) {
+            //     if (!isset($data[$field]) || empty($data[$field])) {
+            //         throw new Exception("Field '$field' is required");
+            //     }
+            // }
             $details = [
-                'tournamentId' => $data['tournament_id'],
-                'playerName' => $data['player_name'],
-                'teamName' => $data['team_name'],
+                'user_id' => $_SESSION['user_id'],
+                'tournament_id' => $data['tournamentId'],
+                'player_name' => $data['playerName'],
+                'team_name' => $data['teamName'],
                 'email' => $data['email'],
-                'phoneNumber' => $data['phone_number']
+                'phone_number' => $data['phoneNumber']
             ];
             // Check if player is already registered for this tournament
             $playerExists = $this->tournamentModel->isPlayerRegistered($data['tournament_id'], $data);
@@ -168,8 +169,8 @@ public function registerTournament() {
             if ($playerExists) {
                 // Player is already registered
                 $response = [
-                    'status' => 'error',
-                    'message' => 'Player is already registered for this tournament.'
+                    // 'status' => 'error',
+                    // 'message' => 'Player is already registered for this tournament.'
                 ];
                 http_response_code(409);
             } else {
