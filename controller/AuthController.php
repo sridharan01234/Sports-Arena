@@ -86,7 +86,7 @@ class AuthController extends BaseController
         $mail->Port = 587;
         $mail->IsHTML(true);
         $mail->Username = "sridharan01234@gmail.com"; // Sender email
-        $mail->Password = "quqyymmbzmqqntrh"; // Sender password
+        $mail->Password = "jxhrmeoqgtfgsdry"; // Sender password
         $mail->SetFrom("sridharan01234@gmail.com", "Sports Arena"); // Sender details
         $mail->Subject = $subject; // Email subject
         $mail->Body = $message; // Email body
@@ -252,10 +252,11 @@ class AuthController extends BaseController
                 'email' => $data['email'],
                 'password' => $hashed_password,
                 'gender' => $data['gender'],
-                'age' => $data['age'],
+                'dob' => $data['age'],
                 'token' => bin2hex(random_bytes(8)),
                 'phonenumber' => $data['phoneNumber'],
             ];
+            unset($data['age']);
             $subject = 'Registration Successful';
             $message = "
         <html>
@@ -270,7 +271,7 @@ class AuthController extends BaseController
             <p>Thank you for using our service.</p>
             <br>
 
-            <p>Click This link to verify your email address: <a href='http://172.24.220.187/email/verify?token=$data[token]'>Click Here</a></p>
+            <p>Click This link to verify your email address: <a href='http://172.24.220.187:8080/email/verify?token=$data[token]'>Click Here</a></p>
 
             <p>Best regards,</p>
             <p>Sports Arena Team</p>

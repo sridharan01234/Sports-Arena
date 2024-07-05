@@ -276,7 +276,7 @@ class OrderController extends BaseController {
     private function processPayment(float $amount, string $payment_method, array $paymentDetails): bool {
         try {
             // Simulated logic to process payment
-            error_log("Processing payment of $amount using $payment_method and " . json_encode($paymentDetails));
+            // error_log("Processing payment of $amount using $payment_method and " . json_encode($paymentDetails));
     
             // Simulate payment success or failure
             $success = true; // Replace with actual logic
