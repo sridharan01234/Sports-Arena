@@ -149,7 +149,14 @@ public function registerTournament() {
         $response = [];
 
         try {
+            // $required_fields = ['tournament_id', 'player_name', 'team_name', 'email', 'phone_number'];
+            // foreach ($required_fields as $field) {
+            //     if (!isset($data[$field]) || empty($data[$field])) {
+            //         throw new Exception("Field '$field' is required");
+            //     }
+            // }
             $details = [
+                'user_id' => $_SESSION['user_id'],
                 'tournament_id' => $data['tournamentId'],
                 'player_name' => $data['playerName'],
                 'team_name' => $data['teamName'],

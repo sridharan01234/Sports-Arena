@@ -228,24 +228,24 @@ class OrderController extends BaseController {
                 //     throw new Exception('User session not found.');
                 // } 
 
-                $required_fields = ['name', 'phone_number', 'pincode', 'locality', 'address', 'city', 'state'];
-                foreach ($required_fields as $field) {
-                    if (!isset($data[$field])) {
-                        throw new Exception("Field '$field' is required");
-                    }
-                }
+                // $required_fields = ['name', 'phone_number', 'pincode', 'locality', 'address', 'city', 'state'];
+                // foreach ($required_fields as $field) {
+                //     if (!isset($data[$field])) {
+                //         throw new Exception("Field '$field' is required");
+                //     }
+                // }
 
                 $addressDetails = [
                     'user_id' => $_SESSION['user_id'],
-                    'userName' => $data['name'],
-                    'phoneNumber' => $data['phone_number'],
+                    'name' => $data['name'],
+                    'phone_number' => $data['phoneNumber'],
                     'pincode' => $data['pincode'],
                     'locality' => $data['locality'],
                     'address' => $data['address'],
                     'city' => $data['city'],
                     'state' => $data['state'],
                     'landmark' => isset($data['landmark']) ? $data['landmark'] : null,
-                    'alternatePhoneNumber' => isset($data['alternate_phone_number']) ? $data['alternate_phone_number'] : null,
+                    'alternate_phone_number' => isset($data['alternatePhoneNumber']) ? $data['alternatePhoneNumber'] : null,
                 ];
 
                 // Add user address
