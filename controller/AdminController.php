@@ -24,12 +24,6 @@ class AdminController extends BaseController {
                 if ($user_id === null || !$this->getAdmin($user_id)) {
                     throw new Exception('Only admins are allowed to add products');
                 }
-                // $required_fields = ['name', 'description', 'price', 'stock', 'category'];
-                // foreach ($required_fields as $field) {
-                //     if (empty($data[$field])) {
-                //         throw new Exception("Field '$field' is required");
-                //     }
-                // }
 
                 $details = [
                     'admin_id' => $_SESSION['user_id'],
@@ -77,18 +71,13 @@ class AdminController extends BaseController {
                     throw new Exception('Only admins are allowed to add turfs');
                 }
 
-                $required_fields = ['name', 'location', 'image_url', 'details'];
-                foreach ($required_fields as $field) {
-                    if (empty($data[$field])) {
-                        throw new Exception("Field '$field' is required");
-                    }
-                }
-
                 $details = [
                     'name' => $data['name'],
                     'location' => $data['location'],
                     'image_url' => $data['imageUrl'],
-                    'details' => $data['details']
+                    'owner' => $data['owner'],
+                    'email' => $data['email'],
+                    'phonenumber' => $data['contactNumber']
                 ];
 
                 $result = $this->turfModel->addTurf($details);
