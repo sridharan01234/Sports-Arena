@@ -190,6 +190,11 @@ public function registerTournament() {
     }
 }
 
+    public function getHistory($registration_id) {
+        $registration_id = $this->tournamentModel->getRegister($registration_id);
+        return $registration_id;
+    }
+
     /**
      * Endpoint to get registered tournament details for a user.
      * GET method expected.
@@ -199,37 +204,40 @@ public function registerTournament() {
      */
     public function getUser()
     {
-        if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-            $response = [];
-            $registration_id = isset($_GET['registration_id']) ? intval($_GET['registration_id']) : null;
-            try {
-                $registerTournament = $this->tournamentModel->getRegisterTournament($registration_id);
+    if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+        $response = [];
+        try {
+            if (!isset($_SESSION['user_id'])) {
+                throw new Exception("User session not found.");
+            }
 
-                if ($registerTournament !== null) {
-                    $response = [
-                        'status' => 'success',
-                        'registerTournament' => $registerTournament
-                    ];
-                    http_response_code(200);
-                } else {
-                    $response = [
-                        'status' => 'error',
-                        'message' => 'Registration not found.'
-                    ];
-                    http_response_code(404);
-                }
-            } catch (Exception $e) {
+            $registerTournament = $this->getHistory($_SESSION['user_id']);
+
+            if (!empty($registerTournament)) {
+                $response = [
+                    'status' => 'success',
+                    'registerTournament' => $registerTournament
+                ];
+                http_response_code(200);
+            } else {
                 $response = [
                     'status' => 'error',
-                    'message' => $e->getMessage()
+                    'message' => 'Registration not found.'
                 ];
-                http_response_code(500);
+                http_response_code(404);
             }
-            header('Content-Type: application/json');
-            echo json_encode($response);
-        } else {
-            http_response_code(405);
-            echo json_encode(['status' => 'error', 'message' => 'Method not allowed']);
+        } catch (Exception $e) {
+            $response = [
+                'status' => 'error',
+                'message' => $e->getMessage()
+            ];
+            http_response_code(500);
         }
+        header('Content-Type: application/json');
+        echo json_encode($response);
+    } else {
+        http_response_code(405);
+        echo json_encode(['status' => 'error', 'message' => 'Method not allowed']);
     }
+}
 }
