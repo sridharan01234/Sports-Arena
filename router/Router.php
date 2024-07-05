@@ -16,6 +16,7 @@ class Router
         $this->add("/tournament/get", ['Controller' => 'TournamentController', 'action' => 'getTournament']);
         $this->add("/tournament/add", ['Controller' => 'TournamentController', 'action' => 'addTournament']);
         $this->add("/tournament/register", ['Controller' => 'TournamentController', 'action' => 'registerTournament']);
+        $this->add("/tournament/getuser", ['Controller' => 'TournamentController', 'action' => 'getUser']);
         $this->add("/register", ['Controller' => 'AuthController', 'action' => 'register']);
         $this->add("/login", ['Controller' => 'AuthController', 'action' => 'login']);
         $this->add("/user/verify", ['Controller' => 'AuthController', 'action' => 'verifyEmail']);
@@ -41,6 +42,9 @@ class Router
         $this->add("/cart/get", ['Controller' => 'CartController', 'action' => 'getCart']);
         $this->add("/cart/remove", ['Controller' => 'CartController', 'action' => 'removeCart']);
         $this->add("/cart/clear", ['Controller' => 'CartController', 'action' => 'clearCart']);
+        $this->add("/product/add", ['Controller' => 'AdminController', 'action' => 'addProduct']);
+        $this->add("/turf/add", ['Controller' => 'AdminController', 'action' => 'addTurf']);
+
     }
     /**
      * Add application paths
