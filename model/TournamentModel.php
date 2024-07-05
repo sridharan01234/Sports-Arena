@@ -118,4 +118,19 @@ class Tournament_Model {
     {
         return $this->db->update('tournaments', ['image_path' => $image_path], ['tournament_id' => $tournament_id]);
     }
+
+     /**
+     * Get tournament details by tournament ID.
+     * If no ID provided, fetch all tournaments.
+     * 
+     * @param int|null $tournament_id (Optional) ID of the tournament to fetch.
+     * @return array|null Returns an array of tournament details if found, null otherwise.
+     */
+    public function getRegisterTournament($registration_id = null): ?array {
+        if ($registration_id !== null) {
+            return $this->db->getAll('tournament_registrations', ['registration_id' => $registration_id], []);
+        } else {
+            return $this->db->getAll('tournament_registrations', [], []);
+        }
+    }
 }

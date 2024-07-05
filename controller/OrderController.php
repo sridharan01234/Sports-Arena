@@ -88,16 +88,16 @@ class OrderController extends BaseController {
                         throw new Exception("UPI payment requires 'upi_id'");
                     }
                     $paymentDetails[] = [
-                        'upiId' => $data['upi_id']
+                        'upi_id' => $data['upiId']
                     ];
                 } elseif ($data['payment_method'] === 'cardPayment') {
                     if (!isset($data['card_number']) || !isset($data['card_holdername']) || !isset($data['expiry_date'])) {
                         throw new Exception("Card payment requires 'card_number', 'card_holdername', and 'expiry_date'");
                     }
                     $paymentDetails[] = [
-                        'cardNumber' => $data['card_number'],
-                        'cardHoldername' => $data['card_holdername'],
-                        'expiryDate' => $data['expiry_date']
+                        'card_number' => $data['cardNumber'],
+                        'card_holdername' => $data['cardHoldername'],
+                        'expiry_date' => $data['expiryDate']
                     ];
                 }
     
@@ -131,7 +131,7 @@ class OrderController extends BaseController {
                 // Add payment details
                 $paymentDetails = [
                     'orderId' => $order_id,
-                    'payment_method' => $data['payment_method'],
+                    'payment_method' => $data['paymentMethod'],
                     'payment_status' => 'Completed'
                 ];
                 $payment_id = $this->paymentModel->addPayment($paymentDetails);
@@ -224,16 +224,9 @@ class OrderController extends BaseController {
             $response = [];
 
             try {
-                // if (!isset($_SESSION['user_id'])) {
-                //     throw new Exception('User session not found.');
-                // } 
-
-                // $required_fields = ['name', 'phone_number', 'pincode', 'locality', 'address', 'city', 'state'];
-                // foreach ($required_fields as $field) {
-                //     if (!isset($data[$field])) {
-                //         throw new Exception("Field '$field' is required");
-                //     }
-                // }
+                if (!isset($_SESSION['user_id'])) {
+                    throw new Exception('User session not found.');
+                } 
 
                 $addressDetails = [
                     'user_id' => $_SESSION['user_id'],

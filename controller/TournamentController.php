@@ -1,7 +1,7 @@
 <?php
-
 require_once './model/TournamentModel.php';
 require_once 'BaseController.php';
+require './helper/SessionHelper.php';
 require_once './helper/JWTHelper.php';
 
 class TournamentController extends BaseController
@@ -22,27 +22,18 @@ class TournamentController extends BaseController
      */
     public function addTournament() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            // Decode the request data
             $data = $this->decodeRequest();
             $response = [];
-
+    
             try {
                 if (!isset($_SESSION['user_id'])) {
                     throw new Exception("User session not found.");
                 }
-
-                // Validate required fields
-                $required_fields = ['title', 'description', 'start_date', 'end_date', 'tournament_location', 'tournament_image', 'organizer_name', 'phone_number', 'email'];
-                foreach ($required_fields as $field) {
-                    if (empty($data[$field])) {
-                        throw new Exception("Field '$field' is required");
-                    }
-                }
-
+    
                 // Convert dates to proper format
-                $start_date = date('Y-m-d', strtotime($data['start_date']));
-                $end_date = date('Y-m-d', strtotime($data['end_date']));
-
+                $start_date = date('Y-m-d', strtotime($data['startDate']));
+                $end_date = date('Y-m-d', strtotime($data['endDate']));
+    
                 // Prepare tournament details
                 $details = [
                     'user_id' => $_SESSION['user_id'],
@@ -54,21 +45,26 @@ class TournamentController extends BaseController
                     'organizer_name' => $data['organizerName'],
                     'phone_number' => $data['phoneNumber'],
                     'email' => $data['email'],
+                    'tournament_image' => $data['tournamentImage']
                 ];
-
+    
                 // Check for date conflict
                 if ($this->tournamentModel->isDateConflict($details['title'], $details['tournament_location'], $details['start_date'], $details['end_date'])) {
                     throw new Exception("A tournament with the same name and location exists during these dates.");
                 }
-
+    
                 // Create tournament
-                $this->tournamentModel->createTournament($details);
+                $tournamentId = $this->tournamentModel->createTournament($details);
+                if (!$tournamentId) {
+                    throw new Exception("Failed to create tournament.");
+                }
+
                 $response = [
                     'status' => 'success',
-                    'message' => 'Tournament created successfully.'
+                    'message' => 'Tournament created successfully.',
+                    'tournament_id' => $tournamentId
                 ];
                 http_response_code(200);
-
             } catch (Exception $e) {
                 $response = [
                     'status' => 'error',
@@ -76,13 +72,12 @@ class TournamentController extends BaseController
                 ];
                 http_response_code(500);
             }
+    
             header('Content-Type: application/json');
             echo json_encode($response);
-        } else {
-            http_response_code(405);
-        }
+        } 
     }
-
+    
     /**
      * Endpoint to get tournament details.
      * GET method expected.
@@ -148,13 +143,11 @@ public function registerTournament() {
         $data = $this->decodeRequest();
         $response = [];
 
+        if (!isset($_SESSION['user_id'])) {
+            throw new Exception("User session not found.");
+        }
+
         try {
-            // $required_fields = ['tournament_id', 'player_name', 'team_name', 'email', 'phone_number'];
-            // foreach ($required_fields as $field) {
-            //     if (!isset($data[$field]) || empty($data[$field])) {
-            //         throw new Exception("Field '$field' is required");
-            //     }
-            // }
             $details = [
                 'user_id' => $_SESSION['user_id'],
                 'tournament_id' => $data['tournamentId'],
@@ -169,8 +162,8 @@ public function registerTournament() {
             if ($playerExists) {
                 // Player is already registered
                 $response = [
-                    // 'status' => 'error',
-                    // 'message' => 'Player is already registered for this tournament.'
+                    'status' => 'error',
+                    'message' => 'Player is already registered for this tournament.'
                 ];
                 http_response_code(409);
             } else {
@@ -197,4 +190,46 @@ public function registerTournament() {
     }
 }
 
+    /**
+     * Endpoint to get registered tournament details for a user.
+     * GET method expected.
+     * 
+     * @param int $registration_id
+     * @return void
+     */
+    public function getUser()
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+            $response = [];
+            $registration_id = isset($_GET['registration_id']) ? intval($_GET['registration_id']) : null;
+            try {
+                $registerTournament = $this->tournamentModel->getRegisterTournament($registration_id);
+
+                if ($registerTournament !== null) {
+                    $response = [
+                        'status' => 'success',
+                        'registerTournament' => $registerTournament
+                    ];
+                    http_response_code(200);
+                } else {
+                    $response = [
+                        'status' => 'error',
+                        'message' => 'Registration not found.'
+                    ];
+                    http_response_code(404);
+                }
+            } catch (Exception $e) {
+                $response = [
+                    'status' => 'error',
+                    'message' => $e->getMessage()
+                ];
+                http_response_code(500);
+            }
+            header('Content-Type: application/json');
+            echo json_encode($response);
+        } else {
+            http_response_code(405);
+            echo json_encode(['status' => 'error', 'message' => 'Method not allowed']);
+        }
+    }
 }
