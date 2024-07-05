@@ -80,32 +80,18 @@ class UserController extends BaseController
      */
     public function userUpdate(): void
     {
-        if ($_SERVER['REQUEST_METHOD'] !== "PUT") {
-            http_response_code(0);
-            echo json_encode(
-                [
-                    'status' => 'error',
-                    'message' => "This " . $_SERVER['REQUEST_METHOD'] . " request method is not supported",
-                ]
-            );
-            exit();
-        }
-
         $data = $this->decodeRequest();
-        $details = [];
-
-        // Iterate through the desired keys
-        $keys = ['name', 'age', 'gender', 'dob', 'phone', 'address'];
-
-        foreach ($keys as $key) {
-            if (isset($data[$key])) {
-                $details[$key] = $data[$key];
-            }
-        }
-
+        $details = [
+        'first_name' => $data['firstName'],
+        'last_name' => $data['lastName'],
+        'email' => $data['email'],
+        'gender' => $data['gender'],
+        'dob' => $data['age'],
+        'phonenumber' => $data['phoneNumber'],
+        ];
         // Add the 'modified_at' key regardless
         $details['modified_at'] = date('Y-m-d H:i:s');
-        if ($this->userModel->updateUser($data['user_id'], $details)) {
+        if ($this->userModel->updateUser($_SESSION['user_id'], $details)) {
             echo json_encode(['success' => true]);
             exit;
         } else {

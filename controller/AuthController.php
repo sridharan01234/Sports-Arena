@@ -271,7 +271,7 @@ class AuthController extends BaseController
             <p>Thank you for using our service.</p>
             <br>
 
-            <p>Click This link to verify your email address: <a href='http://172.24.220.187/email/verify?token=$data[token]'>Click Here</a></p>
+            <p>Click This link to verify your email address: <a href='http://172.24.220.187:8080/email/verify?token=$data[token]'>Click Here</a></p>
 
             <p>Best regards,</p>
             <p>Sports Arena Team</p>
