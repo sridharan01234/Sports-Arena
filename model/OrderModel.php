@@ -57,7 +57,7 @@ class OrderModel {
                 o.total_amount AS total,
                 o.status,
                 a.phone_number AS phoneNumber,
-                a.name AS Name,
+                a.name AS name,
                 CONCAT(a.address, ', ', a.locality, ', ', a.city, ', ', a.state, ' - ', a.pincode) AS address,
                 GROUP_CONCAT(p.name ORDER BY p.name ASC) AS products
             FROM orders o

@@ -3,8 +3,8 @@ require_once './model/OrderModel.php';
 require_once './model/AddressModel.php';
 require_once './model/PaymentModel.php'; 
 require_once 'BaseController.php';
-require_once './helper/JWTHelper.php';
 require_once './helper/SessionHelper.php';
+
 class OrderController extends BaseController {
 
     private $orderModel;
@@ -27,38 +27,40 @@ class OrderController extends BaseController {
     public function placeOrder() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $data = $this->decodeRequest();
-
+    
             $response = [];
-
+    
             try {
                 if (!isset($_SESSION['user_id'])) {
                     throw new Exception('User session not found.');
                 }
-
-                $required_fields = ['user_id','address_id', 'items', 'payment_method'];
+    
+                error_log("Place Order Request Data: " . json_encode($data));
+    
+                $required_fields = ['user_id', 'address_id', 'items', 'payment_method'];
                 foreach ($required_fields as $field) {
                     if (!isset($data[$field])) {
                         throw new Exception("Field '$field' is required");
                     }
                 }
-
+    
                 // Validate items array structure
                 if (!is_array($data['items']) || empty($data['items'])) {
                     throw new Exception("Field 'items' must be a non-empty array");
                 }
-
+    
                 // Validate payment method
-                $allow_payment_methods = ['upiPayment', 'cardPayment', 'cash_on_delivery'];
+                $allow_payment_methods = ['upi_id','cash_on_delivery','card_payment'];
                 if (!in_array($data['payment_method'], $allow_payment_methods)) {
                     throw new Exception("Invalid payment method");
                 }
-
+    
                 // Fetch user address details
                 $address = $this->userAddressModel->getAddress($data['address_id']);
                 if (!$address) {
                     throw new Exception("User address not found");
                 }
-
+    
                 // Calculate total amount and validate items
                 $total_amount = 0;
                 $orderItems = [];
@@ -72,7 +74,7 @@ class OrderController extends BaseController {
                         throw new Exception("Product with ID {$item['product_id']} not found or price not available");
                     }
                     $total_amount += $productPrice * $item['quantity'];
-
+    
                     // Prepare order item details
                     $orderItems[] = [
                         'product_id' => $item['product_id'],
@@ -80,38 +82,20 @@ class OrderController extends BaseController {
                         'price' => $productPrice
                     ];
                 }
-
-                $paymentDetails = [];
-                if ($data['payment_method'] === 'upiPayment') {
-                    if (!isset($data['upi_id'])) {
-                        throw new Exception("UPI payment requires 'upi_id'");
-                    }
-                    $paymentDetails[] = [
-                        'upi_id' => $data['upiId']
-                    ];
-                } elseif ($data['payment_method'] === 'cardPayment') {
-                    if (!isset($data['card_number']) || !isset($data['card_holdername']) || !isset($data['expiry_date'])) {
-                        throw new Exception("Card payment requires 'card_number', 'card_holdername', and 'expiry_date'");
-                    }
-                    $paymentDetails[] = [
-                        'card_number' => $data['cardNumber'],
-                        'card_holdername' => $data['cardHoldername'],
-                        'expiry_date' => $data['expiryDate']
-                    ];
-                }
     
-                // Process payment (hypothetical function)
+                // Prepare payment details
+                $paymentDetails = [
+                    'user_id' => $_SESSION['user_id'],
+                    'total_amount' => $total_amount,
+                    'payment_method' => $data['payment_method'],
+                ];
+    
+                // Process payment
                 $payment_successful = $this->processPayment($total_amount, $data['payment_method'], $paymentDetails);
                 if (!$payment_successful) {
                     throw new Exception("Payment failed");
                 }
-
-                // Process payment (hypothetical function)
-                // $payment_successful = $this->processPayment($total_amount, $data['payment_method']);
-                // if (!$payment_successful) {
-                //     throw new Exception("Payment failed");
-                // }
-
+    
                 // Prepare order details
                 $orderDetails = [
                     'user_id' => $_SESSION['user_id'],
@@ -120,27 +104,27 @@ class OrderController extends BaseController {
                     'orderDate' => date('Y-m-d H:i:s'), 
                     'status' => 'pending' 
                 ];
-
+    
                 // Create order
                 $order_id = $this->orderModel->createOrder($orderDetails, $orderItems);
                 if (!$order_id) {
                     throw new Exception("Failed to place order");
                 }
-
+    
                 // Add payment details
                 $paymentDetails = [
                     'orderId' => $order_id,
-                    'payment_method' => $data['paymentMethod'],
+                    'payment_method' => $data['payment_method'],
                     'payment_status' => 'Completed'
                 ];
                 $payment_id = $this->paymentModel->addPayment($paymentDetails);
                 if (!$payment_id) {
                     throw new Exception("Failed to record payment");
                 }
-
+    
                 // Fetch order history
                 $orderHistory = $this->getOrderHistory($_SESSION['user_id']);
-
+    
                 $response = [
                     'status' => 'success',
                     'message' => 'Order placed successfully.',
@@ -148,19 +132,21 @@ class OrderController extends BaseController {
                     'orderHistory' => $orderHistory
                 ];
                 http_response_code(200);
-
+    
             } catch (Exception $e) {
+                error_log("Error placing order: " . $e->getMessage());
                 $response = [
                     'status' => 'error',
                     'message' => $e->getMessage()
                 ];
                 http_response_code(500);
             }
-
+    
             header('Content-Type: application/json');
             echo json_encode($response);
         }
     }
+    
 
     /**
      * Retrieve the order history for a specific user.
@@ -265,6 +251,52 @@ class OrderController extends BaseController {
             echo json_encode($response);
         }
     }
+
+    /**
+     * Endpoint to fetch user address by address ID.
+     * GET method expected.
+     * Required parameter: address_id (in query string).
+     * 
+     * @return void
+     */
+    public function getAddress() {
+        if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+            $response = [];
+    
+            try {
+                // Ensure the user is authenticated
+                if (!isset($_SESSION['user_id'])) {
+                    throw new Exception('User session not found.');
+                }
+    
+                // Fetch user address using the AddressModel
+                $userAddress = $this->userAddressModel->getAddress($_SESSION['user_id']);
+                if (!$userAddress) {
+                    throw new Exception('Address ID not found or unauthorized.');
+                }
+    
+                $response = [
+                    'status' => 'success',
+                    'address' => $userAddress 
+                ];
+                http_response_code(200);
+    
+            } catch (Exception $e) {
+                $response = [
+                    'status' => 'error',
+                    'message' => $e->getMessage()
+                ];
+                http_response_code(404); // Use appropriate HTTP status code
+    
+                // Log the error for debugging
+                error_log("Error in getAddress endpoint: " . $e->getMessage());
+            }
+    
+            header('Content-Type: application/json');
+            echo json_encode($response);
+        }
+    }
+    
 
     /**
     * Simulated function to process payment.

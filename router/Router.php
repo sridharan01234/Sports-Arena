@@ -38,7 +38,7 @@ class Router
         $this->add("/addAddress", ['Controller' => 'OrderController', 'action' => 'addUserAddress']);
         $this->add("/placeOrder", ['Controller' => 'OrderController', 'action' => 'placeOrder']);
         $this->add("/orderHistory", ['Controller' => 'OrderController', 'action' => 'orderHistory']);
-        $this->add("/getAddress", ['Controller' => 'AddressController', 'action' => 'getAddress']);
+        $this->add("/getAddress", ['Controller' => 'OrderController', 'action' => 'getAddress']);
         $this->add("/cart/add", ['Controller' => 'CartController', 'action' => 'updateCart']);
         $this->add("/cart/get", ['Controller' => 'CartController', 'action' => 'getCart']);
         $this->add("/cart/remove", ['Controller' => 'CartController', 'action' => 'removeCart']);
