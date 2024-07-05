@@ -126,11 +126,36 @@ class Tournament_Model {
      * @param int|null $tournament_id (Optional) ID of the tournament to fetch.
      * @return array|null Returns an array of tournament details if found, null otherwise.
      */
-    public function getRegisterTournament($registration_id = null): ?array {
-        if ($registration_id !== null) {
-            return $this->db->getAll('tournament_registrations', ['registration_id' => $registration_id], []);
-        } else {
-            return $this->db->getAll('tournament_registrations', [], []);
-        }
+    // public function getRegisterTournament($registration_id = null): ?array {
+    //     if ($registration_id !== null) {
+    //         return $this->db->getAll('tournament_registrations', ['registration_id' => $registration_id], []);
+    //     } else {
+    //         return $this->db->getAll('tournament_registrations', [], []);
+    //     }
+    // }
+
+    public function getRegister($user_id): array {
+        $query = "
+            SELECT 
+                t.title,
+                t.start_date,
+                t.end_date,
+                t.organizer_name,
+                t.email,
+                t.tournament_location,
+                t.phone_number,
+                tr.player_name,
+                tr.team_name,
+                tr.email,
+                tr.phone_number
+            FROM tournaments t
+            INNER JOIN tournament_registrations tr ON t.tournament_id = tr.tournament_id
+            WHERE tr.user_id = :user_id
+        ";
+    
+        $this->db->query($query);
+        $this->db->bind(':user_id', $user_id);
+        
+        return $this->db->resultSet();
     }
 }
