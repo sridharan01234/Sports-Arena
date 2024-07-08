@@ -2,6 +2,7 @@
     "require": {
         "phpmailer/phpmailer": "^6.9",
         "firebase/php-jwt": "^6.10",
-        "paragonie/sodium_compat": "^2.0"
+        "paragonie/sodium_compat": "^2.0",
+        "unsplash/unsplash": "^3.2"
     }
 }
