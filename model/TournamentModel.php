@@ -150,4 +150,12 @@ class Tournament_Model {
         
         return $this->db->resultSet();
     }
+
+    public function getRegisteredUsers(int $tournament_id): array {
+        $query = "SELECT user_id FROM tournament_registrations WHERE tournament_id = :tournament_id";
+        $this->db->query($query);
+        $this->db->bind(':tournament_id', $tournament_id);
+        return $this->db->resultSet();
+    }
+    
 }

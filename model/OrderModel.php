@@ -74,5 +74,24 @@ class OrderModel {
         
         return $this->db->resultSet();
     }
+
+     /**
+     * Get the count of orders by gender.
+     * 
+     * @return array Returns an associative array with the count of orders by gender.
+     */
+    public function getOrderCountByGender(): array {
+        $query = "
+            SELECT 
+                u.gender, 
+                COUNT(o.id) AS orderCount
+            FROM orders o
+            INNER JOIN users u ON o.user_id = u.user_id
+            GROUP BY u.gender
+        ";
+
+        $this->db->query($query);
+        return $this->db->resultSet();
+    }
 }
 ?>

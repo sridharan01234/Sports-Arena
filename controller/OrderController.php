@@ -2,6 +2,7 @@
 require_once './model/OrderModel.php';
 require_once './model/AddressModel.php';
 require_once './model/PaymentModel.php'; 
+require_once './controller/CartController.php';
 require_once 'BaseController.php';
 require_once './helper/SessionHelper.php';
 
@@ -21,7 +22,7 @@ class OrderController extends BaseController {
      * Endpoint to place a new order.
      * POST method expected.
      * Required fields: user_id, address_id, items (array of product_id and quantity), payment_method.
-     * 
+     * Clear the ordered items in cart
      * @return void
      */
     public function placeOrder() {
@@ -122,7 +123,6 @@ class OrderController extends BaseController {
                     throw new Exception("Failed to record payment");
                 }
     
-                // Fetch order history
                 $orderHistory = $this->getOrderHistory($_SESSION['user_id']);
     
                 $response = [
@@ -132,6 +132,10 @@ class OrderController extends BaseController {
                     'orderHistory' => $orderHistory
                 ];
                 http_response_code(200);
+                
+                //Clear the ordered items in cart
+                $cartController = new CartController();
+                $cartController->clearCart();
     
             } catch (Exception $e) {
                 error_log("Error placing order: " . $e->getMessage());
@@ -171,7 +175,6 @@ class OrderController extends BaseController {
             $response = [];
 
             try {
-                // Fetch order history
                 $orderHistory = $this->getOrderHistory($_SESSION['user_id']);
 
                 $response = [
@@ -226,7 +229,6 @@ class OrderController extends BaseController {
                     'alternate_phone_number' => isset($data['alternatePhoneNumber']) ? $data['alternatePhoneNumber'] : null,
                 ];
 
-                // Add user address
                 $address_id = $this->userAddressModel->addUserAddress($addressDetails);
                 if (!$address_id) {
                     throw new Exception("Failed to add user address");
@@ -264,12 +266,10 @@ class OrderController extends BaseController {
             $response = [];
     
             try {
-                // Ensure the user is authenticated
                 if (!isset($_SESSION['user_id'])) {
                     throw new Exception('User session not found.');
                 }
-    
-                // Fetch user address using the AddressModel
+
                 $userAddress = $this->userAddressModel->getAddress($_SESSION['user_id']);
                 if (!$userAddress) {
                     throw new Exception('Address ID not found or unauthorized.');
@@ -286,9 +286,7 @@ class OrderController extends BaseController {
                     'status' => 'error',
                     'message' => $e->getMessage()
                 ];
-                http_response_code(404); // Use appropriate HTTP status code
-    
-                // Log the error for debugging
+                http_response_code(404); 
                 error_log("Error in getAddress endpoint: " . $e->getMessage());
             }
     
@@ -307,17 +305,45 @@ class OrderController extends BaseController {
     */
     private function processPayment(float $amount, string $payment_method, array $paymentDetails): bool {
         try {
-            // Simulated logic to process payment
-            // error_log("Processing payment of $amount using $payment_method and " . json_encode($paymentDetails));
-    
-            // Simulate payment success or failure
-            $success = true; // Replace with actual logic
+            error_log("Processing payment of $amount using $payment_method and " . json_encode($paymentDetails));
+            $success = true; 
             return $success;
         } catch (Exception $e) {
-            // Log payment processing error
             error_log("Payment processing error: " . $e->getMessage());
             return false;
         }
     }    
+
+     /**
+     * Endpoint to get order count by gender.
+     * GET method expected.
+     * 
+     * @return void
+     */
+    public function getOrderCountByGender() {
+        if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+            $response = [];
+
+            try {
+                $orderCounts = $this->orderModel->getOrderCountByGender();
+
+                $response = [
+                    'status' => 'success',
+                    'orderCountByGender' => $orderCounts
+                ];
+                http_response_code(200);
+
+            } catch (Exception $e) {
+                $response = [
+                    'status' => 'error',
+                    'message' => $e->getMessage()
+                ];
+                http_response_code(500);
+            }
+
+            header('Content-Type: application/json');
+            echo json_encode($response);
+        }
+    }
 }
 ?>

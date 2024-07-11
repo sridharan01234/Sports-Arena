@@ -121,7 +121,7 @@ class CartController extends BaseController
     public function clearCart(): void
     {
         $user_id = $_SESSION['user_id'];
-        $this->cartModel->clearCart();
+        $this->cartModel->clearCart($user_id);
         echo json_encode(
             [
                 'status'=> 'success',
