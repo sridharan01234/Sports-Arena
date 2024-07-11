@@ -45,7 +45,10 @@ class Router
         $this->add("/cart/clear", ['Controller' => 'CartController', 'action' => 'clearCart']);
         $this->add("/product/add", ['Controller' => 'AdminController', 'action' => 'addProduct']);
         $this->add("/turf/add", ['Controller' => 'AdminController', 'action' => 'addTurf']);
-
+        $this->add("/turf/all", ['Controller' => 'TurfController', 'action' => 'getAll']);
+        $this->add("/add/wishlist",['Controller' => 'WishlistController', 'action' => 'addItemToWishlist']);
+        $this->add("/get/wishlist", ['Controller' => 'WishlistController', 'action' => 'getWishlistItems']);
+        $this->add("/getCounts", ['Controller' => 'OrderController', 'action' => 'getOrderCountByGender']);
     }
     /**
      * Add application paths
