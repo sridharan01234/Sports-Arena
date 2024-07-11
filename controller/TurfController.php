@@ -10,7 +10,7 @@ require_once 'BaseController.php';
 require_once './helper/SessionHelper.php';
 require_once './helper/JWTHelper.php';
 
-class ProductController extends BaseController
+class TurfController extends BaseController
 {
     private $model;
 
