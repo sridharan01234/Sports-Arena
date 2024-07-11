@@ -61,4 +61,35 @@ class ProductController extends BaseController
         );
         exit;
     }
+
+    /**
+     * Add product
+     *
+     * @return void
+     */
+    public function addProduct()
+    {
+        $data = $this->decodeRequest();
+
+        if($this->model->addProduct($data))
+        {
+            echo json_encode(
+                [
+                    'status' => 'success',
+                    'message' => 'product added successfully'
+                ]
+            );
+            exit;
+        }
+        else
+        {
+            echo json_encode(
+                [
+                    'status' => 'error',
+                    'message' => 'product not added successfully'
+                ]
+            );
+            exit;
+        }
+    }
 }
