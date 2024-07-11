@@ -1,5 +1,5 @@
 <?php
-require_once './model/ProductModel.php';
+require_once './model/ProductsModel.php';
 require_once './model/TurfModel.php';
 require_once './helper/JWTHelper.php';
 require './helper/SessionHelper.php';
@@ -20,31 +20,25 @@ class AdminController extends BaseController {
             $response = [];
             try {
                 $user_id = $_SESSION['user_id'] ?? null;
-                echo $_SESSION['user_id'];
 
                 if ($user_id === null || !$this->getAdmin($user_id)) {
                     throw new Exception('Only admins are allowed to add products');
-                }
-                $required_fields = ['name', 'description', 'price', 'stock', 'category', 'main_image'];
-                foreach ($required_fields as $field) {
-                    if (empty($data[$field])) {
-                        throw new Exception("Field '$field' is required");
-                    }
                 }
 
                 $details = [
                     'admin_id' => $_SESSION['user_id'],
                     'name' => $data['name'],
-                    'description' => $data['description'],
                     'price' => $data['price'],
+                    'description' => $data['description'],
                     'stock' => $data['stock'],
                     'category' => $data['category'],
-                    'main_image' => $data['main_image'],
+                    'main_image' => $data['mainImage'],
                 ];
 
                 $result = $this->productModel->addProduct($details);
                 if ($result) {
                     $response = [
+                        var_dump($result),
                         'status' => 'success',
                         'message' => 'Product added successfully'
                     ];
@@ -77,18 +71,13 @@ class AdminController extends BaseController {
                     throw new Exception('Only admins are allowed to add turfs');
                 }
 
-                $required_fields = ['name', 'location', 'image_url', 'details'];
-                foreach ($required_fields as $field) {
-                    if (empty($data[$field])) {
-                        throw new Exception("Field '$field' is required");
-                    }
-                }
-
                 $details = [
                     'name' => $data['name'],
                     'location' => $data['location'],
-                    'image_url' => $data['image_url'],
-                    'details' => $data['details']
+                    'image_url' => $data['imageUrl'],
+                    'owner' => $data['owner'],
+                    'email' => $data['email'],
+                    'phonenumber' => $data['contactNumber']
                 ];
 
                 $result = $this->turfModel->addTurf($details);

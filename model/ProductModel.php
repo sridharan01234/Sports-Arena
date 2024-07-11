@@ -1,24 +1,75 @@
 <?php
-require_once './database/Database.php';
 
-class ProductModel extends Database {
+/**
+ *
+ */
+
+require_once './interface/BaseInterface.php';
+require "./database/Database.php";
+
+class ProductModel extends Database
+{
     private $db;
-
-    public function __construct() {
+    public function __construct()
+    {
         $this->db = new Database();
     }
 
-    public function addProduct(array $details) {
-        return $this->db->insert('products', $details);
+    /**
+     * Get all products
+     *
+     * @return array
+     */
+    public function get_all_products(): array
+    {
+        return $this->db->getAll('products', [], []);
     }
 
-    public function isAdmin($user_id) {
-        if ($user_id !== null) {
-            $user = $this->db->getAll('users', ['user_id' => $user_id, 'is_admin' => '1'], []);
-            return $user;
-        } else {
-            return false;
-        }
+    /**
+     * Get product by id
+     *
+     * @param int $id
+     *
+     * @return object | bool
+     */
+    public function get_product(int $id): object | bool
+    {
+        return $this->db->get('products', ['product_id' => $id], []);
+    }
+
+    /**
+     * Get product images by product id
+     *
+     * @param int $id
+     *
+     * @return array
+     */
+    public function get_product_images(int $id): array
+    {
+        return $this->db->getAll('product_images', ['product_id' => $id], ['imageUrl']);
+    }
+
+    /**
+     * Get product size
+     *
+     * @param int $id
+     *
+     * @return array
+     */
+    public function get_product_size(int $id): array
+    {
+        return $this->db->getAll('product_size', ['product_id' => $id], ['size']);
+    }
+
+    /**
+     * Add product
+     *
+     * @param array $data
+     *
+     * @return bool
+     */
+    public function addProduct(array $data)
+    {
+        return $this->db->insert('products', $data);
     }
 }
-?>

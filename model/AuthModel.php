@@ -1,5 +1,4 @@
 <?php
-
 /**
  * AuthModel
  *
@@ -9,7 +8,6 @@
 
 require './database/Database.php';
 require_once './interface/BaseInterface.php';
-
 
 class AuthModel extends Database implements BaseInterface
 {

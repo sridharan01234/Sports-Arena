@@ -16,6 +16,7 @@ class Router
         $this->add("/tournament/get", ['Controller' => 'TournamentController', 'action' => 'getTournament']);
         $this->add("/tournament/add", ['Controller' => 'TournamentController', 'action' => 'addTournament']);
         $this->add("/tournament/register", ['Controller' => 'TournamentController', 'action' => 'registerTournament']);
+        $this->add("/tournament/getuser", ['Controller' => 'TournamentController', 'action' => 'getUser']);
         $this->add("/register", ['Controller' => 'AuthController', 'action' => 'register']);
         $this->add("/login", ['Controller' => 'AuthController', 'action' => 'login']);
         $this->add("/user/verify", ['Controller' => 'AuthController', 'action' => 'verifyEmail']);
@@ -27,12 +28,29 @@ class Router
         $this->add("/password/change", ['Controller' => 'AuthController', 'action' => 'changePassword']);
         $this->add("/user/profile", ['Controller' => 'UserController', 'action' => 'userProfile']);
         $this->add("/user/update", ['Controller' => 'UserController', 'action' => 'userUpdate']);
-        $this->add("/user/update/profile", ['Controller' => 'UserController', 'action' => 'updateProfile']);
+        $this->add("/user/update/profile", ['Controller' => 'UserController', 'action' => 'userProfilePictureUpload']);
         $this->add("/user/delete", ['Controller' => 'UserController', 'action' => 'userDelete']);
+        $this->add('/countries/get', ['Controller' => 'UserController', 'action' => 'getCountries']);
+        $this->add('/states/get', ['Controller' => 'UserController', 'action' => 'getStates']);
+        $this->add('/cities/get', ['Controller' => 'UserController', 'action' => 'getCities']);
+        $this->add("/product/all", ['Controller' => 'ProductController', 'action' => 'getAll']);
+        $this->add("/product", ['Controller' => 'ProductController', 'action' => 'getBYId']);
+        $this->add("/product/add", ['Controller' => 'ProductController', 'action' => 'addProduct']);
+        $this->add("/addAddress", ['Controller' => 'OrderController', 'action' => 'addUserAddress']);
+        $this->add("/placeOrder", ['Controller' => 'OrderController', 'action' => 'placeOrder']);
+        $this->add("/orderHistory", ['Controller' => 'OrderController', 'action' => 'orderHistory']);
+        $this->add("/getAddress", ['Controller' => 'OrderController', 'action' => 'getAddress']);
+        $this->add("/cart/add", ['Controller' => 'CartController', 'action' => 'updateCart']);
+        $this->add("/cart/get", ['Controller' => 'CartController', 'action' => 'getCart']);
+        $this->add("/cart/remove", ['Controller' => 'CartController', 'action' => 'removeCart']);
+        $this->add("/cart/clear", ['Controller' => 'CartController', 'action' => 'clearCart']);
         $this->add("/product/add", ['Controller' => 'AdminController', 'action' => 'addProduct']);
         $this->add("/turf/add", ['Controller' => 'AdminController', 'action' => 'addTurf']);
+        $this->add("/turf/all", ['Controller' => 'TurfController', 'action' => 'getAll']);
+        $this->add("/add/wishlist",['Controller' => 'WishlistController', 'action' => 'addItemToWishlist']);
+        $this->add("/get/wishlist", ['Controller' => 'WishlistController', 'action' => 'getWishlistItems']);
+        $this->add("/getCounts", ['Controller' => 'OrderController', 'action' => 'getOrderCountByGender']);
     }
-
     /**
      * Add application paths
      *

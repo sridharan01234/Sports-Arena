@@ -9,7 +9,6 @@
 
 require "BaseController.php";
 require './model/UserModel.php';
-require './helper/SessionHelper.php';
 
 class UserController extends BaseController
 {
@@ -81,32 +80,18 @@ class UserController extends BaseController
      */
     public function userUpdate(): void
     {
-        if ($_SERVER['REQUEST_METHOD'] !== "PUT") {
-            http_response_code(0);
-            echo json_encode(
-                [
-                    'status' => 'error',
-                    'message' => "This " . $_SERVER['REQUEST_METHOD'] . " request method is not supported",
-                ]
-            );
-            exit();
-        }
-
         $data = $this->decodeRequest();
-        $details = [];
-
-        // Iterate through the desired keys
-        $keys = ['name', 'age', 'gender', 'dob', 'phone', 'address'];
-
-        foreach ($keys as $key) {
-            if (isset($data[$key])) {
-                $details[$key] = $data[$key];
-            }
-        }
-
+        $details = [
+        'first_name' => $data['firstName'],
+        'last_name' => $data['lastName'],
+        'email' => $data['email'],
+        'gender' => $data['gender'],
+        'dob' => $data['age'],
+        'phonenumber' => $data['phoneNumber'],
+        ];
         // Add the 'modified_at' key regardless
         $details['modified_at'] = date('Y-m-d H:i:s');
-        if ($this->userModel->updateUser($data['user_id'], $details)) {
+        if ($this->userModel->updateUser($_SESSION['user_id'], $details)) {
             echo json_encode(['success' => true]);
             exit;
         } else {
@@ -141,6 +126,11 @@ class UserController extends BaseController
         exit;
     }
 
+    /**
+     * User profile picture upload
+     *
+     * @return void
+     */
     public function userProfilePictureUpload(): void
     {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
@@ -185,5 +175,41 @@ class UserController extends BaseController
             ]);
             exit;
         }
+    }
+
+    /**
+     * Get countries
+     *
+     * @return void
+     */
+    public function getCountries(): void
+    {
+        $countries = $this->userModel->getCountries();
+        echo json_encode($countries);
+        exit;
+    }
+
+    /**
+     * Get states
+     *
+     * @return void
+     */
+    public function getStates(): void
+    {
+        $states = $this->userModel->getStates($_GET['country_id']);
+        echo json_encode($states);
+        exit;
+    }
+
+    /**
+     * Get cities
+     *
+     * @return void
+     */
+    public function getCities(): void
+    {
+        $cities = $this->userModel->getCities($_GET['state_id']);
+        echo json_encode($cities);
+        exit;
     }
 }
