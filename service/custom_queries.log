@@ -1,0 +1,880 @@
+2024-06-06 11:29:05 - Method: POST
+URI: /login
+Client IP: 127.0.0.1
+Query: SELECT * FROM users WHERE email='gomathiabi75@gmail.com'
+
+2024-06-06 11:34:14 - Method: POST
+URI: /login
+Client IP: 127.0.0.1
+Query: SELECT * FROM users WHERE email='gomathiabi75@gmail.com'
+
+2024-06-06 11:42:34 - Method: POST
+URI: /login
+Client IP: 127.0.0.1
+Query: SELECT * FROM users WHERE email='gomathiabi75@gmail.com'
+
+2024-06-06 11:42:34 - Method: POST
+URI: /login
+Client IP: 127.0.0.1
+Query: SELECT * FROM users WHERE email='gomathiabi75@gmail.com'
+
+2024-06-06 11:43:21 - Method: GET
+URI: /tournament/get
+Client IP: 127.0.0.1
+Query: SELECT * FROM tournament 
+
+2024-06-06 11:43:46 - Method: POST
+URI: /tournament/add
+Client IP: 127.0.0.1
+Query: INSERT INTO tournament (user_id,title,location,description,start_date,end_date) VALUES('','','','','','')
+
+2024-06-06 12:44:17 - Method: POST
+URI: /login
+Client IP: 127.0.0.1
+Query: SELECT * FROM users WHERE email='gomathiabi75@gmail.com'
+
+2024-06-06 12:44:17 - Method: POST
+URI: /login
+Client IP: 127.0.0.1
+Query: SELECT * FROM users WHERE email='gomathiabi75@gmail.com'
+
+2024-06-06 12:44:37 - Method: POST
+URI: /login
+Client IP: 127.0.0.1
+Query: SELECT * FROM users WHERE email='gomathiabi75@gmail.com'
+
+2024-06-06 12:44:37 - Method: POST
+URI: /login
+Client IP: 127.0.0.1
+Query: SELECT * FROM users WHERE email='gomathiabi75@gmail.com'
+
+2024-06-06 12:47:19 - Method: POST
+URI: /product/add
+Client IP: 127.0.0.1
+Query: INSERT INTO products (name,description,price,stock,category) VALUES('','','','','')
+
+2024-06-06 12:57:45 - Method: POST
+URI: /product/add
+Client IP: 127.0.0.1
+Query: INSERT INTO products (name,description,price,stock,category) VALUES('','','','','')
+
+2024-06-06 12:58:58 - Method: POST
+URI: /product/add
+Client IP: 127.0.0.1
+Query: INSERT INTO products (name,description,price,stock,category) VALUES('','','','','')
+
+2024-06-07 03:43:49 - Method: POST
+URI: /login
+Client IP: 127.0.0.1
+Query: SELECT * FROM users WHERE email='gomathiabi75@gmail.com'
+
+2024-06-07 03:44:29 - Method: POST
+URI: /login
+Client IP: 127.0.0.1
+Query: SELECT * FROM users WHERE email='gomathiabi75@gmail.com'
+
+2024-06-07 03:44:29 - Method: POST
+URI: /login
+Client IP: 127.0.0.1
+Query: SELECT * FROM users WHERE email='gomathiabi75@gmail.com'
+
+2024-06-07 03:45:38 - Method: POST
+URI: /product/add
+Client IP: 127.0.0.1
+Query: INSERT INTO products (name,description,price,stock,category) VALUES('','','','','')
+
+2024-06-07 03:46:38 - Method: POST
+URI: /product/add
+Client IP: 127.0.0.1
+Query: INSERT INTO products (name,description,price,stock,category) VALUES('','','','','')
+
+2024-06-07 03:47:12 - Method: POST
+URI: /turf/add
+Client IP: 127.0.0.1
+Query: INSERT INTO turf (name,location,image_url,details) VALUES('','','','')
+
+2024-06-07 03:55:25 - Method: POST
+URI: /turf/add
+Client IP: 127.0.0.1
+Query: INSERT INTO turf (name,location,image_url,details) VALUES('','','','')
+
+2024-06-07 03:55:55 - Method: POST
+URI: /turf/add
+Client IP: 127.0.0.1
+Query: INSERT INTO turf (name,location,image_url,details) VALUES('','','','')
+
+2024-06-07 04:13:05 - Method: POST
+URI: /turf/add
+Client IP: 127.0.0.1
+Query: SELECT (is_admin) FROM users WHERE user_id='33'
+
+2024-06-07 04:13:48 - Method: POST
+URI: /turf/add
+Client IP: 127.0.0.1
+Query: SELECT (is_admin) FROM users WHERE user_id='33'
+
+2024-06-07 04:14:49 - Method: POST
+URI: /turf/add
+Client IP: 127.0.0.1
+Query: SELECT (is_admin) FROM users WHERE user_id='33'
+
+2024-06-07 04:15:12 - Method: POST
+URI: /turf/add
+Client IP: 127.0.0.1
+Query: SELECT (is_admin) FROM users WHERE user_id='33'
+
+2024-06-07 04:16:01 - Method: POST
+URI: /turf/add
+Client IP: 127.0.0.1
+Query: SELECT (is_admin) FROM users WHERE user_id='33'
+
+2024-06-07 04:16:01 - Method: POST
+URI: /turf/add
+Client IP: 127.0.0.1
+Query: INSERT INTO turf (name,location,image_url,details) VALUES('','','','')
+
+2024-06-07 04:16:22 - Method: POST
+URI: /turf/add
+Client IP: 127.0.0.1
+Query: SELECT (is_admin) FROM users WHERE user_id='33'
+
+2024-06-07 04:16:22 - Method: POST
+URI: /turf/add
+Client IP: 127.0.0.1
+Query: INSERT INTO turf (name,location,image_url,details) VALUES('','','','')
+
+2024-06-07 04:16:54 - Method: POST
+URI: /turf/add
+Client IP: 127.0.0.1
+Query: SELECT (is_admin) FROM users WHERE user_id='33'
+
+2024-06-07 04:16:54 - Method: POST
+URI: /turf/add
+Client IP: 127.0.0.1
+Query: INSERT INTO turf (name,location,image_url,details) VALUES('','','','')
+
+2024-06-07 04:17:06 - Method: POST
+URI: /turf/add
+Client IP: 127.0.0.1
+Query: SELECT (is_admin) FROM users WHERE user_id='33'
+
+2024-06-07 04:17:06 - Method: POST
+URI: /turf/add
+Client IP: 127.0.0.1
+Query: INSERT INTO turf (name,location,image_url,details) VALUES('','','','')
+
+2024-06-07 04:18:34 - Method: POST
+URI: /turf/add
+Client IP: 127.0.0.1
+Query: SELECT (is_admin) FROM users WHERE user_id='33'
+
+2024-06-07 04:18:34 - Method: POST
+URI: /turf/add
+Client IP: 127.0.0.1
+Query: INSERT INTO turf (name,location,image_url,details) VALUES('','','','')
+
+2024-06-07 04:19:12 - Method: POST
+URI: /turf/add
+Client IP: 127.0.0.1
+Query: SELECT (is_admin) FROM users WHERE user_id='33'
+
+2024-06-07 04:19:12 - Method: POST
+URI: /turf/add
+Client IP: 127.0.0.1
+Query: INSERT INTO turf (name,location,image_url,details) VALUES('','','','')
+
+2024-06-07 04:20:41 - Method: POST
+URI: /turf/add
+Client IP: 127.0.0.1
+Query: SELECT (is_admin) FROM users WHERE user_id='33'
+
+2024-06-07 04:20:41 - Method: POST
+URI: /turf/add
+Client IP: 127.0.0.1
+Query: INSERT INTO turf (name,location,image_url,details) VALUES('','','','')
+
+2024-06-07 04:22:24 - Method: POST
+URI: /turf/add
+Client IP: 127.0.0.1
+Query: SELECT (is_admin) FROM users WHERE user_id='33'
+
+2024-06-07 04:22:24 - Method: POST
+URI: /turf/add
+Client IP: 127.0.0.1
+Query: INSERT INTO turf (name,location,image_url,details) VALUES('','','','')
+
+2024-06-07 04:22:45 - Method: POST
+URI: /turf/add
+Client IP: 127.0.0.1
+Query: SELECT (is_admin) FROM users WHERE user_id='33'
+
+2024-06-07 04:22:45 - Method: POST
+URI: /turf/add
+Client IP: 127.0.0.1
+Query: INSERT INTO turf (name,location,image_url,details) VALUES('','','','')
+
+2024-06-07 04:23:54 - Method: POST
+URI: /turf/add?name%20=Sherjeel
+Client IP: 127.0.0.1
+Query: SELECT (is_admin) FROM users WHERE user_id='33'
+
+2024-06-07 04:23:54 - Method: POST
+URI: /turf/add?name%20=Sherjeel
+Client IP: 127.0.0.1
+Query: INSERT INTO turf (name,location,image_url,details) VALUES('','','','')
+
+2024-06-07 04:25:02 - Method: POST
+URI: /turf/add
+Client IP: 127.0.0.1
+Query: SELECT (is_admin) FROM users WHERE user_id='33'
+
+2024-06-07 04:25:02 - Method: POST
+URI: /turf/add
+Client IP: 127.0.0.1
+Query: INSERT INTO turf (name,location,image_url,details) VALUES('','','','')
+
+2024-06-07 04:25:58 - Method: POST
+URI: /turf/add
+Client IP: 127.0.0.1
+Query: SELECT (is_admin) FROM users WHERE user_id='33'
+
+2024-06-07 04:25:58 - Method: POST
+URI: /turf/add
+Client IP: 127.0.0.1
+Query: INSERT INTO turf (name,location,image_url,details) VALUES('','','','')
+
+2024-06-07 04:26:23 - Method: POST
+URI: /turf/add
+Client IP: 127.0.0.1
+Query: SELECT (is_admin) FROM users WHERE user_id='33'
+
+2024-06-07 04:26:23 - Method: POST
+URI: /turf/add
+Client IP: 127.0.0.1
+Query: INSERT INTO turf (name,location,image_url,details) VALUES('','','','')
+
+2024-06-07 04:30:03 - Method: POST
+URI: /turf/add
+Client IP: 127.0.0.1
+Query: SELECT (is_admin) FROM users WHERE user_id='33'
+
+2024-06-07 04:30:03 - Method: POST
+URI: /turf/add
+Client IP: 127.0.0.1
+Query: INSERT INTO turf (name,location,image_url,details) VALUES('','','','')
+
+2024-06-07 04:30:12 - Method: POST
+URI: /turf/add
+Client IP: 127.0.0.1
+Query: SELECT (is_admin) FROM users WHERE user_id='33'
+
+2024-06-07 04:30:12 - Method: POST
+URI: /turf/add
+Client IP: 127.0.0.1
+Query: INSERT INTO turf (name,location,image_url,details) VALUES('','','','')
+
+2024-06-07 04:32:15 - Method: POST
+URI: /turf/add
+Client IP: 127.0.0.1
+Query: SELECT (is_admin) FROM users WHERE user_id='33'
+
+2024-06-07 04:33:12 - Method: POST
+URI: /turf/add
+Client IP: 127.0.0.1
+Query: SELECT (is_admin) FROM users WHERE user_id='33'
+
+2024-06-07 04:33:32 - Method: POST
+URI: /turf/add
+Client IP: 127.0.0.1
+Query: SELECT (is_admin) FROM users WHERE user_id='33'
+
+2024-06-07 04:33:32 - Method: POST
+URI: /turf/add
+Client IP: 127.0.0.1
+Query: INSERT INTO turf (name,location,image_url,details) VALUES('sherjeel','','','')
+
+2024-06-07 04:35:08 - Method: POST
+URI: /turf/add
+Client IP: 127.0.0.1
+Query: SELECT (is_admin) FROM users WHERE user_id='33'
+
+2024-06-07 04:35:08 - Method: POST
+URI: /turf/add
+Client IP: 127.0.0.1
+Query: INSERT INTO turf (name,location,image_url,details) VALUES('gomathi','','','')
+
+2024-06-07 04:36:10 - Method: POST
+URI: /turf/add
+Client IP: 127.0.0.1
+Query: SELECT (is_admin) FROM users WHERE user_id='33'
+
+2024-06-07 04:36:10 - Method: POST
+URI: /turf/add
+Client IP: 127.0.0.1
+Query: INSERT INTO turf (name,location,image_url,details) VALUES('gomathi','Chennai','kdshdshkhs','ddscdssmkjdsckjds')
+
+2024-06-07 04:38:35 - Method: POST
+URI: /product/add
+Client IP: 127.0.0.1
+Query: SELECT (is_admin) FROM users WHERE user_id='33'
+
+2024-06-07 04:38:35 - Method: POST
+URI: /product/add
+Client IP: 127.0.0.1
+Query: INSERT INTO products (name,description,price,stock,category) VALUES('bat','sdfcgvhbnjygvjb n','4545','4','cricket')
+
+2024-06-07 04:40:13 - Method: POST
+URI: /product/add
+Client IP: 127.0.0.1
+Query: SELECT (is_admin) FROM users WHERE user_id='33'
+
+2024-06-07 04:40:14 - Method: POST
+URI: /product/add
+Client IP: 127.0.0.1
+Query: INSERT INTO products (name,description,price,stock,category) VALUES('bat','sdfcgvhbnjygvjb n','4545','4','cricket')
+
+2024-06-07 04:53:21 - Method: POST
+URI: /login
+Client IP: 127.0.0.1
+Query: SELECT * FROM users WHERE email='gomathiabi75@gmail.com'
+
+2024-06-07 04:53:21 - Method: POST
+URI: /login
+Client IP: 127.0.0.1
+Query: SELECT * FROM users WHERE email='gomathiabi75@gmail.com'
+
+2024-06-07 04:55:52 - Method: POST
+URI: /product/add
+Client IP: 127.0.0.1
+Query: SELECT (is_admin) FROM users WHERE user_id='33'
+
+2024-06-07 04:55:52 - Method: POST
+URI: /product/add
+Client IP: 127.0.0.1
+Query: INSERT INTO products (admin_id,name,description,price,stock,category) VALUES('33','bat','dfgfvgbnm','23','2','cricket')
+
+2024-06-07 04:56:48 - Method: POST
+URI: /product/add
+Client IP: 127.0.0.1
+Query: SELECT (is_admin) FROM users WHERE user_id='33'
+
+2024-06-07 04:56:48 - Method: POST
+URI: /product/add
+Client IP: 127.0.0.1
+Query: INSERT INTO products (admin_id,name,description,price,stock,category) VALUES('33','bat','dfgfvgbnm','23','2','cricket')
+
+2024-06-07 04:58:07 - Method: POST
+URI: /turf/add
+Client IP: 127.0.0.1
+Query: SELECT (is_admin) FROM users WHERE user_id='33'
+
+2024-06-07 04:58:34 - Method: POST
+URI: /turf/add
+Client IP: 127.0.0.1
+Query: SELECT (is_admin) FROM users WHERE user_id='33'
+
+2024-06-07 04:58:55 - Method: POST
+URI: /turf/add
+Client IP: 127.0.0.1
+Query: SELECT (is_admin) FROM users WHERE user_id='33'
+
+2024-06-07 05:00:27 - Method: POST
+URI: /turf/add
+Client IP: 127.0.0.1
+Query: SELECT (is_admin) FROM users WHERE user_id='33'
+
+2024-06-07 05:00:27 - Method: POST
+URI: /turf/add
+Client IP: 127.0.0.1
+Query: INSERT INTO turf (name,location,image_url,details) VALUES('bnm','dgfhgjh','ghjh.jpg','dfgcghvhbjj')
+
+2024-06-07 05:00:44 - Method: POST
+URI: /turf/add
+Client IP: 127.0.0.1
+Query: SELECT (is_admin) FROM users WHERE user_id='33'
+
+2024-06-07 05:07:44 - Method: POST
+URI: /turf/add
+Client IP: 127.0.0.1
+Query: SELECT * FROM users WHERE user_id='33' AND is_admin='1'
+
+2024-06-07 05:08:50 - Method: POST
+URI: /turf/add
+Client IP: 127.0.0.1
+Query: SELECT * FROM users WHERE user_id='33' AND is_admin='1'
+
+2024-06-07 05:08:50 - Method: POST
+URI: /turf/add
+Client IP: 127.0.0.1
+Query: INSERT INTO turf (name,location,image_url,details) VALUES('bnm','dgfhgjh','ghjh.jpg','dfgcghvhbjj')
+
+2024-06-07 05:09:42 - Method: POST
+URI: /turf/add
+Client IP: 127.0.0.1
+Query: SELECT * FROM users WHERE user_id='33' AND is_admin='1'
+
+2024-06-07 05:09:57 - Method: POST
+URI: /turf/add
+Client IP: 127.0.0.1
+Query: SELECT * FROM users WHERE user_id='33' AND is_admin='1'
+
+2024-06-07 05:09:57 - Method: POST
+URI: /turf/add
+Client IP: 127.0.0.1
+Query: INSERT INTO turf (name,location,image_url,details) VALUES('bnm','dgfhgjh','ghjh.jpg','dfgcghvhbjj')
+
+2024-06-07 05:53:10 - Method: POST
+URI: /turf/add
+Client IP: 127.0.0.1
+Query: SELECT * FROM users WHERE user_id='33' AND is_admin='1'
+
+2024-06-07 05:59:53 - Method: POST
+URI: /login
+Client IP: 127.0.0.1
+Query: SELECT * FROM users WHERE email='gomathiabi75@gmail.com'
+
+2024-06-07 06:00:28 - Method: POST
+URI: /login
+Client IP: 127.0.0.1
+Query: SELECT * FROM users WHERE email='gomathiabi75@gmail.com'
+
+2024-06-07 06:02:06 - Method: POST
+URI: /login
+Client IP: 127.0.0.1
+Query: SELECT * FROM users WHERE email='gomathiabi75@gmail.com'
+
+2024-06-07 06:02:31 - Method: POST
+URI: /login
+Client IP: 127.0.0.1
+Query: SELECT * FROM users WHERE email='gomathiabi75@gmail.com'
+
+2024-06-07 06:02:45 - Method: POST
+URI: /login
+Client IP: 127.0.0.1
+Query: SELECT * FROM users WHERE email='gomathiabi75@gmail.com'
+
+2024-06-07 06:03:05 - Method: POST
+URI: /login
+Client IP: 127.0.0.1
+Query: SELECT * FROM users WHERE email='gomathiabi75@gmail.com'
+
+2024-06-07 08:51:38 - Method: POST
+URI: /login
+Client IP: 127.0.0.1
+Query: SELECT * FROM users WHERE email='gomathiabi75@gmail.com'
+
+2024-06-07 08:51:38 - Method: POST
+URI: /login
+Client IP: 127.0.0.1
+Query: SELECT * FROM users WHERE email='gomathiabi75@gmail.com'
+
+2024-06-07 08:53:33 - Method: POST
+URI: /turf/add
+Client IP: 127.0.0.1
+Query: SELECT * FROM users WHERE user_id='33' AND is_admin='1'
+
+2024-06-07 08:53:33 - Method: POST
+URI: /turf/add
+Client IP: 127.0.0.1
+Query: INSERT INTO turf (name,location,image_url,details) VALUES('Product Name','Product Description','sfvgbhndfj','fdgfhjcvbn')
+
+2024-06-07 08:53:48 - Method: POST
+URI: /product/add
+Client IP: 127.0.0.1
+Query: SELECT * FROM users WHERE user_id='33' AND is_admin='1'
+
+2024-06-07 08:56:23 - Method: POST
+URI: /product/add
+Client IP: 127.0.0.1
+Query: SELECT * FROM users WHERE user_id='33' AND is_admin='1'
+
+2024-06-07 08:56:23 - Method: POST
+URI: /product/add
+Client IP: 127.0.0.1
+Query: INSERT INTO products (admin_id,name,description,price,stock,category) VALUES('33','fghb','fghjb','76','5','gfchgvjhb')
+
+2024-06-07 08:56:37 - Method: POST
+URI: /product/add
+Client IP: 127.0.0.1
+Query: SELECT * FROM users WHERE user_id='33' AND is_admin='1'
+
+2024-06-07 08:56:37 - Method: POST
+URI: /product/add
+Client IP: 127.0.0.1
+Query: INSERT INTO products (admin_id,name,description,price,stock,category) VALUES('33','fghb','fghjb','76','5','gfchgvjhb')
+
+2024-06-07 08:56:46 - Method: POST
+URI: /product/add
+Client IP: 127.0.0.1
+Query: SELECT * FROM users WHERE user_id='33' AND is_admin='1'
+
+2024-06-07 08:56:46 - Method: POST
+URI: /product/add
+Client IP: 127.0.0.1
+Query: INSERT INTO products (admin_id,name,description,price,stock,category) VALUES('33','fghb','fghjb','76','5','gfchgvjhb')
+
+2024-06-07 08:56:53 - Method: POST
+URI: /product/add
+Client IP: 127.0.0.1
+Query: SELECT * FROM users WHERE user_id='33' AND is_admin='1'
+
+2024-06-07 08:57:15 - Method: POST
+URI: /product/add
+Client IP: 127.0.0.1
+Query: SELECT * FROM users WHERE user_id='33' AND is_admin='1'
+
+2024-06-07 08:57:15 - Method: POST
+URI: /product/add
+Client IP: 127.0.0.1
+Query: INSERT INTO products (admin_id,name,description,price,stock,category) VALUES('3','fghb','fghjb','76','5','gfchgvjhb')
+
+2024-06-07 08:57:40 - Method: POST
+URI: /product/add
+Client IP: 127.0.0.1
+Query: SELECT * FROM users WHERE user_id='33' AND is_admin='1'
+
+2024-06-07 08:58:09 - Method: POST
+URI: /product/add
+Client IP: 127.0.0.1
+Query: SELECT * FROM users WHERE user_id='33' AND is_admin='1'
+
+2024-06-07 08:58:09 - Method: POST
+URI: /product/add
+Client IP: 127.0.0.1
+Query: INSERT INTO products (admin_id,name,description,price,stock,category) VALUES('6','Product Name','Product Description','100','50','Category Name')
+
+2024-06-07 08:58:16 - Method: POST
+URI: /product/add
+Client IP: 127.0.0.1
+Query: SELECT * FROM users WHERE user_id='33' AND is_admin='1'
+
+2024-06-07 08:58:16 - Method: POST
+URI: /product/add
+Client IP: 127.0.0.1
+Query: INSERT INTO products (admin_id,name,description,price,stock,category) VALUES('33','Product Name','Product Description','100','50','Category Name')
+
+2024-06-07 09:01:19 - Method: POST
+URI: /product/add
+Client IP: 127.0.0.1
+Query: SELECT * FROM users WHERE user_id='33' AND is_admin='1'
+
+2024-06-07 09:01:19 - Method: POST
+URI: /product/add
+Client IP: 127.0.0.1
+Query: INSERT INTO products (admin_id,name,description,price,stock,category,main_image) VALUES('33','Product Name','Product Description','100','50','Category Name','gfhjkjbn')
+
+2024-06-07 09:04:52 - Method: POST
+URI: /product/add
+Client IP: 127.0.0.1
+Query: SELECT * FROM users WHERE user_id='33' AND is_admin='1'
+
+2024-06-07 09:04:52 - Method: POST
+URI: /product/add
+Client IP: 127.0.0.1
+Query: INSERT INTO products (admin_id,name,description,price,stock,category,main_image) VALUES('33','Product Name','Product Description','100','50','Category Namefxdgcfvgb','gfhjkjbn')
+
+2024-06-07 09:05:17 - Method: POST
+URI: /product/add
+Client IP: 127.0.0.1
+Query: SELECT * FROM users WHERE user_id='33' AND is_admin='1'
+
+2024-06-07 09:05:26 - Method: POST
+URI: /product/add
+Client IP: 127.0.0.1
+Query: SELECT * FROM users WHERE user_id='33' AND is_admin='1'
+
+2024-06-07 09:05:26 - Method: POST
+URI: /product/add
+Client IP: 127.0.0.1
+Query: INSERT INTO products (admin_id,name,description,price,stock,main_image) VALUES('33','Product Name','Product Description','100','50','gfhjkjbn')
+
+2024-06-07 09:06:49 - Method: POST
+URI: /product/add
+Client IP: 127.0.0.1
+Query: SELECT * FROM users WHERE user_id='33' AND is_admin='1'
+
+2024-06-07 09:06:49 - Method: POST
+URI: /product/add
+Client IP: 127.0.0.1
+Query: INSERT INTO products (admin_id,name,description,price,stock,category,main_image) VALUES('33','Product Name','Product Description','100','50','cricket','gfhjkjbn')
+
+2024-06-07 10:42:45 - Method: POST
+URI: /login
+Client IP: 127.0.0.1
+Query: SELECT * FROM users WHERE email='sridharan01234@gmail.com'
+
+2024-06-07 10:42:45 - Method: POST
+URI: /login
+Client IP: 127.0.0.1
+Query: SELECT * FROM users WHERE email='sridharan01234@gmail.com'
+
+2024-06-07 10:43:23 - Method: POST
+URI: /product/add
+Client IP: 127.0.0.1
+Query: SELECT * FROM users WHERE user_id='41' AND is_admin='1'
+
+2024-06-07 10:43:37 - Method: POST
+URI: /turf/add
+Client IP: 127.0.0.1
+Query: SELECT * FROM users WHERE user_id='41' AND is_admin='1'
+
+2024-06-07 10:43:41 - Method: POST
+URI: /turf/add
+Client IP: 127.0.0.1
+Query: SELECT * FROM users WHERE user_id='41' AND is_admin='1'
+
+2024-06-07 10:44:21 - Method: POST
+URI: /login
+Client IP: 127.0.0.1
+Query: SELECT * FROM users WHERE email='gomathiabi75@gmail.com'
+
+2024-06-07 10:44:21 - Method: POST
+URI: /login
+Client IP: 127.0.0.1
+Query: SELECT * FROM users WHERE email='gomathiabi75@gmail.com'
+
+2024-06-07 10:45:03 - Method: POST
+URI: /product/add
+Client IP: 127.0.0.1
+Query: SELECT * FROM users WHERE user_id='33' AND is_admin='1'
+
+2024-06-07 10:46:30 - Method: POST
+URI: /product/add
+Client IP: 127.0.0.1
+Query: SELECT * FROM users WHERE user_id='33' AND is_admin='1'
+
+2024-06-07 10:46:59 - Method: POST
+URI: /product/add
+Client IP: 127.0.0.1
+Query: SELECT * FROM users WHERE user_id='33' AND is_admin='1'
+
+2024-06-07 10:46:59 - Method: POST
+URI: /product/add
+Client IP: 127.0.0.1
+Query: INSERT INTO products (admin_id,name,description,price,stock,category,main_image) VALUES('60','Product Name','Product Description','100','50','Category Name','fghj')
+
+2024-06-07 10:47:17 - Method: POST
+URI: /product/add
+Client IP: 127.0.0.1
+Query: SELECT * FROM users WHERE user_id='33' AND is_admin='1'
+
+2024-06-07 10:47:17 - Method: POST
+URI: /product/add
+Client IP: 127.0.0.1
+Query: INSERT INTO products (admin_id,name,description,price,stock,category,main_image) VALUES('60','Product Name','Product Description','100','50','cricket','fghj')
+
+2024-06-07 10:47:26 - Method: POST
+URI: /product/add
+Client IP: 127.0.0.1
+Query: SELECT * FROM users WHERE user_id='33' AND is_admin='1'
+
+2024-06-07 10:47:36 - Method: POST
+URI: /product/add
+Client IP: 127.0.0.1
+Query: SELECT * FROM users WHERE user_id='33' AND is_admin='1'
+
+2024-06-07 10:47:36 - Method: POST
+URI: /product/add
+Client IP: 127.0.0.1
+Query: INSERT INTO products (admin_id,name,description,price,stock,category,main_image) VALUES('12','Product Name','Product Description','100','50','cricket','fghj')
+
+2024-06-07 10:51:08 - Method: POST
+URI: /product/add
+Client IP: 127.0.0.1
+Query: SELECT * FROM users WHERE user_id='33' AND is_admin='1'
+
+2024-06-07 10:51:21 - Method: POST
+URI: /product/add
+Client IP: 127.0.0.1
+Query: SELECT * FROM users WHERE user_id='33' AND is_admin='1'
+
+2024-06-07 10:51:21 - Method: POST
+URI: /product/add
+Client IP: 127.0.0.1
+Query: INSERT INTO products (admin_id,name,description,price,stock,category,main_image) VALUES('33','Product Name','Product Description','100','50','cricket','fghj')
+
+2024-07-11 09:52:45 - Method: POST
+URI: /register
+Client IP: 127.0.0.1
+Query: SELECT * FROM users WHERE email='gomathi@gmail.com'
+
+2024-07-11 09:53:36 - Method: POST
+URI: /register
+Client IP: 127.0.0.1
+Query: SELECT * FROM users WHERE email='gomathi@gmail.com'
+
+2024-07-11 09:56:09 - Method: POST
+URI: /register
+Client IP: 127.0.0.1
+Query: SELECT * FROM users WHERE email='gomathi@gmail.com'
+
+2024-07-11 10:00:35 - Method: POST
+URI: /register
+Client IP: 127.0.0.1
+Query: SELECT * FROM users WHERE email='gomathi@gmail.com'
+
+2024-07-11 10:20:24 - Method: POST
+URI: /register
+Client IP: 127.0.0.1
+Query: SELECT * FROM users WHERE email='gomathi@gmail.com'
+
+2024-07-15 03:37:44 - Method: POST
+URI: /login
+Client IP: 127.0.0.1
+Query: SELECT * FROM users WHERE email='gomathiabi75@gmail.com'
+
+2024-07-15 03:40:38 - Method: POST
+URI: /login
+Client IP: 127.0.0.1
+Query: SELECT * FROM users WHERE email='gomathiabi75@gmail.com'
+
+2024-07-15 03:50:48 - Method: POST
+URI: /login
+Client IP: 127.0.0.1
+Query: SELECT * FROM users WHERE email='gomathiabi75@gmail.com'
+
+2024-07-15 03:54:58 - Method: POST
+URI: /login
+Client IP: 127.0.0.1
+Query: SELECT * FROM users WHERE email='gomathiabi75@gmail.com'
+
+2024-07-15 03:56:01 - Method: POST
+URI: /login
+Client IP: 127.0.0.1
+Query: SELECT * FROM users WHERE email='gomathiabi75@gmail.com'
+
+2024-07-15 03:56:19 - Method: POST
+URI: /login
+Client IP: 127.0.0.1
+Query: SELECT * FROM users WHERE email='gomathiabi75@gmail.com'
+
+2024-07-15 03:57:26 - Method: POST
+URI: /login
+Client IP: 127.0.0.1
+Query: SELECT * FROM users WHERE email='gomathiabi75@gmail.com'
+
+2024-07-15 04:05:36 - Method: POST
+URI: /login
+Client IP: 127.0.0.1
+Query: SELECT * FROM users WHERE email='gomathiabi75@gmail.com'
+
+2024-07-15 04:05:47 - Method: POST
+URI: /login
+Client IP: 127.0.0.1
+Query: SELECT * FROM users WHERE email='gomathiabi75@gmail.com'
+
+2024-07-15 04:05:49 - Method: POST
+URI: /login
+Client IP: 127.0.0.1
+Query: SELECT * FROM users WHERE email='gomathiabi75@gmail.com'
+
+2024-07-15 04:06:43 - Method: POST
+URI: /login
+Client IP: 127.0.0.1
+Query: SELECT * FROM users WHERE email='gomathiabi75@gmail.com'
+
+2024-07-15 04:07:29 - Method: POST
+URI: /login
+Client IP: 127.0.0.1
+Query: SELECT * FROM users WHERE email='gomathiabi75@gmail.com'
+
+2024-07-15 04:08:33 - Method: POST
+URI: /login
+Client IP: 127.0.0.1
+Query: SELECT * FROM users WHERE email='gomathiabi75@gmail.com'
+
+2024-07-15 04:10:44 - Method: POST
+URI: /login
+Client IP: 127.0.0.1
+Query: SELECT * FROM users WHERE email='gomathiabi75@gmail.com'
+
+2024-07-15 04:11:29 - Method: POST
+URI: /login
+Client IP: 127.0.0.1
+Query: SELECT * FROM users WHERE email='gomathiabi75@gmail.com'
+
+2024-07-15 04:11:29 - Method: POST
+URI: /login
+Client IP: 127.0.0.1
+Query: SELECT * FROM users WHERE email='gomathiabi75@gmail.com'
+
+2024-07-15 04:17:33 - Method: POST
+URI: /login
+Client IP: 127.0.0.1
+Query: SELECT * FROM users WHERE email='gomathiabi75@gmail.com'
+
+2024-07-15 04:18:07 - Method: POST
+URI: /login
+Client IP: 127.0.0.1
+Query: SELECT * FROM users WHERE email='gomathiabi75@gmail.com'
+
+2024-07-15 05:21:57 - Method: POST
+URI: /login
+Client IP: 127.0.0.1
+Query: SELECT * FROM users WHERE email='gomathiabi75@gmail.com'
+
+2024-07-15 05:52:19 - Method: POST
+URI: /login
+Client IP: 127.0.0.1
+Query: SELECT * FROM users WHERE email='gomathiabi75@gmail.com'
+
+2024-07-15 05:52:19 - Method: POST
+URI: /login
+Client IP: 127.0.0.1
+Query: SELECT * FROM users WHERE email='gomathiabi75@gmail.com'
+
+2024-07-15 06:22:35 - Method: POST
+URI: /login
+Client IP: 127.0.0.1
+Query: SELECT * FROM users WHERE email='gomathiabi75@gmail.com'
+
+2024-07-15 06:22:35 - Method: POST
+URI: /login
+Client IP: 127.0.0.1
+Query: SELECT * FROM users WHERE email='gomathiabi75@gmail.com'
+
+2024-07-15 06:22:45 - Method: POST
+URI: /login
+Client IP: 127.0.0.1
+Query: SELECT * FROM users WHERE email='gomathiabi75@gmail.com'
+
+2024-07-15 06:22:45 - Method: POST
+URI: /login
+Client IP: 127.0.0.1
+Query: SELECT * FROM users WHERE email='gomathiabi75@gmail.com'
+
+2024-07-15 06:31:15 - Method: POST
+URI: /login
+Client IP: 127.0.0.1
+Query: SELECT * FROM users WHERE email='gomathiabi75@gmail.com'
+
+2024-07-15 06:31:15 - Method: POST
+URI: /login
+Client IP: 127.0.0.1
+Query: SELECT * FROM users WHERE email='gomathiabi75@gmail.com'
+
+2024-07-15 06:31:58 - Method: GET
+URI: /tournament/get
+Client IP: 127.0.0.1
+Query: SELECT * FROM tournaments WHERE end_date > :currentDate
+
+2024-07-15 06:37:29 - Method: GET
+URI: /cart/get
+Client IP: 127.0.0.1
+Query: SELECT * FROM cart WHERE user_id='33'
+
+2024-07-15 06:37:29 - Method: GET
+URI: /cart/get
+Client IP: 127.0.0.1
+Query: SELECT * FROM cart_items WHERE cart_id='9'
+
+2024-07-15 06:37:29 - Method: GET
+URI: /cart/get
+Client IP: 127.0.0.1
+Query: SELECT name,price,main_image,product_id,description,stock,category FROM products WHERE product_id='102'
+
+2024-07-15 06:37:29 - Method: GET
+URI: /cart/get
+Client IP: 127.0.0.1
+Query: SELECT name,price,main_image,product_id,description,stock,category FROM products WHERE product_id='101'
+
