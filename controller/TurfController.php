@@ -51,6 +51,17 @@ class TurfController extends BaseController
     {
         $data = $this->decodeRequest();
 
+
+        if (isset($data['id']) && isset($data['date']))
+        {
+            echo json_encode(
+                [
+                    'status' => 'error',
+                    'message' => 'invalid arguments'
+                ]
+                );
+                exit;
+        }
         echo json_encode($this->turfModel->getTurfSlots($data['id'], $data['date']));
         exit;
     }
