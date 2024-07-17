@@ -76,6 +76,7 @@ class AuthController extends BaseController
      */
     private function sendEmail(string $email, string $subject, string $message): bool|string
     {
+        return true;
         // Sending OTP via email
         $mail = new PHPMailer(true); // Creating PHPMailer instance
         $mail->IsSMTP();
@@ -172,6 +173,7 @@ class AuthController extends BaseController
                         'message' => 'Login successful',
                         'jwt' => $this->jwt->generateJWT($user),
                         'session_id' => session_id(),
+                        'role' => $user->is_admin ? 'admin' : 'user'
                     ]));
                     exit();
                 } else {

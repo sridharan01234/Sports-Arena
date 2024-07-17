@@ -1,135 +1,89 @@
 <?php
 
-/**
- *
- *
- */
-
-require_once './model/TurfsModel.php';
-require_once 'BaseController.php';
-require_once './helper/SessionHelper.php';
-require_once './helper/JWTHelper.php';
+require "BaseController.php";
+require './model/TurfModel.php';
 
 class TurfController extends BaseController
 {
-    private $model;
-
+    private $turfModel;
     public function __construct()
     {
-        $this->model = new TurfsModel();
+        $this->turfModel = new TurfModel();
     }
 
-    /**
-     * Get all turfs
-     *
-     * @return void
-     */
-    public function getAll(): void
+    public function getAllTurf()
     {
-        $data = $this->model->get_all_turfs();
+        $data = $this->decodeRequest();
 
-        foreach ($data as $key => $value) {
-            $data[$key] = $this->correctNaming($value);
-        }
-
-        echo json_encode(
-            [
-                'status' => 200,
-                'message' => 'success',
-                'data' => $data
-            ]
-        );
+        echo json_encode($this->turfModel->getAllTurf());
         exit;
     }
 
-    /**
-     * Get turf by id
-     *
-     * @return void
-     */
-    public function getById(): void
+    public function getTurf()
     {
-        $data = $this->model->get_turf($_GET['id']);
+        $data = $this->decodeRequest();
 
-        $data = $this->correctNaming($data);
-        $data->productImages = $this->model->get_turf_images($_GET['id']);
-
-        echo json_encode(
-            [
-                'status' => 'success',
-                'data' => $data
-            ]
-        );
+        echo json_encode($this->turfModel->getTurf($_GET['id']));
         exit;
     }
 
     public function bookTurf()
     {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $data = $this->decodeRequest();
-            $response = [];
-    
-            if (!isset($_SESSION['user_id'])) {
-                throw new Exception("User session not found.");
-            }
-    
-            try {
-                $userId = $_SESSION['user_id'];
-                $turfId = $data['turfId'];
-                $turfLocation = $data['turfLocation'];
-                $turfDate = $data['turfDate'];
-                $turfStarts = $data['turfStarts']; 
-                $turfEnds = $data['turfEnds']; 
-    
-                $conflictingSlots = $this->model->getConflictingSlots($turfId, $turfDate, $turfStarts, $turfEnds);
-    
-                if (!empty($conflictingSlots)) {
-                    $conflictingSlotStr = implode(', ', array_map(function ($slot) {
-                        return "{$slot['slot_start']}-{$slot['slot_end']}";
-                    }, $conflictingSlots));
-    
-                    $response = [
-                        'status' => 'error',
-                        'message' => "Time slot(s) $conflictingSlotStr are already booked for this turf on $turfDate."
-                    ];
-                    http_response_code(409);
-                } else {
-                    $bookingDetails = [];
-                    foreach ($turfStarts as $index => $start) {
-                        $end = $turfEnds[$index];
-    
-                        $bookingDetails[] = [
-                            'user_id' => $userId,
-                            'turf_id' => $turfId,
-                            'player_name' => $data['playerName'],
-                            'turf_location' => $turfLocation,
-                            'email' => $data['email'],
-                            'turf_date' => $turfDate,
-                            'slot_start' => $start,
-                            'slot_end' => $end
-                        ];
-                    }
-    
-                    foreach ($bookingDetails as $booking) {
-                        $this->model->bookTurf($booking);
-                    }
-    
-                    $response = [
-                        'status' => 'success',
-                        'message' => 'User registered successfully for the turf.'
-                    ];
-                    http_response_code(200);
-                }
-            } catch (Exception $e) {
-                $response = [
-                    'status' => 'error',
-                    'message' => $e->getMessage()
-                ];
-                http_response_code(500);
-            }
-            header('Content-Type: application/json');
-            echo json_encode($response);
-        }
-    }    
-}
+        $data = $this->decodeRequest();
 
+        $details = [];
+        $details['user_id'] = $_SESSION['user_id'];
+        $details['turf_id'] = $data['id'];
+        $details['turf_date'] = "2024-07-02";
+        $details['slot_start'] = $data['slotStart'];
+        $details['slot_end'] = $data['slotEnd'];
+        $details['turf_location'] = $data['location'];
+        $details['email'] = $data['email'];
+        $details['player_name'] = $data['name'];
+
+        $this->checkTiming($data['id'], $data['date'], $data['slotStart'], $data['slotEnd']);
+
+        echo json_encode($this->turfModel->bookTurf($details));
+        exit;
+    }
+
+    public function getTurfSlots()
+    {
+        $data = $this->decodeRequest();
+
+        echo json_encode($this->turfModel->getTurfSlots($data['id'], $data['date']));
+        exit;
+    }
+
+    private function checkTiming($id, $date, $start, $end)
+    {
+        $bookedTimings = $this->turfModel->getTurfSlots($id, $date);
+
+        function periodsOverlap($start1, $end1, $start2, $end2)
+        {
+            return !($end1 <= $start2 || $end2 <= $start1);
+        }
+
+        $timingBlocked = false;
+        foreach ($bookedTimings as $bookedTiming) {
+            $start_time = $bookedTiming->slot_start;
+            $end_time = $bookedTiming->slot_end;
+
+            if (periodsOverlap($start_time, $end_time, $start, $end)) {
+                $timingBlocked = true;
+                break;
+            }
+        }
+
+        if ($timingBlocked) {
+            echo json_encode(
+                [
+                    "status" => "error",
+                    "message" => "Request timing is nt available",
+                ]
+            );
+            exit;
+        }
+
+    }
+}

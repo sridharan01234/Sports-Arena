@@ -36,14 +36,8 @@ class UserController extends BaseController
      */
     public function userDelete(): void
     {
-        if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
-            http_response_code(405);
-            echo json_encode(['error' => 'Method Not Allowed']);
-            exit;
-        }
-
-        $data = $this->decodeRequest();
-        $this->userModel->deleteUser($data['user_id']);
+        $data = (int)$_GET['id'];
+        $this->userModel->deleteUser($data);
 
         echo json_encode(['success' => true]);
         exit;
@@ -210,6 +204,20 @@ class UserController extends BaseController
     {
         $cities = $this->userModel->getCities($_GET['state_id']);
         echo json_encode($cities);
+        exit;
+    }
+
+    public function getAll()
+    {
+        $users = $this->userModel->getAllUsers();
+        echo json_encode($users);
+        exit;
+    }
+
+    public function usersCount()
+    {
+        $users = $this->userModel->getAllUsers();
+        echo json_encode(count($users));
         exit;
     }
 }
