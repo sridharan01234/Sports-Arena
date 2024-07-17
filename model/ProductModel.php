@@ -5,7 +5,7 @@
  */
 
 require_once './interface/BaseInterface.php';
-require_once "./database/Database.php";
+require "./database/Database.php";
 
 class ProductModel extends Database
 {

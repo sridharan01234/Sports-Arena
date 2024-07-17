@@ -92,7 +92,6 @@ class Tournament_Model extends Database {
         $result = $this->db->single();
         return $result->count > 0;
     }
-    
 
     /**
      * Get all upcoming tournaments where the end date is after the current date.

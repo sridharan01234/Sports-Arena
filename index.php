@@ -12,7 +12,7 @@ if (!$routeParams) {
     echo json_encode(
         [
             'status'=> 'error',
-            'message'=> 'Invalid Request',
+            'message'=> 'Invalid Request'
         ]
     );
     exit;
@@ -30,4 +30,3 @@ require_once sprintf("controller/%s.php", $controllerName);
 
 $controllerObject = new $controllerName($requestUri);
 $controllerObject->$actionName();
-

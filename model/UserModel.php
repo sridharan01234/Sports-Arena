@@ -17,7 +17,7 @@ class UserModel implements BaseInterface
      *
      * @var Database
      */
-    private $db;
+    private $db;    
 
     public function __construct()
     {
@@ -93,5 +93,15 @@ class UserModel implements BaseInterface
     public function getCities(int $state_id): array
     {
         return $this->db->getAll('cities', ['state_id' => $state_id], []);
+    }
+
+    /**
+     * Get all users
+     *
+     * @return array
+     */
+    public function getAllUsers()
+    {
+        return $this->db->getAll('users', [], []);
     }
 }

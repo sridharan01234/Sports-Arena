@@ -37,11 +37,12 @@ class OrderController extends BaseController {
                 if (!isset($_SESSION['user_id'])) {
                     throw new Exception('User session not found.');
                 }
-    
-                error_log("Place Order Request Data: " . json_encode($data));
+                if (!isset($data['address_id'])) {
+                    throw new Exception('Address ID is required.');
+                }
     
                 // Validate items array structure
-                if (!is_array($data['items']) || empty($data['items'])) {
+                if (!isset($data['items']) || !is_array($data['items']) || empty($data['items'])) {
                     throw new Exception("Field 'items' must be a non-empty array");
                 }
     
@@ -125,13 +126,12 @@ class OrderController extends BaseController {
                     'status' => 'success',
                     'message' => 'Order placed successfully.',
                     'orderId' => $order_id,
-                    'orderHistory' => $orderHistory
                 ];
                 http_response_code(200);
     
                 // Clear the ordered items in cart
-                // $cartController = new CartController();
-                // $cartController->clearCart();
+                $cartController = new CartController();
+                $cartController->clearCart();
     
             } catch (Exception $e) {
                 error_log("Error placing order: " . $e->getMessage());

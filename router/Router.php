@@ -27,9 +27,11 @@ class Router
         $this->add("/jwt/verify", ['Controller' => 'AuthController', 'action' => 'verifyToken']);
         $this->add("/password/change", ['Controller' => 'AuthController', 'action' => 'changePassword']);
         $this->add("/user/profile", ['Controller' => 'UserController', 'action' => 'userProfile']);
+        $this->add("/users/all", ['Controller' => 'UserController', 'action' => 'getAll']);
         $this->add("/user/update", ['Controller' => 'UserController', 'action' => 'userUpdate']);
         $this->add("/user/update/profile", ['Controller' => 'UserController', 'action' => 'userProfilePictureUpload']);
         $this->add("/user/delete", ['Controller' => 'UserController', 'action' => 'userDelete']);
+        $this->add("/user/count", ['Controller' => 'UserController', 'action' => 'usersCount']);
         $this->add('/countries/get', ['Controller' => 'UserController', 'action' => 'getCountries']);
         $this->add('/states/get', ['Controller' => 'UserController', 'action' => 'getStates']);
         $this->add('/cities/get', ['Controller' => 'UserController', 'action' => 'getCities']);
@@ -50,6 +52,16 @@ class Router
         $this->add("/delete/wishlist", ['Controller' => 'WishlistController', 'action' => 'deleteItemFromWishlist']);
         $this->add("/getCounts/gender", ['Controller' => 'OrderController', 'action' => 'getOrderCountByGender']);
         $this->add("/getCounts/category", ['Controller' => 'OrderController', 'action' => 'getOrderCountByCategory']);
+        $this->add("/add/wishlist",['Controller' => 'WishlistController', 'action' => 'addItemToWishlist']);
+        $this->add("/get/wishlist", ['Controller' => 'WishlistController', 'action' => 'getWishlistItems']);
+        $this->add("/turf/get/all", ['Controller' => 'TurfController', 'action' => 'getAllTurf']);
+        $this->add("/turf/get", ['Controller' => 'TurfController', 'action' => 'getTurf']);
+        $this->add("/turf/book", ['Controller' => 'TurfController', 'action' => 'bookTurf']);
+        $this->add("/turf/get/slots", ['Controller' => 'TurfController', 'action' => 'getTurfSlots']);
+
+
+
+
     }
     /**
      * Add application paths

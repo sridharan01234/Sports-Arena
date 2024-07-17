@@ -76,16 +76,13 @@ class Database extends QueryBuilder
      *
      * @return object|false
      */
-    // public function single(): object | false
-    // {
-    //     $this->execute();
-    //     return $this->stmt->fetch(PDO::FETCH_OBJ);
-    // }
 
     public function single($fetchMode = PDO::FETCH_OBJ): ?object {
         $this->execute();
-        return $this->stmt->fetch($fetchMode);
+        $result = $this->stmt->fetch($fetchMode);
+        return $result !== false ? $result : null;
     }
+    
 
     /**
      * Get the number of rows affected by the last SQL statement.

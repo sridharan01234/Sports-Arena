@@ -6,6 +6,7 @@
 
 require_once './interface/BaseInterface.php';
 require_once './database/Database.php';
+require './helper/SessionHelper.php';
 
 class CartModel extends Database
 {
@@ -24,54 +25,51 @@ class CartModel extends Database
      * @return void
      */
     public function add(array $data)
-    {
+{
+    $cart_id = $this->findCart();
+    if ($cart_id === null) {
+        // Handle the error or create a new cart
+        $this->createCart();
         $cart_id = $this->findCart();
-        if (
-            $this->db->get('cart_items', [
-                'cart_id' => $cart_id,
-                'product_id' => $data['productId'],
-                'size' => $data['productSize']
-            ], [])
-        ) {
-            if (isset($data['quantity'])) {
-                $quantity = $data['quantity'];
-            } else {
-                $quantity = $this->db->get('cart_items', ['cart_id' => $cart_id, 'product_id' => $data['productId']], ['quantity'])->quantity + 1;
-            }
-            $this->db->update("cart_items", [
-                "quantity" => $quantity,
-            ], [
-                "cart_id" => $cart_id,
-                'size' => $data['productSize'],
-                "product_id" => $data["productId"],
-            ]);
-        } else {
-            $this->db->insert("cart_items", [
-                "cart_id" => $cart_id,
-                'size' => $data['productSize'],
-                "product_id" => $data["productId"],
-            ]);
-        }
     }
+    
+    $existingItem = $this->db->get('cart_items', [
+        'cart_id' => $cart_id,
+        'product_id' => $data['productId'],
+        'size' => $data['productSize']
+    ], []);
+    
+    if ($existingItem) {
+        $quantity = isset($data['quantity']) ? $data['quantity'] : $existingItem->quantity + 1;
+        $this->db->update("cart_items", [
+            "quantity" => $quantity,
+        ], [
+            "cart_id" => $cart_id,
+            'size' => $data['productSize'],
+            "product_id" => $data["productId"],
+        ]);
+    } else {
+        $this->db->insert("cart_items", [
+            "cart_id" => $cart_id,
+            'size' => $data['productSize'],
+            "product_id" => $data["productId"],
+        ]);
+    }
+}
 
     /**
      * Find the cart id for the user
      *
      * @return int
      */
-    private function findCart(): int
-    {
-        $cart_id = $this->db->get("cart", [
+    private function findCart(): ?int {
+        $result = $this->db->get("cart", [
             "user_id" => $_SESSION["user_id"],
-        ], [])->cart_id;
-        if ($cart_id) {
-            return $cart_id;
-        } else {
-            $this->createCart();
-            return $this->findCart();
-        }
+        ], []);
+        return $result ? $result->cart_id : null;
     }
-
+    
+    
     /**
      * Create a new cart for the user
      *
@@ -79,6 +77,7 @@ class CartModel extends Database
      */
     private function createCart(): void
     {
+        if(isset($_SESSION['user_id'])) exit;
         if (
             !$this->db->get("cart", [
                 "user_id" => $_SESSION["user_id"],
