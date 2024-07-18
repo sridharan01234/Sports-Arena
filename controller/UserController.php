@@ -64,12 +64,15 @@ class UserController extends BaseController
         $user = $this->userModel->getUser($_SESSION['user_id']);
 
         $details = [];
+        $from = new DateTime($user->dob);
+        $to   = new DateTime('today');
         $details = [
             'firstName' => $user->first_name,
             'lastName' => $user->last_name,
             'email' => $user->email,
             'gender' => $user->gender,
-            'age' => $user->dob,
+            'age' => $from->diff($to)->y,
+            'dob' => $user->dob,
             'phoneNumber' => $user->phonenumber,
         ];
         echo json_encode($details);
@@ -89,7 +92,7 @@ class UserController extends BaseController
         'last_name' => $data['lastName'],
         'email' => $data['email'],
         'gender' => $data['gender'],
-        'dob' => $data['age'],
+        'dob' => $data['dob'],
         'phonenumber' => $data['phoneNumber'],
         ];
         // Add the 'modified_at' key regardless
