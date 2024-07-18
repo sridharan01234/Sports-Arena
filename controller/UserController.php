@@ -63,7 +63,20 @@ class UserController extends BaseController
         $data = $this->decodeRequest();
         $user = $this->userModel->getUser($_SESSION['user_id']);
 
-        echo json_encode($user);
+        $details = [];
+        $from = new DateTime($user->dob);
+        $to   = new DateTime('today');
+        
+        $details = [
+            'firstName' => $user->first_name,
+            'lastName' => $user->last_name,
+            'email' => $user->email,
+            'gender' => $user->gender,
+            'dob' => $user->dob,
+            'age' => $from->diff($to)->y,
+            'phoneNumber' => $user->phonenumber,
+        ];
+        echo json_encode($details);
         exit;
     }
 
