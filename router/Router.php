@@ -46,21 +46,17 @@ class Router
         $this->add("/cart/get", ['Controller' => 'CartController', 'action' => 'getCart']);
         $this->add("/cart/remove", ['Controller' => 'CartController', 'action' => 'removeCart']);
         $this->add("/cart/clear", ['Controller' => 'CartController', 'action' => 'clearCart']);
-        $this->add("/bookTurf", ['Controller' => 'TurfController', 'action' => 'bookTurf']);
-        $this->add("/add/wishlist",['Controller' => 'WishlistController', 'action' => 'addItemToWishlist']);
-        $this->add("/get/wishlist", ['Controller' => 'WishlistController', 'action' => 'getWishlistItems']);
-        $this->add("/getCounts", ['Controller' => 'OrderController', 'action' => 'getOrderCountByGender']);
+        $this->add("/turf/add", ['Controller' => 'AdminController', 'action' => 'addTurf']);
+        $this->add("/wishlist/add", ['Controller' => 'WishlistController', 'action' => 'addWishlist']);
+        $this->add("/wishlist/get", ['Controller' => 'WishlistController', 'action' => 'getWishlist']);
+        $this->add("/wishlist/remove", ['Controller' => 'WishlistController', 'action' => 'removeWishlist']);
+        $this->add("/wishlist/clear", ['Controller' => 'WishlistController', 'action' => 'clearWishlist']);
+        $this->add("/getCounts/gender", ['Controller' => 'OrderController', 'action' => 'getOrderCountByGender']);
+        $this->add("/getCounts/category", ['Controller' => 'OrderController', 'action' => 'getOrderCountByCategory']);
         $this->add("/turf/get/all", ['Controller' => 'TurfController', 'action' => 'getAllTurf']);
         $this->add("/turf/get", ['Controller' => 'TurfController', 'action' => 'getTurf']);
         $this->add("/turf/book", ['Controller' => 'TurfController', 'action' => 'bookTurf']);
         $this->add("/turf/get/slots", ['Controller' => 'TurfController', 'action' => 'getTurfSlots']);
-        $this->add("/turf/get/slots", ['Controller' => 'TurfController', 'action' => 'getTurfSlots']);
-        $this->add('/decode/image', ['Controller' => 'UserController', 'action' => 'decodeStringToImage']);
-
-
-
-
-
     }
     /**
      * Add application paths

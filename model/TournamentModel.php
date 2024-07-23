@@ -1,8 +1,8 @@
 <?php
 
-require './database/Database.php';
+require_once './database/Database.php';
 
-class Tournament_Model {
+class Tournament_Model extends Database {
     private $db;
 
     public function __construct()
@@ -37,6 +37,24 @@ class Tournament_Model {
         }
     }
 
+     /**
+     * Get tournament details by tournament ID.
+     * If no ID provided, fetch all tournaments.
+     * 
+     * @param int|null $tournament_id (Optional) ID of the tournament to fetch.
+     * @return object|null Returns an object of tournament details if found, null otherwise.
+     */
+    public function fetchTournament($tournament_id = null): ?object {
+        if ($tournament_id !== null) {
+            $this->db->query("SELECT * FROM tournaments WHERE tournament_id = :tournament_id");
+            $this->db->bind(':tournament_id', $tournament_id);
+            return $this->db->single(); // Assuming single returns an object
+        } else {
+            $this->db->query("SELECT * FROM tournaments");
+            return $this->db->resultSet(); // Assuming resultSet returns an array of objects
+        }
+    }
+
     /**
      * Check if a tournament with the given title and location already exists.
      * 
@@ -66,12 +84,13 @@ class Tournament_Model {
      * @param array $details Details to match against for player registration.
      * @return object|null Returns player registration details if found, null otherwise.
      */
-    public function isPlayerRegistered($registration_id = null, array $details = []): ?object {
-        if ($registration_id !== null) {
-            return $this->db->get('tournament_registrations', ['registration_id' => $registration_id] + $details, []);
-        } else {
-            return $this->db->get('tournament_registrations', $details, []);
-        }
+    public function isPlayerRegistered($userId, $tournamentId): bool {
+        $query = "SELECT COUNT(*) as count FROM tournament_registrations WHERE user_id = :user_id AND tournament_id = :tournament_id";
+        $this->db->query($query);
+        $this->db->bind(':user_id', $userId);
+        $this->db->bind(':tournament_id', $tournamentId);
+        $result = $this->db->single();
+        return $result->count > 0;
     }
 
     /**
@@ -130,16 +149,16 @@ class Tournament_Model {
         $query = "
             SELECT 
                 t.title,
-                t.start_date,
-                t.end_date,
-                t.organizer_name,
+                t.start_date as startDate,
+                t.end_date as endDate, 
+                t.organizer_name as organizerName,
                 t.email,
-                t.tournament_location,
-                t.phone_number,
-                tr.player_name,
-                tr.team_name,
+                t.tournament_location tournamentLocation,
+                t.phone_number as phoneNumber,
+                tr.player_name as playerName,
+                tr.team_name as teamName,
                 tr.email,
-                tr.phone_number
+                tr.phone_number as phoneNumber
             FROM tournaments t
             INNER JOIN tournament_registrations tr ON t.tournament_id = tr.tournament_id
             WHERE tr.user_id = :user_id
@@ -157,5 +176,4 @@ class Tournament_Model {
         $this->db->bind(':tournament_id', $tournament_id);
         return $this->db->resultSet();
     }
-    
 }

@@ -37,7 +37,7 @@ class AuthController extends BaseController
     {
         $errors = [];
 
-        $requiredFields = ['firstName' => 'First Name', 'lastName' => 'Last Name', 'email' => 'Email', 'password' => 'Password', 'confirmPassword' => 'Confirm Password', 'gender' => 'Gender', 'age' => 'Age', 'phoneNumber' => 'Phone'];
+        $requiredFields = ['firstName' => 'First Name', 'lastName' => 'Last Name', 'email' => 'Email', 'password' => 'Password', 'confirmPassword' => 'Confirm Password', 'gender' => 'Gender', 'phoneNumber' => 'Phone'];
 
         foreach ($requiredFields as $field => $fieldName) {
             if (empty($data[$field])) {
@@ -254,7 +254,7 @@ class AuthController extends BaseController
                 'email' => $data['email'],
                 'password' => $hashed_password,
                 'gender' => $data['gender'],
-                'dob' => $data['age'],
+                'dob' => $data['dob'],
                 'token' => bin2hex(random_bytes(8)),
                 'phonenumber' => $data['phoneNumber'],
             ];

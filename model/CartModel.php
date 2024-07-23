@@ -5,7 +5,8 @@
  */
 
 require_once './interface/BaseInterface.php';
-require './database/Database.php';
+require_once './database/Database.php';
+require './helper/SessionHelper.php';
 
 class CartModel extends Database
 {
@@ -56,19 +57,14 @@ class CartModel extends Database
      *
      * @return int
      */
-    private function findCart(): int
-    {
-        $cart_id = $this->db->get("cart", [
+    private function findCart(): ?int {
+        $result = $this->db->get("cart", [
             "user_id" => $_SESSION["user_id"],
-        ], [])->cart_id;
-        if ($cart_id) {
-            return $cart_id;
-        } else {
-            $this->createCart();
-            return $this->findCart();
-        }
+        ], []);
+        return $result ? $result->cart_id : null;
     }
-
+    
+    
     /**
      * Create a new cart for the user
      *
@@ -76,6 +72,7 @@ class CartModel extends Database
      */
     private function createCart(): void
     {
+        if(isset($_SESSION['user_id'])) exit;
         if (
             !$this->db->get("cart", [
                 "user_id" => $_SESSION["user_id"],

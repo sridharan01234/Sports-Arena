@@ -6,7 +6,7 @@
  * LastModified : 29-05-2024
  */
 
-require './database/Database.php';
+require_once './database/Database.php';
 require_once './interface/BaseInterface.php';
 
 class AuthModel extends Database implements BaseInterface

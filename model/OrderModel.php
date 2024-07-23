@@ -1,7 +1,7 @@
 <?php
 require_once './database/Database.php';
 
-class OrderModel {
+class OrderModel extends Database {
     private $db;
 
     public function __construct() {
@@ -17,6 +17,7 @@ class OrderModel {
      */
     public function createOrder(array $orderDetails, array $orderItems): int|false {
         $order_id = $this->db->insertWithLastId('orders', $orderDetails);
+        var_dump($order_id);
         if (!$order_id) {
             return false;
         }
@@ -93,5 +94,19 @@ class OrderModel {
         $this->db->query($query);
         return $this->db->resultSet();
     }
+
+public function getOrderCountByItems(): array {
+    $query = "
+        SELECT 
+            p.category, 
+            COUNT(oi.id) AS productCount
+        FROM order_items oi
+        INNER JOIN products p ON p.product_id = oi.product_id
+        GROUP BY p.category
+    ";
+
+    $this->db->query($query);
+    return $this->db->resultSet();
+}
 }
 ?>

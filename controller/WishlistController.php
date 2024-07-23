@@ -1,8 +1,15 @@
 <?php
 
-require_once './model/WishlistModel.php';
+/**
+ * WishlistController class
+ *
+ * Manages wishlist operations
+ */
 
-class WishlistController
+require './model/WishlistModel.php';
+require_once 'BaseController.php';
+
+class WishlistController extends BaseController
 {
     private $wishlistModel;
 
@@ -14,40 +21,130 @@ class WishlistController
     /**
      * Add item to wishlist
      *
-     * @param int $userId
-     * @param int $itemId
      * @return void
      */
-    public function addItemToWishlist(int $userId, int $itemId): void
+    public function addWishlist(): void
     {
-        $success = $this->wishlistModel->addItemToWishlist($userId, $itemId);
+        $data = $this->decodeRequest();
 
-        if ($success) {
-            echo json_encode([
-                'status' => 'success',
-                'message' => 'Item added to wishlist successfully',
-            ]);
-        } else {
+        if (!isset($data['productId']) || empty($data['productId'])) {
             echo json_encode([
                 'status' => 'error',
-                'message' => 'Failed to add item to wishlist',
+                'message' => 'Product ID is required'
             ]);
+            exit;
         }
+
+        $userId = $_SESSION['user_id'];
+        if ($userId === null) {
+            echo json_encode([
+                'status' => 'error',
+                'message' => 'User not logged in'
+            ]);
+            exit;
+        }
+
+        $this->wishlistModel->addWishlist($userId, $data['productId']);
+        echo json_encode([
+            'status' => 'success',
+            'message' => 'Product added to wishlist'
+        ]);
+        header('Content-Type: application/json');
+        exit;
     }
 
     /**
-     * Get wishlist items for a user
+     * Get wishlist items
      *
-     * @param int $userId
      * @return void
      */
-    public function getWishlistItems(int $userId): void
+    public function getWishlist(): void
     {
-        $wishlistItems = $this->wishlistModel->getWishlistItems($userId);
+        try {
+            $userId = $_SESSION['user_id'];
 
-        echo json_encode([
-            'status' => 'success',
-            'data' => $wishlistItems,
-        ]);
+            if (!$userId) {
+                throw new Exception('User session not found');
+            }
+
+            $products = $this->wishlistModel->getWishlistItems($userId);
+
+            echo json_encode([
+                'status' => 'success',
+                'data' => $products
+            ]);
+            header('Content-Type: application/json');
+        } catch (Exception $e) {
+            echo json_encode([
+                'status' => 'error',
+                'message' => $e->getMessage()
+            ]);
+        }
+        exit;
+    }
+
+    /**
+     * Remove item from wishlist
+     *
+     * @return void
+     */
+    public function removeWishlist(): void
+    {
+        try {
+            $data = $this->decodeRequest();
+            $userId = $_SESSION['user_id'];
+
+            if (!$userId) {
+                throw new Exception('User session not found');
+            }
+
+            if (empty($data['productId'])) {
+                throw new Exception('Product ID is required');
+            }
+
+            $this->wishlistModel->removeItemFromWishlist($userId, $data['productId']);
+
+            echo json_encode([
+                'status' => 'success',
+                'message' => 'Product removed from wishlist'
+            ]);
+            header('Content-Type: application/json');
+        } catch (Exception $e) {
+            echo json_encode([
+                'status' => 'error',
+                'message' => $e->getMessage()
+            ]);
+        }
+        exit;
+    }
+
+    /**
+     * Clear all items from wishlist
+     *
+     * @return void
+     */
+    public function clearWishlist(): void
+    {
+        try {
+            $userId = $_SESSION['user_id'];
+
+            if (!$userId) {
+                throw new Exception('User session not found');
+            }
+
+            $this->wishlistModel->clearWishlist($userId);
+
+            echo json_encode([
+                'status' => 'success',
+                'message' => 'Wishlist cleared'
+            ]);
+            header('Content-Type: application/json');
+        } catch (Exception $e) {
+            echo json_encode([
+                'status' => 'error',
+                'message' => $e->getMessage()
+            ]);
+        }
+        exit;
     }
 }

@@ -5,6 +5,7 @@ require_once './model/PaymentModel.php';
 require_once './controller/CartController.php';
 require_once 'BaseController.php';
 require_once './helper/SessionHelper.php';
+require_once './helper/JWTHelper.php';
 
 class OrderController extends BaseController {
 
@@ -32,26 +33,21 @@ class OrderController extends BaseController {
             $response = [];
     
             try {
+                // Validate session and user ID
                 if (!isset($_SESSION['user_id'])) {
                     throw new Exception('User session not found.');
                 }
-    
-                error_log("Place Order Request Data: " . json_encode($data));
-    
-                $required_fields = ['user_id', 'address_id', 'items', 'payment_method'];
-                foreach ($required_fields as $field) {
-                    if (!isset($data[$field])) {
-                        throw new Exception("Field '$field' is required");
-                    }
+                if (!isset($data['address_id'])) {
+                    throw new Exception('Address ID is required.');
                 }
     
                 // Validate items array structure
-                if (!is_array($data['items']) || empty($data['items'])) {
+                if (!isset($data['items']) || !is_array($data['items']) || empty($data['items'])) {
                     throw new Exception("Field 'items' must be a non-empty array");
                 }
     
                 // Validate payment method
-                $allow_payment_methods = ['upi_id','cash_on_delivery','card_payment'];
+                $allow_payment_methods = ['UPI','Cash on Delivery','Credit/Debit/ATM card'];
                 if (!in_array($data['payment_method'], $allow_payment_methods)) {
                     throw new Exception("Invalid payment method");
                 }
@@ -101,8 +97,8 @@ class OrderController extends BaseController {
                 $orderDetails = [
                     'user_id' => $_SESSION['user_id'],
                     'address_id' => $data['address_id'],
-                    'total' => $total_amount,
-                    'orderDate' => date('Y-m-d H:i:s'), 
+                    'total_amount' => $total_amount,
+                    'order_date' => date('Y-m-d H:i:s'), 
                     'status' => 'pending' 
                 ];
     
@@ -114,7 +110,7 @@ class OrderController extends BaseController {
     
                 // Add payment details
                 $paymentDetails = [
-                    'orderId' => $order_id,
+                    'order_id' => $order_id,
                     'payment_method' => $data['payment_method'],
                     'payment_status' => 'Completed'
                 ];
@@ -123,17 +119,17 @@ class OrderController extends BaseController {
                     throw new Exception("Failed to record payment");
                 }
     
+                // Get order history
                 $orderHistory = $this->getOrderHistory($_SESSION['user_id']);
     
                 $response = [
                     'status' => 'success',
                     'message' => 'Order placed successfully.',
                     'orderId' => $order_id,
-                    'orderHistory' => $orderHistory
                 ];
                 http_response_code(200);
-                
-                //Clear the ordered items in cart
+    
+                // Clear the ordered items in cart
                 $cartController = new CartController();
                 $cartController->clearCart();
     
@@ -149,9 +145,8 @@ class OrderController extends BaseController {
             header('Content-Type: application/json');
             echo json_encode($response);
         }
-    }
+    }    
     
-
     /**
      * Retrieve the order history for a specific user.
      *
@@ -270,7 +265,7 @@ class OrderController extends BaseController {
                     throw new Exception('User session not found.');
                 }
 
-                $userAddress = $this->userAddressModel->getAddress($_SESSION['user_id']);
+                $userAddress = $this->userAddressModel->getAddresses($_SESSION['user_id']);
                 if (!$userAddress) {
                     throw new Exception('Address ID not found or unauthorized.');
                 }
@@ -330,6 +325,39 @@ class OrderController extends BaseController {
                 $response = [
                     'status' => 'success',
                     'orderCountByGender' => $orderCounts
+                ];
+                http_response_code(200);
+
+            } catch (Exception $e) {
+                $response = [
+                    'status' => 'error',
+                    'message' => $e->getMessage()
+                ];
+                http_response_code(500);
+            }
+
+            header('Content-Type: application/json');
+            echo json_encode($response);
+        }
+    }
+
+
+     /**
+     * Endpoint to get order count by gender.
+     * GET method expected.
+     * 
+     * @return void
+     */
+    public function getOrderCountByCategory() {
+        if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+            $response = [];
+
+            try {
+                $orderCounts = $this->orderModel->getOrderCountByItems();
+
+                $response = [
+                    'status' => 'success',
+                    'orderCountByItems' => $orderCounts
                 ];
                 http_response_code(200);
 

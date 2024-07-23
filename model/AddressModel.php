@@ -1,7 +1,7 @@
 <?php
 require_once './database/Database.php';
 
-class AddressModel {
+class AddressModel extends Database {
     private $db;
 
     public function __construct() {
@@ -15,16 +15,16 @@ class AddressModel {
      * @return int|false Returns the ID of the newly added address if successful, false otherwise.
      */
     public function addUserAddress(array $addressDetails): int|false {
-        return $this->db->insert('user_addresses', $addressDetails);
+        return $this->db->insertWithLastId('user_addresses', $addressDetails);
     }
-
+    
     /**
      * Get user's address by address ID.
      * 
      * @param int $address_id ID of the address to fetch.
      * @return object|null Returns address details as an object if found, null otherwise.
      */
-    public function getAddress(int $user_id): array {
+    public function getAddresses(int $user_id): array {
         $query = "
             SELECT * FROM user_addresses
             WHERE user_id = :user_id
@@ -34,6 +34,13 @@ class AddressModel {
         $this->db->bind(':user_id', $user_id);
         
         return $this->db->resultSet();
+    }
+
+    public function getAddress(int $address_id): ?object {
+        $query = "SELECT * FROM user_addresses WHERE id = :address_id";
+        $this->db->query($query);
+        $this->db->bind(':address_id', $address_id);
+        return $this->db->single();
     }
 
     /**

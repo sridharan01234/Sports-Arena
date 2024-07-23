@@ -38,7 +38,6 @@ class AdminController extends BaseController {
                 $result = $this->productModel->addProduct($details);
                 if ($result) {
                     $response = [
-                        var_dump($result),
                         'status' => 'success',
                         'message' => 'Product added successfully'
                     ];
@@ -66,12 +65,12 @@ class AdminController extends BaseController {
             $response = [];
             try {
                 $user_id = $_SESSION['user_id'] ?? null;
-                echo $_SESSION['user_id'];
                 if ($user_id === null || !$this->isAdmin($user_id)) {
                     throw new Exception('Only admins are allowed to add turfs');
                 }
 
                 $details = [
+                    'admin_id' => $_SESSION['user_id'],
                     'name' => $data['name'],
                     'location' => $data['location'],
                     'image_url' => $data['imageUrl'],

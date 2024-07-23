@@ -1,7 +1,7 @@
 <?php
 require_once './database/Database.php';
 
-class PaymentModel {
+class PaymentModel extends Database {
     private $db;
 
     public function __construct() {
