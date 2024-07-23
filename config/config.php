@@ -9,6 +9,6 @@
 
 define("host", 'localhost');     
 define("user", 'root');
-define("pass", '');
-define("dbname", 'sports');
-define("port", 3307); 
+define("pass", 'Aspire@123');
+define("dbname", 'sports_arena');
+define("port", 3306); 

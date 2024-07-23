@@ -1,8 +1,13 @@
 <?php
-require_once './model/WishlistModel.php';
+
+/**
+ * WishlistController class
+ *
+ * Manages wishlist operations
+ */
+
+require './model/WishlistModel.php';
 require_once 'BaseController.php';
-require_once './helper/SessionHelper.php';
-require_once './helper/JWTHelper.php';
 
 class WishlistController extends BaseController
 {
@@ -15,131 +20,131 @@ class WishlistController extends BaseController
 
     /**
      * Add item to wishlist
-     * Expects a POST request with 'item_id' in the request body
-     * 
+     *
      * @return void
      */
-    public function addItemToWishlist(): void
+    public function addWishlist(): void
     {
-        try {
-            if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-                throw new Exception('Invalid request method');
-            }
+        $data = $this->decodeRequest();
 
-            $data = $this->decodeRequest();
-
-            if (!isset($_SESSION['user_id'])) {
-                throw new Exception('User session not found');
-            }
-
-            $userId = $_SESSION['user_id'];
-
-            if (!isset($data['itemId'])) {
-                throw new Exception('item_id is required');
-            }
-
-            $itemId = (int) $data['itemId'];
-            $success = $this->wishlistModel->addItemToWishlist($userId, $itemId);
-
-            if ($success) {
-                $response = [
-                    'status' => 'success',
-                    'message' => 'Item added to wishlist successfully',
-                ];
-                http_response_code(200);
-            } else {
-                throw new Exception('Failed to add item to wishlist');
-            }
-        } catch (Exception $e) {
-            $response = [
+        if (!isset($data['productId']) || empty($data['productId'])) {
+            echo json_encode([
                 'status' => 'error',
-                'message' => $e->getMessage(),
-            ];
-            http_response_code(500);
+                'message' => 'Product ID is required'
+            ]);
+            exit;
         }
-        echo json_encode($response);
+
+        $userId = $_SESSION['user_id'];
+        if ($userId === null) {
+            echo json_encode([
+                'status' => 'error',
+                'message' => 'User not logged in'
+            ]);
+            exit;
+        }
+
+        $this->wishlistModel->addWishlist($userId, $data['productId']);
+        echo json_encode([
+            'status' => 'success',
+            'message' => 'Product added to wishlist'
+        ]);
+        header('Content-Type: application/json');
+        exit;
     }
 
     /**
-     * Get wishlist items for a user
-     * 
+     * Get wishlist items
+     *
      * @return void
      */
-    public function getWishlistItems(): void
+    public function getWishlist(): void
     {
         try {
-            if (!isset($_SESSION['user_id'])) {
+            $userId = $_SESSION['user_id'];
+
+            if (!$userId) {
                 throw new Exception('User session not found');
             }
 
-            if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
-                throw new Exception('Invalid request method');
-            }
+            $products = $this->wishlistModel->getWishlistItems($userId);
 
-            $userId = $_SESSION['user_id'];
-            $wishlistItems = $this->wishlistModel->getWishlistItems($userId);
-
-            $response = [
+            echo json_encode([
                 'status' => 'success',
-                'data' => $wishlistItems,
-            ];
-            http_response_code(200);
+                'data' => $products
+            ]);
+            header('Content-Type: application/json');
         } catch (Exception $e) {
-            $response = [
+            echo json_encode([
                 'status' => 'error',
-                'message' => $e->getMessage(),
-            ];
-            http_response_code(500);
+                'message' => $e->getMessage()
+            ]);
         }
-        echo json_encode($response);
+        exit;
     }
 
     /**
-     * Delete item from wishlist
-     * Expects a DELETE request with 'item_id' in the request body
-     * 
+     * Remove item from wishlist
+     *
      * @return void
      */
-    public function deleteItemFromWishlist(): void
+    public function removeWishlist(): void
     {
         try {
-            if ($_SERVER['REQUEST_METHOD'] !== 'DELETE') {
-                throw new Exception('Invalid request method');
-            }
-
             $data = $this->decodeRequest();
+            $userId = $_SESSION['user_id'];
 
-            if (!isset($_SESSION['user_id'])) {
+            if (!$userId) {
                 throw new Exception('User session not found');
             }
 
+            if (empty($data['productId'])) {
+                throw new Exception('Product ID is required');
+            }
+
+            $this->wishlistModel->removeItemFromWishlist($userId, $data['productId']);
+
+            echo json_encode([
+                'status' => 'success',
+                'message' => 'Product removed from wishlist'
+            ]);
+            header('Content-Type: application/json');
+        } catch (Exception $e) {
+            echo json_encode([
+                'status' => 'error',
+                'message' => $e->getMessage()
+            ]);
+        }
+        exit;
+    }
+
+    /**
+     * Clear all items from wishlist
+     *
+     * @return void
+     */
+    public function clearWishlist(): void
+    {
+        try {
             $userId = $_SESSION['user_id'];
 
-            if (!isset($data['itemId'])) {
-                throw new Exception('item_id is required');
+            if (!$userId) {
+                throw new Exception('User session not found');
             }
 
-            $itemId = (int) $data['itemId'];
-            $success = $this->wishlistModel->deleteItemFromWishlist($userId, $itemId);
+            $this->wishlistModel->clearWishlist($userId);
 
-            if ($success) {
-                $response = [
-                    'status' => 'success',
-                    'message' => 'Item deleted from wishlist successfully',
-                ];
-                http_response_code(200);
-            } else {
-                throw new Exception('Failed to delete item from wishlist');
-            }
+            echo json_encode([
+                'status' => 'success',
+                'message' => 'Wishlist cleared'
+            ]);
+            header('Content-Type: application/json');
         } catch (Exception $e) {
-            $response = [
+            echo json_encode([
                 'status' => 'error',
-                'message' => $e->getMessage(),
-            ];
-            http_response_code(500);
+                'message' => $e->getMessage()
+            ]);
         }
-        echo json_encode($response);
+        exit;
     }
 }
-
-

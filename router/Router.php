@@ -37,7 +37,7 @@ class Router
         $this->add('/cities/get', ['Controller' => 'UserController', 'action' => 'getCities']);
         $this->add("/product/all", ['Controller' => 'ProductController', 'action' => 'getAll']);
         $this->add("/product", ['Controller' => 'ProductController', 'action' => 'getBYId']);
-        $this->add("/product/add", ['Controller' => 'ProductController', 'action' => 'addProduct']);
+        $this->add("/product/add", ['Controller' => 'AdminController', 'action' => 'addProduct']);
         $this->add("/addAddress", ['Controller' => 'OrderController', 'action' => 'addUserAddress']);
         $this->add("/placeOrder", ['Controller' => 'OrderController', 'action' => 'placeOrder']);
         $this->add("/orderHistory", ['Controller' => 'OrderController', 'action' => 'orderHistory']);
@@ -47,21 +47,16 @@ class Router
         $this->add("/cart/remove", ['Controller' => 'CartController', 'action' => 'removeCart']);
         $this->add("/cart/clear", ['Controller' => 'CartController', 'action' => 'clearCart']);
         $this->add("/turf/add", ['Controller' => 'AdminController', 'action' => 'addTurf']);
-        $this->add("/add/wishlist",['Controller' => 'WishlistController', 'action' => 'addItemToWishlist']);
-        $this->add("/get/wishlist", ['Controller' => 'WishlistController', 'action' => 'getWishlistItems']);
-        $this->add("/delete/wishlist", ['Controller' => 'WishlistController', 'action' => 'deleteItemFromWishlist']);
+        $this->add("/wishlist/add", ['Controller' => 'WishlistController', 'action' => 'addWishlist']);
+        $this->add("/wishlist/get", ['Controller' => 'WishlistController', 'action' => 'getWishlist']);
+        $this->add("/wishlist/remove", ['Controller' => 'WishlistController', 'action' => 'removeWishlist']);
+        $this->add("/wishlist/clear", ['Controller' => 'WishlistController', 'action' => 'clearWishlist']);
         $this->add("/getCounts/gender", ['Controller' => 'OrderController', 'action' => 'getOrderCountByGender']);
         $this->add("/getCounts/category", ['Controller' => 'OrderController', 'action' => 'getOrderCountByCategory']);
-        $this->add("/add/wishlist",['Controller' => 'WishlistController', 'action' => 'addItemToWishlist']);
-        $this->add("/get/wishlist", ['Controller' => 'WishlistController', 'action' => 'getWishlistItems']);
         $this->add("/turf/get/all", ['Controller' => 'TurfController', 'action' => 'getAllTurf']);
         $this->add("/turf/get", ['Controller' => 'TurfController', 'action' => 'getTurf']);
         $this->add("/turf/book", ['Controller' => 'TurfController', 'action' => 'bookTurf']);
         $this->add("/turf/get/slots", ['Controller' => 'TurfController', 'action' => 'getTurfSlots']);
-
-
-
-
     }
     /**
      * Add application paths

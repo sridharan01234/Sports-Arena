@@ -93,7 +93,8 @@ class UserController extends BaseController
         'last_name' => $data['lastName'],
         'email' => $data['email'],
         'gender' => $data['gender'],
-        'dob' => $data['age'],
+        'dob' => $data['dob'],
+        'age' => $data['age'],
         'phonenumber' => $data['phoneNumber'],
         ];
         // Add the 'modified_at' key regardless
