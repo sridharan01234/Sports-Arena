@@ -94,8 +94,8 @@ class CartController extends BaseController
         $data = $this->cartModel->getCart();
         $products = [];
         foreach ($data as $product) {
-            $product->productMainImage = $this->imageToBase64($product->productMainImage);
             $product = $this->correctNaming($product);
+            $product->productMainImage = $this->imageToBase64($product->productMainImage);
             $products[] = $product;
         }
         echo json_encode(

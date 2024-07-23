@@ -7,13 +7,16 @@
  * Last modified : 28/5/2024
  */
 
-require_once './config/config.php'; // Include the database configuration file
-require_once './service/QueryBuilder.php';
+require './config/config.php'; // Include the database configuration file
+require './service/QueryLogger.php';
+require './service/QueryBuilder.php';
+
 class Database extends QueryBuilder
 {
     private $dbh;
     private $stmt;
     private $error;
+    private $logger;
 
     /**
      * Constructor method.
@@ -32,8 +35,9 @@ class Database extends QueryBuilder
         } catch (PDOException $e) {
             error_log($e->getMessage()); //Logs error
         }
+        $this->logger = new QueryLogger();
     }
-    
+
     /**
      * Prepare a SQL query.
      *
@@ -43,7 +47,8 @@ class Database extends QueryBuilder
      */
     public function query(string $sql): void
     {
-    $this->stmt = $this->dbh->prepare($sql);
+        //$this->logger->logQuery($sql);
+        $this->stmt = $this->dbh->prepare($sql);
     }
 
     /**
@@ -61,14 +66,10 @@ class Database extends QueryBuilder
      *
      * @return array|false
      */
-    // public function resultSet(): array | false
-    // {
-    //     $this->execute();
-    //     return $this->stmt->fetchAll(PDO::FETCH_OBJ);
-    // }
-    public function resultSet($fetchMode = PDO::FETCH_OBJ): array {
+    public function resultSet(): array | false
+    {
         $this->execute();
-        return $this->stmt->fetchAll($fetchMode);
+        return $this->stmt->fetchAll(PDO::FETCH_OBJ);
     }
 
     /**
@@ -76,13 +77,11 @@ class Database extends QueryBuilder
      *
      * @return object|false
      */
-
-    public function single($fetchMode = PDO::FETCH_OBJ): ?object {
+    public function single(): object | false
+    {
         $this->execute();
-        $result = $this->stmt->fetch($fetchMode);
-        return $result !== false ? $result : null;
+        return $this->stmt->fetch(PDO::FETCH_OBJ);
     }
-    
 
     /**
      * Get the number of rows affected by the last SQL statement.
@@ -271,8 +270,7 @@ class Database extends QueryBuilder
         $this->stmt->bindValue($param, $value, $type);
     }
 
-     
-    /**
+     /**
      * Insert a record into a table and return the last inserted ID.
      * 
      * @param string $table The name of the table.
@@ -292,7 +290,6 @@ class Database extends QueryBuilder
             $stmt->execute();
             return $this->dbh->lastInsertId();
         } catch (PDOException $e) {
-            error_log("Database error: " . $e->getMessage());
             return false;
         }
     }
@@ -316,7 +313,6 @@ class Database extends QueryBuilder
             }
             return $stmt->execute();
         } catch (PDOException $e) {
-            error_log("Database error: " . $e->getMessage());
             return false;
         }
     }

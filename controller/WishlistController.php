@@ -69,9 +69,15 @@ class WishlistController extends BaseController
 
             $products = $this->wishlistModel->getWishlistItems($userId);
 
+            $data = [];
+            foreach($products as $product) {
+                $product->main_image = $this->imageToBase64($product->main_image);
+                $data[] = $product;
+            }
+
             echo json_encode([
                 'status' => 'success',
-                'data' => $products
+                'data' => $data
             ]);
             header('Content-Type: application/json');
         } catch (Exception $e) {
@@ -92,6 +98,11 @@ class WishlistController extends BaseController
     {
         try {
             $data = $this->decodeRequest();
+
+            echo json_encode(
+                $data
+            );
+            exit;
             $userId = $_SESSION['user_id'];
 
             if (!$userId) {
@@ -146,5 +157,20 @@ class WishlistController extends BaseController
             ]);
         }
         exit;
+    }
+
+        /**
+     * Convert image to base64
+     *
+     * @param string $path
+     *
+     * @return string
+     */
+    public function imageToBase64(?string $path): string
+    {
+        if(is_null($path) || !$path) return '';
+        $imageData = file_get_contents($path);
+        $type = pathinfo($path, PATHINFO_EXTENSION);
+        return 'data:image/' . $type . ';base64,' . base64_encode($imageData);
     }
 }

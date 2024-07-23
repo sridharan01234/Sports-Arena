@@ -185,9 +185,8 @@ class TournamentController extends BaseController
             } catch (Exception $e) {
                 $response = [
                     'status' => 'error',
-                    'message' => $e->getMessage()
+                    'message' => 'You cant register to your tournament created by yourself',
                 ];
-                http_response_code(400);
             }
 
             header('Content-Type: application/json');
