@@ -27,12 +27,10 @@ class CartController extends BaseController
      */
     public function validateCart(array $data): array
     {
+        
         $error = [];
         if (!isset($data['productId']) || empty($data['productId'])) {
             $error[] = 'Product ID is required';
-        }
-        if (!isset($data['productSize']) || empty($data['productSize'])) {
-            $error[] = 'Product size is required';
         }
         return $error;
         ;
@@ -45,6 +43,16 @@ class CartController extends BaseController
      */
     public function updateCart(): void
     {
+        if(!$_SESSION['user_id'])
+        {
+            echo json_encode(
+                [
+                    'status'=> 'fail',
+                    'data'=> 'Cart items cleared',
+                ]
+            );
+            exit;
+        }
         $data = $this->decodeRequest();
         $error = $this->validateCart($data);
         if (!empty($error)) {
@@ -73,10 +81,22 @@ class CartController extends BaseController
      */
     public function getCart(): void
     {
+        if(!$_SESSION['user_id'])
+        {
+            echo json_encode(
+                [
+                    'status'=> 'fail',
+                    'data'=> 'Cart items cleared',
+                ]
+            );
+            exit;
+        }
         $data = $this->cartModel->getCart();
         $products = [];
         foreach ($data as $product) {
-            $products[] = $this->correctNaming($product);
+            $product->productMainImage = $this->imageToBase64($product->productMainImage);
+            $product = $this->correctNaming($product);
+            $products[] = $product;
         }
         echo json_encode(
             [
@@ -121,7 +141,17 @@ class CartController extends BaseController
     public function clearCart(): void
     {
         $user_id = $_SESSION['user_id'];
-        $this->cartModel->clearCart($user_id);
+        if(!$_SESSION['user_id'])
+        {
+            echo json_encode(
+                [
+                    'status'=> 'fail',
+                    'data'=> 'Cart items cleared',
+                ]
+            );
+            exit;
+        }
+        $this->cartModel->clearCart();
         echo json_encode(
             [
                 'status'=> 'success',
@@ -129,5 +159,13 @@ class CartController extends BaseController
             ]
         );
         exit;
+    }
+
+    public function imageToBase64(?string $path): string
+    {
+        if(is_null($path) || !$path) return '';
+        $imageData = file_get_contents($path);
+        $type = pathinfo($path, PATHINFO_EXTENSION);
+        return 'data:image/' . $type . ';base64,' . base64_encode($imageData);
     }
 }

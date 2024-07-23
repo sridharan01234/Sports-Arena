@@ -30,7 +30,6 @@ class CartModel extends Database
             $this->db->get('cart_items', [
                 'cart_id' => $cart_id,
                 'product_id' => $data['productId'],
-                'size' => $data['productSize']
             ], [])
         ) {
             if (isset($data['quantity'])) {
@@ -42,13 +41,11 @@ class CartModel extends Database
                 "quantity" => $quantity,
             ], [
                 "cart_id" => $cart_id,
-                'size' => $data['productSize'],
                 "product_id" => $data["productId"],
             ]);
         } else {
             $this->db->insert("cart_items", [
                 "cart_id" => $cart_id,
-                'size' => $data['productSize'],
                 "product_id" => $data["productId"],
             ]);
         }
@@ -118,14 +115,13 @@ class CartModel extends Database
      *
      * @return bool
      */
-    public function removeCart(string $productId, string $size): bool
+    public function removeCart(string $productId, ?string $size): bool
     {
         $cart_id = $this->findCart();
         if (
             $this->db->delete("cart_items", [
                 "cart_id" => $cart_id,
                 "product_id" => $productId,
-                "size" => $size
             ])
         ) {
             return true;

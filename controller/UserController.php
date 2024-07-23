@@ -7,6 +7,7 @@
  * Last Modified : 03-06-2024
  */
 
+require './helper/base64Helper.php';
 require "BaseController.php";
 require './model/UserModel.php';
 
@@ -153,7 +154,7 @@ class UserController extends BaseController
 
         // Updated code for handling profile picture upload with error handling, permission fix, and database update
         if ($_FILES['profile_picture']['error'] === UPLOAD_ERR_OK) {
-            $uploadDir = '/home/asplap1937/github/be/assets/profile_pictures/';
+            $uploadDir = '/home/asplap1937/github/be/assets/product_pictures/';
 
             $fileExtension = pathinfo($_FILES['profile_picture']['name'], PATHINFO_EXTENSION);
             $uploadFile = $uploadDir . $_SESSION['user_id'] . '.' . $fileExtension;

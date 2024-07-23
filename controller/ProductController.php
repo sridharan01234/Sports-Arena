@@ -28,6 +28,8 @@ class ProductController extends BaseController
 
         foreach ($data as $key => $value) {
             $data[$key] = $this->correctNaming($value);
+            $data[$key]->productMainImage = $this->imageToBase64($data[$key]->productMainImage);
+
         }
 
         echo json_encode(
@@ -35,7 +37,8 @@ class ProductController extends BaseController
                 'status' => 200,
                 'message' => 'success',
                 'data' => $data
-            ]
+            ], 
+            JSON_UNESCAPED_SLASHES
         );
         exit;
     }
@@ -56,8 +59,10 @@ class ProductController extends BaseController
         echo json_encode(
             [
                 'status' => 'success',
-                'data' => $data
-            ]
+                'data' => $data,
+                'image' => $this->imageToBase64($data->productMainImage)
+            ],
+            JSON_UNESCAPED_SLASHES
         );
         exit;
     }
@@ -91,5 +96,25 @@ class ProductController extends BaseController
             );
             exit;
         }
+    }
+
+    public function getImage()
+    {
+
+    }
+
+    /**
+     * Convert image to base64
+     *
+     * @param string $path
+     *
+     * @return string
+     */
+    public function imageToBase64(?string $path): string
+    {
+        if(is_null($path) || !$path) return '';
+        $imageData = file_get_contents($path);
+        $type = pathinfo($path, PATHINFO_EXTENSION);
+        return 'data:image/' . $type . ';base64,' . base64_encode($imageData);
     }
 }

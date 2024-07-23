@@ -37,7 +37,7 @@ class Router
         $this->add('/cities/get', ['Controller' => 'UserController', 'action' => 'getCities']);
         $this->add("/product/all", ['Controller' => 'ProductController', 'action' => 'getAll']);
         $this->add("/product", ['Controller' => 'ProductController', 'action' => 'getBYId']);
-        $this->add("/product/add", ['Controller' => 'ProductController', 'action' => 'addProduct']);
+        $this->add("/product/add", ['Controller' => 'AdminController', 'action' => 'addProduct']);
         $this->add("/addAddress", ['Controller' => 'OrderController', 'action' => 'addUserAddress']);
         $this->add("/placeOrder", ['Controller' => 'OrderController', 'action' => 'placeOrder']);
         $this->add("/orderHistory", ['Controller' => 'OrderController', 'action' => 'orderHistory']);
@@ -54,6 +54,9 @@ class Router
         $this->add("/turf/get", ['Controller' => 'TurfController', 'action' => 'getTurf']);
         $this->add("/turf/book", ['Controller' => 'TurfController', 'action' => 'bookTurf']);
         $this->add("/turf/get/slots", ['Controller' => 'TurfController', 'action' => 'getTurfSlots']);
+        $this->add("/turf/get/slots", ['Controller' => 'TurfController', 'action' => 'getTurfSlots']);
+        $this->add('/decode/image', ['Controller' => 'UserController', 'action' => 'decodeStringToImage']);
+
 
 
 
