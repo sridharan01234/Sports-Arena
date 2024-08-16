@@ -50,8 +50,6 @@ abstract class BaseController
         $data->productDescription = $data->description;
         unset($data->description);
 
-        $data->productSize = $data->size;
-        unset($data->size);
 
         $data->productCategory = $data->category;
         unset($data->category);

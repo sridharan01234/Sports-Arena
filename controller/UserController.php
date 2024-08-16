@@ -7,6 +7,7 @@
  * Last Modified : 03-06-2024
  */
 
+require './helper/base64Helper.php';
 require "BaseController.php";
 require './model/UserModel.php';
 
@@ -29,25 +30,19 @@ class UserController extends BaseController
         $this->userModel = new UserModel();
     }
 
-    // /**
-    //  * Delete User
-    //  *
-    //  * @return void
-    //  */
-    // public function userDelete(): void
-    // {
-    //     if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
-    //         http_response_code(405);
-    //         echo json_encode(['error' => 'Method Not Allowed']);
-    //         exit;
-    //     }
+    /**
+     * Delete User
+     *
+     * @return void
+     */
+    public function userDelete(): void
+    {
+        $data = (int)$_GET['id'];
+        $this->userModel->deleteUser($data);
 
-    //     $data = $this->decodeRequest();
-    //     $this->userModel->deleteUser($data['user_id']);
-
-    //     echo json_encode(['success' => true]);
-    //     exit;
-    // }
+        echo json_encode(['success' => true]);
+        exit;
+    }
 
     /**
      * Get User
@@ -66,18 +61,22 @@ class UserController extends BaseController
             );
             exit();
         }
-        $user = (array)$this->userModel->getUser($_SESSION['user_id']);
+        $data = $this->decodeRequest();
+        $user = $this->userModel->getUser($_SESSION['user_id']);
 
-        $data = [
-            'firstName' => $user['first_name'],
-            'lastName' => $user['last_name'],
-            'phoneNumber' => $user['phonenumber'],
-            'email' => $user['email'],
-            'age' => (string)$user['dob'],
-            'gender' => $user['gender']
+        $details = [];
+        $from = new DateTime($user->dob);
+        $to   = new DateTime('today');
+        $details = [
+            'firstName' => $user->first_name,
+            'lastName' => $user->last_name,
+            'email' => $user->email,
+            'gender' => $user->gender,
+            'age' => $from->diff($to)->y,
+            'dob' => $user->dob,
+            'phoneNumber' => $user->phonenumber,
         ];
-
-        echo json_encode($data);
+        echo json_encode($details);
         exit;
     }
 
@@ -94,7 +93,7 @@ class UserController extends BaseController
         'last_name' => $data['lastName'],
         'email' => $data['email'],
         'gender' => $data['gender'],
-        'dob' => $data['age'],
+        'dob' => $data['dob'],
         'phonenumber' => $data['phoneNumber'],
         ];
         // Add the 'modified_at' key regardless
@@ -155,7 +154,7 @@ class UserController extends BaseController
 
         // Updated code for handling profile picture upload with error handling, permission fix, and database update
         if ($_FILES['profile_picture']['error'] === UPLOAD_ERR_OK) {
-            $uploadDir = '/home/asplap1937/github/be/assets/profile_pictures/';
+            $uploadDir = '/home/asplap1937/github/be/assets/product_pictures/';
 
             $fileExtension = pathinfo($_FILES['profile_picture']['name'], PATHINFO_EXTENSION);
             $uploadFile = $uploadDir . $_SESSION['user_id'] . '.' . $fileExtension;
@@ -221,17 +220,17 @@ class UserController extends BaseController
         exit;
     }
 
-    public function getAllUsers()
+    public function getAll()
     {
-        echo json_encode(
-            $this->userModel->getAllUsers()
-        );
+        $users = $this->userModel->getAllUsers();
+        echo json_encode($users);
         exit;
     }
 
-    public function userDelete()
+    public function usersCount()
     {
-        $data = $this->decodeRequest();
-        $this->userModel->deleteUser((int)$data['userId']);
+        $users = $this->userModel->getAllUsers();
+        echo json_encode(count($users));
+        exit;
     }
 }

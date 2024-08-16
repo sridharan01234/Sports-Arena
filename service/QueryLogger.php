@@ -16,7 +16,7 @@ class QueryLogger
     public function logQuery(string $query)
     {
         // Open the log file in append mode
-        $fp = fopen(self::LOG_FILE, 'a');
+        $fp = fopen(self::LOG_FILE, 'a+'); 
 
         // Get additional details
         $request_method = $_SERVER['REQUEST_METHOD'];

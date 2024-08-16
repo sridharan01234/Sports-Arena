@@ -1,7 +1,7 @@
 <?php
 require_once './model/TournamentModel.php';
 require_once 'BaseController.php';
-require './helper/SessionHelper.php';
+require_once './helper/SessionHelper.php';
 require_once './helper/JWTHelper.php';
 
 class TournamentController extends BaseController
@@ -29,12 +29,11 @@ class TournamentController extends BaseController
                 if (!isset($_SESSION['user_id'])) {
                     throw new Exception("User session not found.");
                 }
-    
-                // Convert dates to proper format
+                $created_by = $_SESSION['user_id'];
+            
                 $start_date = date('Y-m-d', strtotime($data['startDate']));
                 $end_date = date('Y-m-d', strtotime($data['endDate']));
     
-                // Prepare tournament details
                 $details = [
                     'user_id' => $_SESSION['user_id'],
                     'title' => $data['title'],
@@ -45,15 +44,14 @@ class TournamentController extends BaseController
                     'organizer_name' => $data['organizerName'],
                     'phone_number' => $data['phoneNumber'],
                     'email' => $data['email'],
-                    'tournament_image' => $data['tournamentImage']
+                    'tournament_image' => $data['tournamentImage'],
+                    'created_by' => $created_by,
                 ];
     
-                // Check for date conflict
                 if ($this->tournamentModel->isDateConflict($details['title'], $details['tournament_location'], $details['start_date'], $details['end_date'])) {
                     throw new Exception("A tournament with the same name and location exists during these dates.");
                 }
-    
-                // Create tournament
+
                 $tournamentId = $this->tournamentModel->createTournament($details);
                 if (!$tournamentId) {
                     throw new Exception("Failed to create tournament.");
@@ -63,8 +61,8 @@ class TournamentController extends BaseController
                     'status' => 'success',
                     'message' => 'Tournament created successfully.',
                     'tournament_id' => $tournamentId
-                ];
-                http_response_code(200);
+                ];http_response_code(200);
+                
             } catch (Exception $e) {
                 $response = [
                     'status' => 'error',
@@ -110,7 +108,6 @@ class TournamentController extends BaseController
                         http_response_code(404);
                     }
                 } else {
-                    // Get details of all upcoming tournaments
                     $tournaments = $this->tournamentModel->getUpcomingTournaments();
                     $response = [
                         'status' => 'success',
@@ -131,64 +128,75 @@ class TournamentController extends BaseController
         }   
     }
 
-   /**
- * Endpoint to register a player for a tournament.
- * POST method expected.
- * Required fields: tournament_id, player_name, team_name, email, phone_number.
- * 
- * @return void
- */
-public function registerTournament() {
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $data = $this->decodeRequest();
-        $response = [];
+    public function registerTournament()
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $data = $this->decodeRequest();
+            $response = [];
 
-        if (!isset($_SESSION['user_id'])) {
-            throw new Exception("User session not found.");
-        }
-
-        try {
-            $details = [
-                'user_id' => $_SESSION['user_id'],
-                'tournament_id' => $data['tournamentId'],
-                'player_name' => $data['playerName'],
-                'team_name' => $data['teamName'],
-                'email' => $data['email'],
-                'phone_number' => $data['phoneNumber']
-            ];
-            // Check if player is already registered for this tournament
-            $playerExists = $this->tournamentModel->isPlayerRegistered($data['tournament_id'], $data);
-
-            if ($playerExists) {
-                // Player is already registered
+            if (!isset($_SESSION['user_id'])) {
                 $response = [
                     'status' => 'error',
-                    'message' => 'Player is already registered for this tournament.'
+                    'message' => 'User session not found.'
                 ];
-                http_response_code(409);
-            } else {
-                // Register player for the tournament
-                $this->tournamentModel->addPlayer($details);
-                $response = [
-                    'status' => 'success',
-                    'message' => 'Player registered successfully for the tournament.'
-                ];
-                http_response_code(200); 
+                http_response_code(401);
+                echo json_encode($response);
+                return;
             }
 
-        } catch (Exception $e) {
-            // Error occurred during registration
-            $response = [
-                'status' => 'error',
-                'message' => $e->getMessage()
-            ];
-            http_response_code(500); 
-        }
+            try {
+                $userId = $_SESSION['user_id'];
+                $tournamentId = $data['tournamentId'];
 
-        header('Content-Type: application/json');
-        echo json_encode($response);
+                $tournament = $this->tournamentModel->fetchTournament($tournamentId);
+                if (!$tournament) {
+                    throw new Exception("Tournament not found.");
+                }
+
+                // Check if the user is the creator of the tournament
+                if ($tournament->created_by == $userId) {
+                    throw new Exception("You cannot register for a tournament you created.");
+                }
+
+                // Check if the user is already registered for the tournament
+                if ($this->tournamentModel->isPlayerRegistered($userId, $tournamentId)) {
+                    throw new Exception('You are already registered for this tournament.');
+                }
+
+                $details = [
+                    'user_id' => $userId,
+                    'tournament_id' => $tournamentId,
+                    'player_name' => $data['playerName'],
+                    'team_name' => $data['teamName'],
+                    'email' => $data['email'],
+                    'phone_number' => $data['phoneNumber']
+                ];
+
+                if ($this->tournamentModel->addPlayer($details)) {
+                    $response = [
+                        'status' => 'success',
+                        'message' => 'Player registered successfully for the tournament.'
+                    ];
+                    http_response_code(200);
+                } else {
+                    throw new Exception("Failed to register player.");
+                }
+
+            } catch (Exception $e) {
+                $response = [
+                    'status' => 'error',
+                    'message' => 'You cant register to your tournament created by yourself',
+                ];
+            }
+
+            header('Content-Type: application/json');
+            echo json_encode($response);
+        } else {
+            http_response_code(405);
+            echo json_encode(['status' => 'error', 'message' => 'Method not allowed']);
+        }
     }
-}
+
 
     public function getHistory($registration_id) {
         $registration_id = $this->tournamentModel->getRegister($registration_id);
@@ -216,7 +224,7 @@ public function registerTournament() {
             if (!empty($registerTournament)) {
                 $response = [
                     'status' => 'success',
-                    'registerTournament' => $registerTournament
+                    'registerTournament' => $registerTournament,
                 ];
                 http_response_code(200);
             } else {

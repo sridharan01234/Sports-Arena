@@ -1,7 +1,7 @@
 <?php
 require_once './database/Database.php';
 
-class OrderModel {
+class OrderModel extends Database {
     private $db;
 
     public function __construct() {
@@ -17,6 +17,7 @@ class OrderModel {
      */
     public function createOrder(array $orderDetails, array $orderItems): int|false {
         $order_id = $this->db->insertWithLastId('orders', $orderDetails);
+        var_dump($order_id);
         if (!$order_id) {
             return false;
         }
@@ -74,5 +75,38 @@ class OrderModel {
         
         return $this->db->resultSet();
     }
+
+     /**
+     * Get the count of orders by gender.
+     * 
+     * @return array Returns an associative array with the count of orders by gender.
+     */
+    public function getOrderCountByGender(): array {
+        $query = "
+            SELECT 
+                u.gender, 
+                COUNT(o.id) AS orderCount
+            FROM orders o
+            INNER JOIN users u ON o.user_id = u.user_id
+            GROUP BY u.gender
+        ";
+
+        $this->db->query($query);
+        return $this->db->resultSet();
+    }
+
+public function getOrderCountByItems(): array {
+    $query = "
+        SELECT 
+            p.category, 
+            COUNT(oi.id) AS productCount
+        FROM order_items oi
+        INNER JOIN products p ON p.product_id = oi.product_id
+        GROUP BY p.category
+    ";
+
+    $this->db->query($query);
+    return $this->db->resultSet();
+}
 }
 ?>

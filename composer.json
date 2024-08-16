@@ -1,8 +1,12 @@
 {
+    "name": "gomathithiru/package123",
+    "description": "php project",
+    "type": "project",
     "require": {
-        "phpmailer/phpmailer": "^6.9",
-        "firebase/php-jwt": "^6.10",
-        "paragonie/sodium_compat": "^2.0",
-        "unsplash/unsplash": "^3.2"
-    }
+        "monolog/monolog": "3.x-dev",
+        "firebase/php-jwt": "dev-main",
+        "phpmailer/phpmailer": "dev-master"
+    },
+    "license": "MIT",
+    "minimum-stability": "dev"
 }

@@ -28,14 +28,17 @@ class ProductController extends BaseController
 
         foreach ($data as $key => $value) {
             $data[$key] = $this->correctNaming($value);
+            $data[$key]->productMainImage = $this->imageToBase64($data[$key]->productMainImage);
+
         }
 
         echo json_encode(
             [
                 'status' => 200,
                 'message' => 'success',
-                'data' => $data,
-            ]
+                'data' => $data
+            ], 
+            JSON_UNESCAPED_SLASHES
         );
         exit;
     }
@@ -57,7 +60,9 @@ class ProductController extends BaseController
             [
                 'status' => 'success',
                 'data' => $data,
-            ]
+                'image' => $this->imageToBase64($data->productMainImage)
+            ],
+            JSON_UNESCAPED_SLASHES
         );
         exit;
     }
@@ -71,31 +76,45 @@ class ProductController extends BaseController
     {
         $data = $this->decodeRequest();
 
-        $details = [
-            'category' => $data['productCategory'],
-            'description' => $data['productDescription'],
-            'main_image' => $data['productMainImage'],
-            'name' => $data['productName'],
-            'price' => $data['productPrice'],
-            'stock' => $data['productStock'],
-        ];
-
-        if ($this->model->addProduct($details)) {
+        if($this->model->addProduct($data))
+        {
             echo json_encode(
                 [
                     'status' => 'success',
-                    'message' => 'product added successfully',
-                ]
-            );
-            exit;
-        } else {
-            echo json_encode(
-                [
-                    'status' => 'error',
-                    'message' => 'product not added successfully',
+                    'message' => 'product added successfully'
                 ]
             );
             exit;
         }
+        else
+        {
+            echo json_encode(
+                [
+                    'status' => 'error',
+                    'message' => 'product not added successfully'
+                ]
+            );
+            exit;
+        }
+    }
+
+    public function getImage()
+    {
+
+    }
+
+    /**
+     * Convert image to base64
+     *
+     * @param string $path
+     *
+     * @return string
+     */
+    public function imageToBase64(?string $path): string
+    {
+        if(is_null($path) || !$path) return '';
+        $imageData = file_get_contents($path);
+        $type = pathinfo($path, PATHINFO_EXTENSION);
+        return 'data:image/' . $type . ';base64,' . base64_encode($imageData);
     }
 }
