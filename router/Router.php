@@ -4,6 +4,7 @@
  * This file contains request handling functionalities
  *
  * @author Sridharan sridharan01234@gmail.com
+ * @author Sridharan sridharan01234@gmail.com
  * Last modified : 28/5/2024
  */
 
@@ -17,9 +18,14 @@ class Router
         $this->add("/tournament/add", ['Controller' => 'TournamentController', 'action' => 'addTournament']);
         $this->add("/tournament/register", ['Controller' => 'TournamentController', 'action' => 'registerTournament']);
         $this->add("/tournament/getuser", ['Controller' => 'TournamentController', 'action' => 'getUser']);
+        $this->add("/tournament/get", ['Controller' => 'TournamentController', 'action' => 'getTournament']);
+        $this->add("/tournament/add", ['Controller' => 'TournamentController', 'action' => 'addTournament']);
+        $this->add("/tournament/register", ['Controller' => 'TournamentController', 'action' => 'registerTournament']);
+        $this->add("/tournament/getuser", ['Controller' => 'TournamentController', 'action' => 'getUser']);
         $this->add("/register", ['Controller' => 'AuthController', 'action' => 'register']);
         $this->add("/login", ['Controller' => 'AuthController', 'action' => 'login']);
         $this->add("/user/verify", ['Controller' => 'AuthController', 'action' => 'verifyEmail']);
+        $this->add("/email/verify", ['Controller' => 'AuthController', 'action' => 'EmailConfirmation']);
         $this->add("/email/verify", ['Controller' => 'AuthController', 'action' => 'EmailConfirmation']);
         $this->add("/logout", ['Controller' => 'AuthController', 'action' => 'logout']);
         $this->add("/password/reset", ['Controller' => 'AuthController', 'action' => 'resetPassword']);
