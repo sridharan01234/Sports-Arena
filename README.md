@@ -1,66 +1,111 @@
-# Authentication API
+# E-commerce Backend API
 
-This repository provides a PHP API for user authentication, offering features like registration, login, logout, email verification, and password reset.
+This repository contains the backend code for an e-commerce application. It provides APIs for user authentication, product management, cart operations, and more.
 
 ## Features
-- **Registration:** Enables users to create new accounts with username, email, and password.
-- **Login:** Authenticates users based on email and password.
-- **Logout:** Logs users out of their session.
-- **Email Verification:** Sends verification emails to newly registered users.
-- **Password Reset:** Allows users to reset their passwords via email.
-- **Secure Password Handling:** Uses password hashing to protect user passwords.
-- **Error Handling:** Provides informative error messages for invalid inputs or failed operations.
 
-## Requirements
-- PHP 7.4 or higher
-- Composer
-- A mail server configured for sending emails (e.g., SMTP)
+### User Management:
+- **Registration**: Allows users to create new accounts.
+- **Login**: Authenticates users using their credentials.
+- **Email Verification**: Sends verification emails and handles verification.
+- **Password Reset**: Enables users to reset their passwords.
+- **Profile Management**: Allows users to view, update, and delete their profiles.
+- **Profile Picture Upload**: Enables users to upload their profile pictures.
+
+### Product Management:
+- **Product Listing**: Retrieves a list of all products.
+- **Product Details**: Retrieves details of a specific product.
+
+### Cart Management:
+- **Add to Cart**: Adds products to the user's cart.
+- **Remove from Cart**: Removes products from the user's cart.
+- **Clear Cart**: Empties the user's cart.
+
+### Other Features:
+- **Country, State, and City Retrieval**: Provides APIs to retrieve lists of countries, states, and cities.
+
+## Technologies
+- **PHP**: The backend is written in PHP.
+- **MySQL**: The database is MySQL.
+- **JSON**: Data is exchanged in JSON format.
 
 ## Installation
-1. Clone the repository: bash git clone https://github.com/your-username/authentication-api.git
-
-
-Insert code
-2. Install dependencies:
-bash cd authentication-api composer install
-
-
-Insert code
-3. Configure the email settings:
-   - Open `AuthController.php` and replace the placeholder values in the `sendEmail` function with your actual email server settings (host, username, password, etc.).
+1. Clone the repository.
+2. Configure the database connection in `config.php`.
 
 ## Usage
-The API is designed to be used with a web server. You can access the API endpoints using HTTP requests.
+The API endpoints are documented in the code comments.
 
-### Endpoints:
-- **/register:** Register a new user (POST)
-- **/login:** Login a user (POST)
-- **/logout:** Logout a user (GET)
-- **/verify-email:** Verify email address (POST)
-- **/reset-password:** Request password reset (POST)
+## Contributing
+Contributions are welcome! Please open an issue or submit a pull request.
 
-### Example Request (Register):
-```
-json { "username": "johndoe", "email": "johndoe@example.com", "password": "password123", "confirm_password": "password123" }
-```
+## License
+This project is licensed under the MIT License.
 
-### Example Request (Login):
+## Example Usage
+
+## User Registration:
 ```
-json { "email": "johndoe@example.com", "password": "password123" }
+POST http://localhost/register -d '{"name": "John Doe", "email": "john.doe@example.com", "password": "password123"}'
 ```
 
-Insert code
-### Example Request (Logout):
+## User Login:
 ```
-json { "email": "johndoe@example.com" }
-```
-
-### Example Response (Success):
-```
-{ "message": "User registered successfully" }
+POST http://localhost/login -d '{"email": "john.doe@example.com", "password": "password123"}'
 ```
 
-### Example Response (Error):
+## Email Verification:
 ```
-{ "error": "Invalid email or password" }
+GET http://localhost/verify/email
 ```
+
+## Profile Management:
+```
+GET http://localhost/profile/get
+POST http://localhost/profile/update -d '{"name": "John Doe", "email": "john.doe@example.com"}'
+DELETE http://localhost/profile/delete
+```
+
+## Password Reset:
+```
+POST http://localhost/reset/password -d '{"email": "john.doe@example.com"}'
+```
+
+## Product Listing:
+```
+GET http://localhost/product/all
+```
+## Cart Management:
+
+### Add to Cart:
+```
+POST http://localhost/cart/add -d '{"product_id": 1, "quantity": 2}'
+```
+
+### Remove from Cart:
+```
+DELETE http://localhost/cart/remove/1
+```
+
+### Clear Cart:
+```
+DELETE http://localhost/cart/clear
+```
+
+## Country, State, and City Retrieval:
+
+### Get Countries:
+```
+GET http://localhost/countries/get
+```
+
+### Get States:
+```
+GET http://localhost/states/get
+```
+
+### Get Cities:
+```
+GET http://localhost/cities/get
+```
+

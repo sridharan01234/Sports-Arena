@@ -1,7 +1,12 @@
 <?php
 
 /**
+ * QueryLogger class
  *
+ * This class is used to log queries made to a database.
+ *
+ * @author Sridharan sridharan01234@gmail.com
+ * Last Modified : 03-06-2024
  */
 
 class QueryLogger
@@ -11,7 +16,7 @@ class QueryLogger
     public function logQuery(string $query)
     {
         // Open the log file in append mode
-        $fp = fopen(self::LOG_FILE, 'a');
+        $fp = fopen(self::LOG_FILE, 'a+'); 
 
         // Get additional details
         $request_method = $_SERVER['REQUEST_METHOD'];
